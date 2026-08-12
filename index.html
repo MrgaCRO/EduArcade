@@ -48,12 +48,66 @@
             <div class="flex items-center gap-2 text-slate-400">
                 <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Sustav aktivan
             </div>
-            <div class="text-cyan-400 font-bold" id="games-counter">Dostupne igre: 0</div>
+            <div class="text-cyan-400 font-bold">Dostupne igre: 3</div>
         </div>
 
-        <!-- Mreža Igara (Grid) -->
+        <!-- Mreža Igara (Izravno upisane kartice u HTML) -->
         <div id="game-grid" class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <!-- Dinamički iscrtane kartice -->
+            
+            <!-- 1. SNAKE EDU PRO -->
+            <div onclick="window.location.href='games/snake/index.html'" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-green-500/50 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 transition-transform">🐍</span>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Akcija & Kviz</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-green-400 transition-colors flex items-center justify-between">
+                        Snake Edu Pro
+                        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-green-400">arrow_forward</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Vježbaj matematičke operacije, povijest i geografiju uz klasičnu zmiju s modernim 360° kontrolama.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-green-400 gap-1">
+                    Pokreni igru <span class="material-symbols-outlined text-sm">play_arrow</span>
+                </div>
+            </div>
+
+            <!-- 2. TABLIĆ -->
+            <div onclick="window.location.href='games/tablic/index.html'" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-purple-500/50 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 transition-transform">🃏</span>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Strategija & Brojevi</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-purple-400 transition-colors flex items-center justify-between">
+                        Tablić
+                        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-purple-400">arrow_forward</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Klasična kartaška igra strategije i zbrajanja brojeva protiv pametnog računalnog suparnika.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-purple-400 gap-1">
+                    Pokreni igru <span class="material-symbols-outlined text-sm">play_arrow</span>
+                </div>
+            </div>
+
+            <!-- 3. KLONDIKE PASIJANS -->
+            <div onclick="window.location.href='games/pasijans/index.html'" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.2)] flex flex-col justify-between group">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 transition-transform">🎴</span>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Logika & Strpljenje</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-cyan-400 transition-colors flex items-center justify-between">
+                        Klondike Pasijans
+                        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400">arrow_forward</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Klasična kartaška igra strpljenja i slaganja nizova od asa do kralja po znakovima.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-cyan-400 gap-1">
+                    Pokreni igru <span class="material-symbols-outlined text-sm">play_arrow</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -62,72 +116,5 @@
         EduArcade Portal &bull; Uči kroz igru
     </footer>
 
-    <script>
-        // Centralna lista igara (Sada uključuje i Pasijans)[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span)
-        const gamesList = [
-            { 
-                id: 'snake', 
-                name: 'Snake Edu Pro', 
-                desc: 'Vježbaj matematičke operacije, povijest i geografiju uz klasičnu zmiju s modernim 360° kontrolama.', 
-                badge: 'Akcija & Kviz',
-                color: 'green', 
-                borderHover: 'hover:border-green-500/50 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)]',
-                icon: '🐍', 
-                url: 'games/snake/index.html[span_4](start_span)'[span_4](end_span)
-            },
-            { 
-                id: 'tablic', 
-                name: 'Tablić', 
-                desc: 'Klasična kartaška igra strategije i zbrajanja brojeva protiv pametnog računalnog suparnika.', 
-                badge: 'Strategija & Brojevi',
-                color: 'purple', 
-                borderHover: 'hover:border-purple-500/50 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]',
-                icon: '🃏', 
-                url: 'games/tablic/index.html[span_5](start_span)'[span_5](end_span)
-            },
-            { 
-                id: 'pasijans', 
-                name: 'Klondike Pasijans', 
-                desc: 'Klasična kartaška igra strpljenja i slaganja nizova od asa do kralja po znakovima.', 
-                badge: 'Logika & Strpljenje',
-                color: 'cyan', 
-                borderHover: 'hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.2)]',
-                icon: '🎴', 
-                url: 'games/pasijans/index.html[span_6](start_span)'[span_6](end_span)
-            }
-        ];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('game-grid');
-            const counter = document.getElementById('games-counter');
-            if (!grid) return;
-            
-            counter.innerText = `Dostupne igre: ${gamesList.length}`;
-            grid.innerHTML = '';
-            
-            gamesList.forEach(game => {
-                const card = document.createElement('div');
-                card.className = `glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 ${game.borderHover} flex flex-col justify-between group`;
-                card.onclick = () => window.location.href = game.url;
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 transition-transform">${game.icon}</span>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">${game.badge}</span>
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-green-400 transition-colors flex items-center justify-between">
-                            ${game.name}
-                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-green-400">arrow_forward</span>
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${game.desc}</p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-green-400 gap-1">
-                        Pokreni igru <span class="material-symbols-outlined text-sm">play_arrow</span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        });
-    </script>
-</body> 
+</body>
 </html>
