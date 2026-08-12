@@ -1,1 +1,1407 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tablić - Klasična Igra Kartama</title>
+<style>
+:root {
+--table-bg: #1b5e20;
+--table-bg-dark: #0d3b12;
+--gold: #fbc02d;
+--gold-dark: #f57f17;
+--card-w: 72px;
+--card-h: 105px;
+--card-radius: 8px;
+}
 
+* {
+box-sizing: border-box;
+user-select: none;
+-webkit-user-select: none;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: radial-gradient(circle at center, var(--table-bg) 0%, var(--table-bg-dark) 100%);
+color: #ffffff;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+overflow-x: hidden;
+width: 100vw;
+}
+
+/* Zaglavlje / Header */
+header {
+background: rgba(0, 0, 0, 0.4);
+backdrop-filter: blur(8px);
+padding: 8px 15px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-bottom: 2px solid rgba(251, 192, 45, 0.3);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+z-index: 10;
+width: 100%;
+}
+
+.logo {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 1.3rem;
+font-weight: bold;
+color: var(--gold);
+text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.header-controls {
+display: flex;
+gap: 8px;
+}
+
+.btn {
+background: linear-gradient(135deg, #2e7d32, #1b5e20);
+color: white;
+border: 1px solid var(--gold);
+padding: 6px 14px;
+border-radius: 20px;
+cursor: pointer;
+font-weight: 600;
+font-size: 0.85rem;
+transition: all 0.2s ease;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+white-space: nowrap;
+}
+
+.btn:hover {
+background: linear-gradient(135deg, #388e3c, #2e7d32);
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.btn:active {
+transform: translateY(0);
+}
+
+.btn:disabled {
+opacity: 0.4;
+cursor: not-allowed;
+transform: none !important;
+box-shadow: none !important;
+}
+
+.btn-secondary {
+background: rgba(255, 255, 255, 0.15);
+border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+background: rgba(255, 255, 255, 0.25);
+}
+
+.btn-action {
+background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+color: #000;
+border: none;
+}
+
+.btn-action:hover {
+background: linear-gradient(135deg, #fff59d, var(--gold));
+}
+
+/* Glavni Layout */
+.game-container {
+flex: 1;
+display: grid;
+grid-template-columns: 1fr 280px;
+gap: 12px;
+padding: 10px;
+max-width: 100%;
+margin: 0 auto;
+width: 100%;
+box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+.game-container {
+grid-template-columns: 1fr;
+}
+}
+
+/* Površina stola za igru */
+.table-area {
+background: rgba(0, 0, 0, 0.2);
+border: 2px solid rgba(255, 255, 255, 0.1);
+border-radius: 16px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+padding: 10px;
+position: relative;
+box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+min-height: 560px;
+width: 100%;
+box-sizing: border-box;
+overflow: hidden;
+}
+
+/* Zone Igrača */
+.player-zone {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+width: 100%;
+}
+
+.player-info {
+display: flex;
+align-items: center;
+gap: 12px;
+background: rgba(0, 0, 0, 0.4);
+padding: 4px 14px;
+border-radius: 20px;
+border: 1px solid rgba(255, 255, 255, 0.15);
+max-width: 100%;
+flex-wrap: wrap;
+justify-content: center;
+}
+
+.player-name {
+font-weight: bold;
+font-size: 0.95rem;
+}
+
+.active-turn-indicator {
+display: inline-block;
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background-color: #4caf50;
+box-shadow: 0 0 8px #4caf50;
+margin-right: 4px;
+}
+
+.active-turn-indicator.inactive {
+background-color: #757575;
+box-shadow: none;
+}
+
+.stat-badge {
+font-size: 0.8rem;
+background: rgba(255, 255, 255, 0.1);
+padding: 2px 8px;
+border-radius: 10px;
+}
+
+/* Karte u ruci */
+.hand {
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+gap: 8px;
+min-height: calc(var(--card-h) + 20px);
+padding: 8px 5px;
+width: 100%;
+max-width: 100%;
+box-sizing: border-box;
+}
+
+/* Središnji stol s kartama */
+.table-cards-zone {
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+position: relative;
+margin: 10px 0;
+background: rgba(0, 0, 0, 0.15);
+border-radius: 12px;
+border: 2px dashed rgba(255, 255, 255, 0.1);
+padding: 15px 10px;
+width: 100%;
+box-sizing: border-box;
+}
+
+.table-cards {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-content: center;
+gap: 10px;
+width: 100%;
+max-width: 100%;
+min-height: calc(var(--card-h) + 25px);
+box-sizing: border-box;
+padding: 5px;
+}
+
+/* Traka s podacima o trenutnom odabiru */
+.selection-info-bar {
+background: rgba(0, 0, 0, 0.85);
+border: 1px solid rgba(251, 192, 45, 0.6);
+padding: 4px 14px;
+border-radius: 20px;
+font-size: 0.85rem;
+color: var(--gold);
+margin-bottom: 10px;
+display: flex;
+gap: 10px;
+align-items: center;
+backdrop-filter: blur(4px);
+text-align: center;
+}
+
+.action-bar {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 8px;
+background: rgba(0, 0, 0, 0.85);
+padding: 8px 14px;
+border-radius: 25px;
+border: 1.5px solid var(--gold);
+backdrop-filter: blur(8px);
+z-index: 10;
+margin-top: 8px;
+box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Prikaz Karte */
+.card {
+width: var(--card-w);
+height: var(--card-h);
+background: #ffffff;
+border-radius: var(--card-radius);
+box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+position: relative;
+cursor: pointer;
+transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease, border 0.2s ease;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+padding: 5px;
+font-weight: bold;
+color: #222;
+border: 2px solid #ddd;
+box-sizing: border-box;
+flex-shrink: 0;
+}
+
+.card.red {
+color: #e53935;
+}
+
+.card.black {
+color: #212121;
+}
+
+.card:hover {
+transform: translateY(-4px);
+box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+/* PODIGNUTA KARTA U RUCI */
+.card.selected {
+transform: translateY(-16px) scale(1.04) !important;
+border: 3px solid var(--gold) !important;
+box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 15px var(--gold) !important;
+z-index: 15;
+}
+
+/* PODIGNUTE KARTE NA STOLU */
+.card.table-card.target-selected {
+transform: translateY(-16px) scale(1.04) !important;
+border: 3px solid var(--gold) !important;
+box-shadow: 0 10px 20px rgba(0,0,0,0.6), 0 0 18px #f57f17 !important;
+z-index: 20;
+background-color: #fffde7;
+}
+
+/* Kvačica na označenim kartama */
+.selected-badge {
+position: absolute;
+top: -8px;
+right: -8px;
+background: #4caf50;
+color: white;
+border-radius: 50%;
+width: 20px;
+height: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 11px;
+font-weight: bold;
+border: 2px solid white;
+box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn {
+0% { transform: scale(0); }
+80% { transform: scale(1.2); }
+100% { transform: scale(1); }
+}
+
+/* Poleđina karte */
+.card.card-back {
+background: linear-gradient(135deg, #1565c0, #0d47a1);
+border: 2px solid #ffffff;
+background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0, rgba(255,255,255,0.1) 10px, transparent 0, transparent 20px);
+cursor: default;
+}
+
+.card.card-back:hover {
+transform: none;
+}
+
+/* Unutrašnjost karte */
+.card-corner {
+display: flex;
+flex-direction: column;
+align-items: center;
+line-height: 1;
+}
+
+.card-corner.top-left {
+align-self: flex-start;
+}
+
+.card-corner.bottom-right {
+align-self: flex-end;
+transform: rotate(180deg);
+}
+
+.card-rank {
+font-size: 1.05rem;
+}
+
+.card-suit {
+font-size: 0.85rem;
+}
+
+.card-center-suit {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+font-size: 1.9rem;
+opacity: 0.85;
+}
+
+/* Bočna traka / Sidebar */
+.sidebar {
+display: flex;
+flex-direction: column;
+gap: 12px;
+width: 100%;
+}
+
+.panel {
+background: rgba(0, 0, 0, 0.4);
+border: 1px solid rgba(255, 255, 255, 0.15);
+border-radius: 12px;
+padding: 12px;
+backdrop-filter: blur(5px);
+}
+
+.panel-title {
+font-size: 1rem;
+color: var(--gold);
+margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+padding-bottom: 5px;
+}
+
+/* Špil prikaz */
+.deck-info {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.deck-stack {
+width: 45px;
+height: 62px;
+position: relative;
+}
+
+.deck-card-layer {
+position: absolute;
+width: 100%;
+height: 100%;
+background: linear-gradient(135deg, #1565c0, #0d47a1);
+border: 1px solid #fff;
+border-radius: 4px;
+box-shadow: -2px 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Dnevnik igre (Log) */
+.game-log {
+height: 180px;
+overflow-y: auto;
+font-size: 0.82rem;
+display: flex;
+flex-direction: column;
+gap: 5px;
+padding-right: 4px;
+}
+
+.game-log::-webkit-scrollbar {
+width: 4px;
+}
+.game-log::-webkit-scrollbar-thumb {
+background: rgba(255, 255, 255, 0.2);
+border-radius: 3px;
+}
+
+.log-item {
+padding: 5px 8px;
+border-radius: 5px;
+background: rgba(255, 255, 255, 0.05);
+line-height: 1.3;
+}
+
+.log-item.player {
+border-left: 3px solid #4caf50;
+}
+
+.log-item.cpu {
+border-left: 3px solid #ff9800;
+}
+
+.log-item.tabla {
+border-left: 3px solid var(--gold);
+background: rgba(251, 192, 45, 0.15);
+font-weight: bold;
+}
+
+/* Tablica Rezultata */
+.score-table {
+width: 100%;
+border-collapse: collapse;
+font-size: 0.85rem;
+text-align: center;
+}
+
+.score-table th {
+color: rgba(255, 255, 255, 0.7);
+padding: 3px;
+font-weight: normal;
+}
+
+.score-table td {
+padding: 5px 3px;
+font-weight: bold;
+font-size: 1rem;
+}
+
+/* Modal Prozor */
+.modal-overlay {
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(0, 0, 0, 0.8);
+backdrop-filter: blur(8px);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 100;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+opacity: 1;
+pointer-events: auto;
+}
+
+.modal-content {
+background: #1e272e;
+border: 2px solid var(--gold);
+border-radius: 16px;
+padding: 20px;
+max-width: 480px;
+width: 92%;
+box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+text-align: center;
+}
+
+.modal-title {
+font-size: 1.6rem;
+color: var(--gold);
+margin-bottom: 12px;
+}
+
+.modal-body {
+margin-bottom: 18px;
+line-height: 1.4;
+font-size: 0.9rem;
+color: #dcdde1;
+text-align: left;
+}
+
+.score-breakdown {
+width: 100%;
+margin: 12px 0;
+border-collapse: collapse;
+}
+
+.score-breakdown th, .score-breakdown td {
+padding: 6px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.score-breakdown th {
+color: var(--gold);
+text-align: left;
+}
+
+.score-breakdown td {
+text-align: right;
+}
+
+/* Tabla Banner Animacija */
+.tabla-banner {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%) scale(0);
+background: linear-gradient(135deg, #ffd700, #ff8c00);
+color: #000;
+font-size: 2.2rem;
+font-weight: 900;
+padding: 12px 35px;
+border-radius: 40px;
+box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+z-index: 50;
+pointer-events: none;
+transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tabla-banner.show {
+transform: translate(-50%, -50%) scale(1);
+}
+
+/* Responsive dimenzije za mobilne uređaje */
+@media (max-width: 600px) {
+:root {
+--card-w: 52px;
+--card-h: 78px;
+}
+.card-rank { font-size: 0.85rem; }
+.card-suit { font-size: 0.7rem; }
+.card-center-suit { font-size: 1.2rem; }
+.table-area { min-height: 480px; padding: 8px; }
+.logo { font-size: 1.1rem; }
+.btn { padding: 5px 10px; font-size: 0.78rem; }
+.action-bar { flex-direction: column; gap: 5px; padding: 6px 10px; width: 90%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Zaglavlje -->
+<header>
+<div class="logo">
+♠♥ Tablić ♣♦
+</div>
+<div class="header-controls">
+<button class="btn btn-secondary" onclick="toggleAudio()" id="audioBtn">🔊 Zvuk</button>
+<button class="btn btn-secondary" onclick="openRulesModal()">📜 Pravila</button>
+<button class="btn" onclick="startNewGame()">🔄 Nova Igra</button>
+</div>
+</header>
+
+<!-- Glavni Kontejner -->
+<div class="game-container">
+
+<!-- Površina Stola -->
+<div class="table-area">
+<div id="tablaBanner" class="tabla-banner">TABLA! +1</div>
+
+<!-- ZONA RAČUNALA (Gore) -->
+<div class="player-zone">
+<div class="player-info">
+<span id="cpuTurnInd" class="active-turn-indicator inactive"></span>
+<span class="player-name">🤖 Računalo</span>
+<span class="stat-badge">Karte: <span id="cpuCapturedCount">0</span></span>
+<span class="stat-badge">Table: <span id="cpuTablaCount">0</span></span>
+</div>
+<div class="hand" id="cpuHand"></div>
+</div>
+
+<!-- SREDIŠNJI STOL -->
+<div class="table-cards-zone">
+<!-- Prikaz zbroja označenih karata -->
+<div class="selection-info-bar" id="selectionInfoBar" style="display: none;">
+<span id="selectionText">Odabrano na stolu: niti jedna karta</span>
+</div>
+
+<div class="table-cards" id="tableCards"></div>
+
+<!-- Akcijski gumbi za igrača (Inicijalno skriveno!) -->
+<div class="action-bar" id="actionBar" style="display: none;">
+<button class="btn btn-action" id="btnAutoCapture" onclick="handleAutoCapture()" style="display: none;">✨ Automatsko odnošenje</button>
+<button class="btn btn-action" id="btnConfirmCapture" onclick="handleConfirmCapture()" disabled style="display: none;">✔️ Uzmi odabrano</button>
+<button class="btn btn-secondary" id="btnDropCard" onclick="handleDropCard()" style="display: none;">⬇️ Baci na stol</button>
+<button class="btn btn-secondary" id="btnCancel" onclick="cancelAllSelections()" style="display: none;">❌ Očisti odabir</button>
+</div>
+</div>
+
+<!-- ZONA IGRAČA (Dolje) -->
+<div class="player-zone">
+<div class="hand" id="playerHand"></div>
+<div class="player-info">
+<span id="playerTurnInd" class="active-turn-indicator"></span>
+<span class="player-name">👤 Ti (Igrač)</span>
+<span class="stat-badge">Karte: <span id="playerCapturedCount">0</span></span>
+<span class="stat-badge">Table: <span id="playerTablaCount">0</span></span>
+</div>
+</div>
+
+</div>
+
+<!-- Bočne Informacije / Sidebar -->
+<div class="sidebar">
+
+<!-- Špil & Rezultat -->
+<div class="panel">
+<div class="panel-title">
+<span>Stanje Partije</span>
+</div>
+<div class="deck-info" style="margin-bottom: 10px;">
+<div class="deck-stack">
+<div class="deck-card-layer" style="top: 0px; left: 0px;"></div>
+<div class="deck-card-layer" style="top: -2px; left: 2px;"></div>
+<div class="deck-card-layer" style="top: -4px; left: 4px;"></div>
+</div>
+<div>
+<div style="font-size: 0.8rem; color: #aaa;">U špilu preostalo:</div>
+<div style="font-size: 1.3rem; font-weight: bold; color: var(--gold);" id="deckCount">36</div>
+</div>
+</div>
+
+<table class="score-table">
+<thead>
+<tr>
+<th>Igrač</th>
+<th>Ukupni Meč</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>👤 Ti</td>
+<td id="matchScorePlayer" style="color: #4caf50;">0</td>
+</tr>
+<tr>
+<td>🤖 Računalo</td>
+<td id="matchScoreCpu" style="color: #ff9800;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- Dnevnik Igre -->
+<div class="panel" style="flex: 1; display: flex; flex-direction: column;">
+<div class="panel-title">
+<span>Dnevnik Poteza</span>
+</div>
+<div class="game-log" id="gameLog">
+<div class="log-item">Igra je započela! Kliknite na karte da ih označite.</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- Modal za Rezultat / Pravila -->
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal-content">
+<h2 class="modal-title" id="modalTitle">Kraj Runde!</h2>
+<div class="modal-body" id="modalBody"></div>
+<button class="btn btn-action" style="width: 100%; padding: 10px;" onclick="closeModal()">U redu</button>
+</div>
+</div>
+
+<!-- JS LOGIKA IGRE -->
+<script>
+/* ZVUČNI EFEKTI */
+let audioEnabled = true;
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function initAudio() {
+if (!audioCtx) {
+audioCtx = new AudioCtx();
+}
+}
+
+function playSound(type) {
+if (!audioEnabled) return;
+initAudio();
+if (audioCtx.state === 'suspended') {
+audioCtx.resume();
+}
+
+const now = audioCtx.currentTime;
+const osc = audioCtx.createOscillator();
+const gain = audioCtx.createGain();
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+
+if (type === 'card') {
+osc.type = 'sine';
+osc.frequency.setValueAtTime(400, now);
+osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+gain.gain.setValueAtTime(0.3, now);
+gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+osc.start(now);
+osc.stop(now + 0.08);
+} else if (type === 'capture') {
+osc.type = 'triangle';
+osc.frequency.setValueAtTime(523.25, now);
+osc.frequency.setValueAtTime(659.25, now + 0.08);
+gain.gain.setValueAtTime(0.3, now);
+gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+osc.start(now);
+osc.stop(now + 0.2);
+} else if (type === 'tabla') {
+osc.type = 'triangle';
+osc.frequency.setValueAtTime(523.25, now);
+osc.frequency.setValueAtTime(659.25, now + 0.1);
+osc.frequency.setValueAtTime(783.99, now + 0.2);
+osc.frequency.setValueAtTime(1046.50, now + 0.3);
+gain.gain.setValueAtTime(0.4, now);
+gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+osc.start(now);
+osc.stop(now + 0.5);
+}
+}
+
+function toggleAudio() {
+audioEnabled = !audioEnabled;
+document.getElementById('audioBtn').innerText = audioEnabled ? '🔊 Zvuk' : '🔇 Zvuk';
+}
+
+/* KONSTANTE I STRUKTURA KARATA */
+const SUITS = [
+{ name: 'Herc', symbol: '♥', color: 'red' },
+{ name: 'Karo', symbol: '♦', color: 'red' },
+{ name: 'Pik', symbol: '♠', color: 'black' },
+{ name: 'Tref', symbol: '♣', color: 'black' }
+ ];
+
+const RANKS = [
+{ rank: '2', val: 2 },
+{ rank: '3', val: 3 },
+{ rank: '4', val: 4 },
+{ rank: '5', val: 5 },
+{ rank: '6', val: 6 },
+{ rank: '7', val: 7 },
+{ rank: '8', val: 8 },
+{ rank: '9', val: 9 },
+{ rank: '10', val: 10 },
+{ rank: 'J', val: 12 },
+{ rank: 'Q', val: 13 },
+{ rank: 'K', val: 14 },
+{ rank: 'A', val: 1 }
+ ];
+
+function getCardPoints(card) {
+if (card.rank === '10' && card.suit.symbol === '♦') return 2;
+if (card.rank === '2' && card.suit.symbol === '♣') return 1;
+if (['A', 'K', 'Q', 'J', '10'].includes(card.rank)) return 1;
+return 0;
+}
+
+function getCardPossibleValues(card) {
+if (card.rank === 'A') return [1, 11];
+if (card.rank === 'J') return [12];
+if (card.rank === 'Q') return [13];
+if (card.rank === 'K') return [14];
+return [card.val];
+}
+
+/* STANJE IGRE */
+let deck = [];
+let table = [];
+let playerHand = [];
+let cpuHand = [];
+let playerCaptured = [];
+let cpuCaptured = [];
+let playerTablas = 0;
+let cpuTablas = 0;
+
+let matchScorePlayer = 0;
+let matchScoreCpu = 0;
+
+let turn = 'player';
+let lastCapturer = null;
+
+let selectedHandCardIndex = null;
+let selectedTableCardIds = [];
+let currentValidCaptures = [];
+
+/* INICIJALIZACIJA */
+function createDeck() {
+let newDeck = [];
+let id = 0;
+for (let suit of SUITS) {
+for (let r of RANKS) {
+newDeck.push({
+id: id++,
+suit: suit,
+rank: r.rank,
+val: r.val,
+pts: getCardPoints({ rank: r.rank, suit: suit })
+});
+}
+}
+for (let i = newDeck.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
+}
+return newDeck;
+}
+
+function startNewGame() {
+deck = createDeck();
+table = [];
+playerHand = [];
+cpuHand = [];
+playerCaptured = [];
+cpuCaptured = [];
+playerTablas = 0;
+cpuTablas = 0;
+turn = 'player';
+lastCapturer = null;
+selectedHandCardIndex = null;
+selectedTableCardIds = [];
+
+for (let i = 0; i < 4; i++) {
+table.push(deck.pop());
+}
+
+dealHands();
+logMessage('Započela je nova runda! 4 karte postavljene na stol.');
+updateUI();
+}
+
+function dealHands() {
+if (deck.length === 0) return;
+for (let i = 0; i < 6; i++) {
+if (deck.length > 0) playerHand.push(deck.pop());
+if (deck.length > 0) cpuHand.push(deck.pop());
+}
+playSound('card');
+}
+
+/* KOMBINATORIKA TABLIĆA */
+function canPartitionCards(cards, targetVal) {
+if (cards.length === 0) return true;
+
+let groups = findSubsetsSummingTo(cards, targetVal);
+for (let group of groups) {
+let remaining = cards.filter(c => !group.some(gc => gc.id === c.id));
+if (canPartitionCards(remaining, targetVal)) {
+return true;
+}
+}
+return false;
+}
+
+function findSubsetsSummingTo(cards, targetVal) {
+let result = [];
+let n = cards.length;
+let totalSubsets = 1 << n;
+
+for (let i = 1; i < totalSubsets; i++) {
+let sub = [];
+for (let j = 0; j < n; j++) {
+if ((i >> j) & 1) sub.push(cards[j]);
+}
+if (doesSubsetEqualTarget(sub, targetVal)) {
+result.push(sub);
+}
+}
+return result;
+}
+
+function doesSubsetEqualTarget(subset, targetVal) {
+if (subset.length === 0) return false;
+if (subset.length === 1) {
+let vals = getCardPossibleValues(subset[0]);
+return vals.includes(targetVal);
+}
+return checkSumRecursive(subset, 0, 0, targetVal);
+}
+
+function checkSumRecursive(subset, index, currentSum, targetVal) {
+if (currentSum > targetVal) return false;
+if (index === subset.length) return currentSum === targetVal;
+
+let card = subset[index];
+let possibleVals = getCardPossibleValues(card);
+
+for (let v of possibleVals) {
+if (checkSumRecursive(subset, index + 1, currentSum + v, targetVal)) {
+return true;
+}
+}
+return false;
+}
+
+function findAllValidCaptureSubsets(tableCards, playedCard) {
+if (tableCards.length === 0) return [];
+
+if (playedCard.rank === 'J') {
+return [ [...tableCards] ];
+}
+
+let targetValues = getCardPossibleValues(playedCard);
+let validSubsets = [];
+
+for (let targetVal of targetValues) {
+let n = tableCards.length;
+let totalSubsets = 1 << n;
+
+for (let i = 1; i < totalSubsets; i++) {
+let sub = [];
+for (let j = 0; j < n; j++) {
+if ((i >> j) & 1) sub.push(tableCards[j]);
+}
+
+if (canPartitionCards(sub, targetVal)) {
+if (!validSubsets.some(existing => isSameCardSet(existing, sub))) {
+validSubsets.push(sub);
+}
+}
+}
+}
+
+return validSubsets;
+}
+
+function isSameCardSet(setA, setB) {
+if (setA.length !== setB.length) return false;
+let idsA = setA.map(c => c.id).sort();
+let idsB = setB.map(c => c.id).sort();
+return idsA.every((id, idx) => id === idsB[idx]);
+}
+
+function evaluateCaptureScore(capturedCards, isTabla) {
+let score = 0;
+for (let c of capturedCards) {
+score += c.pts * 10;
+}
+score += capturedCards.length;
+if (isTabla) score += 50;
+return score;
+}
+
+/* INTERAKCIJA I ODABIR KARATA */
+function selectHandCard(index) {
+if (turn !== 'player') return;
+
+if (selectedHandCardIndex === index) {
+selectedHandCardIndex = null;
+} else {
+selectedHandCardIndex = index;
+}
+
+reevaluateSelection();
+updateUI();
+}
+
+function toggleTableCardSelection(cardId) {
+if (turn !== 'player') return;
+
+const idx = selectedTableCardIds.indexOf(cardId);
+if (idx >= 0) {
+selectedTableCardIds.splice(idx, 1);
+} else {
+selectedTableCardIds.push(cardId);
+}
+
+playSound('card');
+reevaluateSelection();
+updateUI();
+}
+
+function cancelAllSelections() {
+selectedHandCardIndex = null;
+selectedTableCardIds = [];
+currentValidCaptures = [];
+updateUI();
+}
+
+function reevaluateSelection() {
+const selectedTableCards = table.filter(c => selectedTableCardIds.includes(c.id));
+
+if (selectedHandCardIndex !== null) {
+const playedCard = playerHand[selectedHandCardIndex];
+currentValidCaptures = findAllValidCaptureSubsets(table, playedCard);
+
+let isValid = false;
+if (selectedTableCards.length > 0) {
+if (playedCard.rank === 'J') {
+isValid = (selectedTableCards.length === table.length);
+} else {
+let possibleVals = getCardPossibleValues(playedCard);
+isValid = possibleVals.some(targetVal => canPartitionCards(selectedTableCards, targetVal));
+}
+}
+
+document.getElementById('btnConfirmCapture').disabled = !isValid;
+} else {
+currentValidCaptures = [];
+document.getElementById('btnConfirmCapture').disabled = true;
+}
+}
+
+function handleAutoCapture() {
+if (selectedHandCardIndex === null || currentValidCaptures.length === 0) return;
+
+let bestSet = currentValidCaptures[0];
+let bestScore = -1;
+
+for (let set of currentValidCaptures) {
+let isTabla = (set.length === table.length);
+let score = evaluateCaptureScore(set, isTabla);
+if (score > bestScore) {
+bestScore = score;
+bestSet = set;
+}
+}
+
+executePlay(selectedHandCardIndex, bestSet);
+}
+
+function handleConfirmCapture() {
+if (selectedHandCardIndex === null) return;
+const selectedCards = table.filter(c => selectedTableCardIds.includes(c.id));
+executePlay(selectedHandCardIndex, selectedCards);
+}
+
+function handleDropCard() {
+if (selectedHandCardIndex === null) return;
+executePlay(selectedHandCardIndex, []);
+}
+
+/* Izvršavanje poteza */
+function executePlay(handCardIndex, capturedCards) {
+const isPlayer = (turn === 'player');
+const hand = isPlayer ? playerHand : cpuHand;
+const playedCard = hand.splice(handCardIndex, 1)[0];
+
+if (capturedCards.length > 0) {
+table = table.filter(tc => !capturedCards.some(cc => cc.id === tc.id));
+
+const capturedPile = isPlayer ? playerCaptured : cpuCaptured;
+capturedPile.push(playedCard, ...capturedCards);
+lastCapturer = turn;
+
+let isTabla = (table.length === 0);
+
+if (isTabla && (deck.length > 0 || playerHand.length > 0 || cpuHand.length > 0)) {
+if (isPlayer) playerTablas++;
+else cpuTablas++;
+showTablaAnimation();
+playSound('tabla');
+logMessage(${isPlayer ? '👤 Ti si ostvario' : '🤖 Računalo je ostvarilo'} TABLU! (+1b), isPlayer ? 'tabla' : 'cpu tabla'); } else { playSound('capture'); let textCards = capturedCards.map(c =&gt; ``${c.rank}${c.suit.symbol}).join(', '); logMessage(``${isPlayer ? '👤 Ti si odnio' : '🤖 Računalo je odnelo'}: [${textCards}] pomoću ${playedCard.rank}${playedCard.suit.symbol}`, isPlayer ? 'player' : 'cpu');
+}
+
+} else {
+table.push(playedCard);
+playSound('card');
+logMessage(``${isPlayer ? '👤 Ti si bacio' : '🤖 Računalo je bacilo'}: {playedCard.suit.symbol} na stol.`, isPlayer ? 'player' : 'cpu');
+}
+
+// ODMAH očisti odabire i sakrij akcije
+selectedHandCardIndex = null;
+selectedTableCardIds = [];
+currentValidCaptures = [];
+
+turn = isPlayer ? 'cpu' : 'player';
+updateUI();
+checkRoundProgress();
+}
+
+/* AI RAČUNALO LOGIKA */
+function makeCpuMove() {
+if (turn !== 'cpu') return;
+
+setTimeout(() => {
+let bestMove = null;
+let highestScore = -999;
+
+for (let i = 0; i < cpuHand.length; i++) {
+let card = cpuHand[i];
+let validCaptures = findAllValidCaptureSubsets(table, card);
+
+if (validCaptures.length > 0) {
+for (let set of validCaptures) {
+let isTabla = (set.length === table.length);
+let score = evaluateCaptureScore(set, isTabla);
+
+if (card.rank === 'J' && !isTabla && score < 15) {
+score -= 5;
+}
+
+if (score > highestScore) {
+highestScore = score;
+bestMove = { handIndex: i, capturedCards: set };
+}
+}
+} else {
+let dropScore = -card.pts * 20;
+if (card.rank === 'J') dropScore -= 50;
+if (card.rank === 'A') dropScore -= 30;
+
+if (dropScore > highestScore) {
+highestScore = dropScore;
+bestMove = { handIndex: i, capturedCards: [] };
+}
+}
+}
+
+if (bestMove) {
+executePlay(bestMove.handIndex, bestMove.capturedCards);
+}
+}, 850);
+}
+
+/* PROGRES RUNDE */
+function checkRoundProgress() {
+if (playerHand.length === 0 && cpuHand.length === 0) {
+if (deck.length > 0) {
+dealHands();
+logMessage('Podijeljene su nove karte!');
+updateUI();
+if (turn === 'cpu') makeCpuMove();
+} else {
+endRound();
+}
+} else {
+if (turn === 'cpu') {
+makeCpuMove();
+}
+}
+}
+
+function endRound() {
+if (table.length > 0 && lastCapturer) {
+const dest = (lastCapturer === 'player') ? playerCaptured : cpuCaptured;
+dest.push(...table);
+logMessage(Zadnje karte sa stola (${table.length}) pripale su ${lastCapturer === 'player' ? 'igraču' : 'računalu'}.);
+table = [];
+}
+
+let pPts = calculateCardsPoints(playerCaptured);
+let cPts = calculateCardsPoints(cpuCaptured);
+
+let pSpula = 0, cSpula = 0;
+if (playerCaptured.length > cpuCaptured.length) {
+pSpula = 3;
+} else if (cpuCaptured.length > playerCaptured.length) {
+cSpula = 3;
+}
+
+let pTotalRound = pPts + pSpula + playerTablas;
+let cTotalRound = cPts + cSpula + cpuTablas;
+
+matchScorePlayer += pTotalRound;
+matchScoreCpu += cTotalRound;
+
+showRoundResultModal(pPts, cPts, pSpula, cSpula, pTotalRound, cTotalRound);
+updateUI();
+}
+
+function calculateCardsPoints(capturedArray) {
+return capturedArray.reduce((sum, card) => sum + card.pts, 0);
+}
+
+/* OSVJEŽAVANJE PRIKAZA (UI) */
+function updateUI() {
+// Prikaz stola
+const tableCardsEl = document.getElementById('tableCards');
+tableCardsEl.innerHTML = '';
+
+table.forEach(card => {
+const isSelected = selectedTableCardIds.includes(card.id);
+const cardEl = renderCard(card, isSelected);
+cardEl.classList.add('table-card');
+
+if (isSelected) {
+cardEl.classList.add('target-selected');
+}
+
+cardEl.onclick = () => toggleTableCardSelection(card.id);
+tableCardsEl.appendChild(cardEl);
+});
+
+// Prikaz ruke igrača
+const playerHandEl = document.getElementById('playerHand');
+playerHandEl.innerHTML = '';
+playerHand.forEach((card, idx) => {
+const isSelected = (selectedHandCardIndex === idx);
+const cardEl = renderCard(card, isSelected);
+if (isSelected) {
+cardEl.classList.add('selected');
+}
+cardEl.onclick = () => selectHandCard(idx);
+playerHandEl.appendChild(cardEl);
+});
+
+// Prikaz ruke računala
+const cpuHandEl = document.getElementById('cpuHand');
+cpuHandEl.innerHTML = '';
+cpuHand.forEach(() => {
+const backCard = document.createElement('div');
+backCard.className = 'card card-back';
+cpuHandEl.appendChild(backCard);
+});
+
+// Traka informacija o odabiru na stolu
+const selectionInfoBar = document.getElementById('selectionInfoBar');
+const selectionText = document.getElementById('selectionText');
+const selectedTableCards = table.filter(c => selectedTableCardIds.includes(c.id));
+
+if (selectedTableCards.length > 0) {
+selectionInfoBar.style.display = 'flex';
+let names = selectedTableCards.map(c => ${c.rank}${c.suit.symbol}).join(' + ');
+let sumVals = selectedTableCards.reduce((acc, c) => acc + c.val, 0);
+selectionText.innerHTML = Odabrano na stolu: &lt;b&gt;${names}</b> (Zbroj: <b>${sumVals}&lt;/b&gt;);
+} else {
+selectionInfoBar.style.display = 'none';
+}
+
+// AKCIJSKA TRAKA I GUMB "UZMI ODABRANO" (Upravljanje vidljivošću)
+const actionBar = document.getElementById('actionBar');
+const btnAuto = document.getElementById('btnAutoCapture');
+const btnConfirm = document.getElementById('btnConfirmCapture');
+const btnDrop = document.getElementById('btnDropCard');
+const btnCancel = document.getElementById('btnCancel');
+
+// Ako NIJE igračev potez ili NEMA nikakvog odabira -> sakrij sve akcije!
+if (turn !== 'player' || (selectedHandCardIndex === null && selectedTableCardIds.length === 0)) {
+actionBar.style.display = 'none';
+} else {
+// Prikaži akcijsku traku samo kad igrač aktivno bira
+actionBar.style.display = 'flex';
+
+// Gumb za čišćenje odabira
+btnCancel.style.display = 'inline-flex';
+
+// Gumb "Uzmi odabrano" prikazuje se kad postoji odabir karata na stolu i u ruci
+if (selectedHandCardIndex !== null && selectedTableCardIds.length > 0) {
+btnConfirm.style.display = 'inline-flex';
+} else {
+btnConfirm.style.display = 'none';
+}
+
+// Automatsko odnošenje ili Bacanje
+if (selectedHandCardIndex !== null) {
+if (currentValidCaptures.length > 0) {
+btnAuto.style.display = 'inline-flex';
+btnDrop.style.display = 'none';
+} else {
+btnAuto.style.display = 'none';
+btnDrop.style.display = 'inline-flex';
+}
+} else {
+btnAuto.style.display = 'none';
+btnDrop.style.display = 'none';
+}
+}
+
+// Statistika
+document.getElementById('deckCount').innerText = deck.length;
+document.getElementById('playerCapturedCount').innerText = playerCaptured.length;
+document.getElementById('cpuCapturedCount').innerText = cpuCaptured.length;
+document.getElementById('playerTablaCount').innerText = playerTablas;
+document.getElementById('cpuTablaCount').innerText = cpuTablas;
+
+document.getElementById('matchScorePlayer').innerText = matchScorePlayer;
+document.getElementById('matchScoreCpu').innerText = matchScoreCpu;
+
+// Indikator poteza
+document.getElementById('playerTurnInd').className = active-turn-indicator ${turn === 'player' ? '' : 'inactive'}; document.getElementById('cpuTurnInd').className =active-turn-indicator ${turn === 'cpu' ? '' : 'inactive'};
+}
+
+function renderCard(card, isSelected = false) {
+const el = document.createElement('div');
+el.className = card ${card.suit.color}`;
+
+let badgeHtml = isSelected ? <div class="selected-badge"&gt;✓&lt;/div> : '';
+
+el.innerHTML = ${badgeHtml}
+<div class="card-corner top-left">
+<span class="card-rank">{card.suit.symbol}</span>
+</div>
+<div class="card-center-suit">{card.rank}</span>
+<span class="card-suit">${card.suit.symbol}&lt;/span&gt; &lt;/div&gt;;
+return el;
+}
+
+function logMessage(msg, type = '') {
+const logEl = document.getElementById('gameLog');
+const item = document.createElement('div');
+item.className = log-item${type}`;
+item.innerHTML = msg;
+logEl.prepend(item);
+}
+
+function showTablaAnimation() {
+const banner = document.getElementById('tablaBanner');
+banner.classList.add('show');
+setTimeout(() => banner.classList.remove('show'), 1500);
+}
+
+/* Modali */
+function showRoundResultModal(pPts, cPts, pSpula, cSpula, pTotal, cTotal) {
+document.getElementById('modalTitle').innerText = '🏆 Rezultat Runde';
+
+let html = &lt;table class="score-breakdown"&gt; &lt;thead&gt; &lt;tr&gt; &lt;th&gt;Kategorija&lt;/th&gt; &lt;th&gt;👤 Ti&lt;/th&gt; &lt;th&gt;🤖 Računalo&lt;/th&gt; &lt;/tr&gt; &lt;/thead&gt; &lt;tbody&gt; &lt;tr&gt; &lt;td&gt;Bodovne karte (${playerCaptured.length} vs ${cpuCaptured.length})&lt;/td&gt; &lt;td&gt;${pPts}</td>
+<td>${cPts}&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;Špula (Većina karata +3)&lt;/td&gt; &lt;td&gt;${pSpula}</td>
+<td>${cSpula}&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td&gt;Table (+1 svaka)&lt;/td&gt; &lt;td&gt;${playerTablas}</td>
+<td>${cpuTablas}&lt;/td&gt; &lt;/tr&gt; &lt;tr style="font-weight: bold; background: rgba(255,255,255,0.08);"&gt; &lt;td style="color: var(--gold);"&gt;Ukupno runda:&lt;/td&gt; &lt;td style="color: #4caf50;"&gt;+${pTotal}</td>
+<td style="color: #ff9800;">+${cTotal}&lt;/td&gt; &lt;/tr&gt; &lt;/tbody&gt; &lt;/table&gt; &lt;div style="font-size: 1.1rem; margin-top: 15px; font-weight: bold;"&gt; Ukupni Meč: Igrač ${matchScorePlayer} - ${matchScoreCpu} Računalo &lt;/div&gt;;
+
+document.getElementById('modalBody').innerHTML = html;
+document.getElementById('modalOverlay').classList.add('active');
+}
+
+function openRulesModal() {
+document.getElementById('modalTitle').innerText = '📖 Pravila Igre Tablić';
+document.getElementById('modalBody').innerHTML = &lt;ul style="text-align: left; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;"&gt; &lt;li&gt;&lt;b&gt;Označavanje više karata:&lt;/b&gt; Kliknite na karte na stolu i kartu u ruci. Sve označene karte podižu se gore.&lt;/li&gt; &lt;li&gt;&lt;b&gt;Uzimanje karata:&lt;/b&gt; Gumb "Uzmi odabrano" aktivirat će se čim označeni zbroj sa stola odgovara odabranoj karti u ruci.&lt;/li&gt; &lt;li&gt;&lt;b&gt;Vrijednosti karata:&lt;/b&gt; &lt;ul&gt; &lt;li&gt;Brojevi (2-10) vrijede svoju nominalnu vrijednost.&lt;/li&gt; &lt;li&gt;Slike: Žandar (J) = 12, Dama (Q) = 13, Kralj (K) = 14.&lt;/li&gt; &lt;li&gt;As (A) može vrijediti &lt;b&gt;1&lt;/b&gt; ili &lt;b&gt;11&lt;/b&gt;.&lt;/li&gt; &lt;li&gt;Žandar (J) odnosi &lt;b&gt;sve karte sa stola&lt;/b&gt;!&lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt;&lt;b&gt;Bodovanje:&lt;/b&gt; 10 Karo (2b), 2 Tref (1b), A/K/Q/J/10 (1b), Špula/većina karata (+3b), Tabla (+1b).&lt;/li&gt; &lt;/ul&gt;;
+document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+document.getElementById('modalOverlay').classList.remove('active');
+if (deck.length === 0 && playerHand.length === 0 && cpuHand.length === 0) {
+startNewGame();
+}
+}
+
+window.onload = () => {
+startNewGame();
+};
+</script>
+</body>
+</html>
