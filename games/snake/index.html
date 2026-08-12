@@ -1,1 +1,1363 @@
+<!DOCTYPE html>
+<html class="dark" lang="hr">
 
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta name="theme-color" content="#020617">
+    <title>Snake Edu Pro</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/192x192.png?text=Snake">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            background-color: #020617 !important;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .neon-glow-lime {
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            transition: all 0.3s ease;
+        }
+
+        .modal {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(12, 19, 36, 0.96);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .opt-btn {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #dce1fb;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3.5rem;
+            word-break: break-word;
+            line-height: 1.2;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .opt-btn:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(6, 182, 212, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .opt-btn:active {
+            transform: scale(0.95);
+            background: #03b5d3;
+            color: #003640;
+            border-color: #06B6D4;
+        }
+
+        .setting-tab-active {
+            background-color: #22C55E !important;
+            color: #020617 !important;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#003640", "outline": "#869585", "on-background": "#dce1fb",
+                        "neon-orange": "#F97316", "surface-base": "#0F172A", "surface-container-low": "#151b2d",
+                        "secondary-container": "#03b5d3", "surface-bright": "#33394c", "error-container": "#93000a",
+                        "on-tertiary-container": "#6d2d00", "neon-cyan": "#06B6D4", "primary-fixed": "#6bff8f",
+                        "on-error": "#690005", "primary-container": "#22c55e", "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#070d1f", "secondary-fixed": "#acedff", "on-primary-fixed-variant": "#005321",
+                        "surface-container": "#191f31", "surface-variant": "#2e3447", "on-tertiary": "#552100",
+                        "on-secondary-container": "#00424e", "outline-variant": "#3d4a3d", "neon-lime": "#22C55E",
+                        "surface-tint": "#4ae176", "success-green": "#22C55E", "background": "#0c1324",
+                        "surface-container-highest": "#2e3447", "surface-container-high": "#23293c", "on-secondary-fixed-variant": "#004e5c",
+                        "on-surface-variant": "#bccbb9", "tertiary": "#ffb792", "inverse-primary": "#006e2f",
+                        "tertiary-fixed": "#ffdbca", "on-primary": "#003915", "neon-purple": "#A855F7",
+                        "on-tertiary-fixed-variant": "#783200", "surface-elevated": "#1E293B", "on-tertiary-fixed": "#341100",
+                        "secondary": "#4cd7f6", "on-primary-fixed": "#002109", "surface": "#0c1324",
+                        "primary": "#4be277", "error": "#ffb4ab", "tertiary-fixed-dim": "#ffb690",
+                        "on-primary-container": "#004b1e", "secondary-fixed-dim": "#4cd7f6", "inverse-on-surface": "#2a3043",
+                        "error-red": "#EF4444", "on-surface": "#dce1fb", "surface-dim": "#0c1324",
+                        "inverse-surface": "#dce1fb", "tertiary-container": "#ff8e4d", "primary-fixed-dim": "#4ae176",
+                        "on-secondary-fixed": "#001f26", "surface-deep": "#020617"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"], "stats-number": ["JetBrains Mono"], "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"], "display-xl": ["Plus Jakarta Sans"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface-deep text-on-surface font-body-md min-h-screen selection:bg-neon-lime/30 overflow-x-hidden">
+    <!-- TopAppBar -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-16 bg-surface-container/70 backdrop-blur-xl shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+        <div class="flex items-center gap-4">
+            <h1 onclick="goBackToMenu()"
+                class="font-display-xl-mobile text-2xl font-extrabold text-neon-lime cursor-pointer">Snake Edu</h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex gap-8">
+                <span onclick="goBackToMenu()"
+                    class="text-on-surface-variant hover:text-neon-lime transition-colors cursor-pointer font-label-caps text-sm">Izbornik</span>
+                <span onclick="goBackTo('dashboard')"
+                    class="text-on-surface-variant hover:text-neon-cyan transition-colors cursor-pointer font-label-caps text-sm">Statistika</span>
+                <span onclick="goBackTo('difficulty')"
+                    class="text-on-surface-variant hover:text-neon-orange transition-colors cursor-pointer font-label-caps text-sm">Brzina</span>
+                <span onclick="goBackTo('settings')"
+                    class="text-on-surface-variant hover:text-neon-purple transition-colors cursor-pointer font-label-caps text-sm">Postavke</span>
+            </div>
+            <button id="header-pause-btn" disabled onclick="togglePause()"
+                class="active:scale-95 duration-200 p-2 rounded-full hover:bg-surface-bright/20 opacity-30 cursor-not-allowed">
+                <span class="material-symbols-outlined text-on-surface flex items-center justify-center">pause</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- SideNavBar -->
+    <aside
+        class="hidden md:flex flex-col fixed left-0 top-0 h-full z-40 w-64 backdrop-blur-xl bg-surface-container-low/90 border-r border-white/10 shadow-2xl pt-24 px-4">
+        <div class="mb-8 px-4">
+            <h2 class="font-headline-lg text-2xl text-neon-cyan">Snake Edu</h2>
+            <p class="text-on-surface-variant text-sm">Vježbaj i Uči</p>
+        </div>
+        <nav class="flex flex-col gap-2">
+            <button id="nav-categories" onclick="goBackToMenu()"
+                class="flex items-center gap-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all duration-300 ease-in-out w-full text-left">
+                <span class="material-symbols-outlined">category</span>
+                <span>Kategorije</span>
+            </button>
+            <button id="nav-dashboard" onclick="goBackTo('dashboard')"
+                class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-lg transition-all duration-300 ease-in-out w-full text-left">
+                <span class="material-symbols-outlined">bar_chart</span>
+                <span>Statistika</span>
+            </button>
+            <button id="nav-speed" onclick="goBackTo('difficulty')"
+                class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-lg transition-all duration-300 ease-in-out w-full text-left">
+                <span class="material-symbols-outlined">speed</span>
+                <span>Brzina Zmije</span>
+            </button>
+            <button id="nav-settings" onclick="goBackTo('settings')"
+                class="flex items-center gap-4 p-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-lg transition-all duration-300 ease-in-out w-full text-left">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Postavke</span>
+            </button>
+        </nav>
+        <div class="mt-auto pb-8 px-4">
+            <button onclick="location.reload()"
+                class="w-full py-3 bg-neon-orange text-surface-deep font-bold rounded-lg hover:scale-105 active:scale-95 transition-transform duration-200">Restart</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-24 md:pb-8 px-4 md:px-8 md:ml-64 flex flex-col items-center min-h-screen">
+        <!-- Stats HUD -->
+        <div
+            class="w-full max-w-4xl flex justify-between items-center mb-8 glass-card rounded-xl p-4 border border-white/5 shadow-lg">
+            <div class="flex flex-col">
+                <span class="font-label-caps text-[10px] text-on-surface-variant">PRAG</span>
+                <span id="min-limit" class="font-stats-number text-xl text-neon-lime">0</span>
+            </div>
+            <div class="h-10 w-[1px] bg-white/10"></div>
+            <div class="flex flex-col text-right">
+                <span id="hud-score-label" class="font-label-caps text-[10px] text-on-surface-variant">BODOVI</span>
+                <span id="score-val" class="font-stats-number text-xl text-neon-cyan">0</span>
+            </div>
+        </div>
+
+        <!-- CATEGORIES VIEW -->
+        <section id="view-categories" class="w-full max-w-4xl flex flex-col gap-6">
+            <div onclick="startDailyChallenge()"
+                class="cursor-pointer group relative overflow-hidden rounded-2xl border-2 border-amber-500/50 bg-amber-500/10 p-6 transition-all duration-300 hover:scale-[1.01] hover:bg-amber-500/15">
+                <div class="absolute -right-6 -top-6 text-7xl opacity-10 group-hover:scale-110 transition-transform">🏆
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="text-left">
+                        <span
+                            class="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-black tracking-widest uppercase mb-2">🏆
+                            POSEBNA AKTIVNOST</span>
+                        <h3 class="font-headline-lg text-2xl font-black text-amber-300">Dnevni Izazov</h3>
+                        <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Provjeri svoje znanje u točno 10
+                            brzih pitanja iz nasumične teme i težine!</p>
+                    </div>
+                    <div
+                        class="text-left sm:text-right min-w-[120px] bg-amber-500/5 sm:bg-transparent p-3 sm:p-0 rounded-xl">
+                        <p class="text-[9px] font-bold text-on-surface-variant uppercase tracking-wider">Status danas
+                        </p>
+                        <span id="daily-status-txt" class="text-sm font-black text-amber-400">Nije odigrano</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                <div
+                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-purple opacity-50">
+                </div>
+                <div class="text-center mb-10">
+                    <h2 class="font-headline-lg text-3xl text-on-surface mb-2">Kategorije</h2>
+                    <p class="text-on-surface-variant text-lg">Odaberi područje znanja</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <button onclick="selectMainCategory('math')"
+                        class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-neon-cyan/30 bg-neon-cyan/5 hover:bg-neon-cyan/10 transition-all group">
+                        <span class="text-4xl mb-4 group-hover:scale-110 transition-transform">🔢</span>
+                        <span class="font-headline-md text-xl text-neon-cyan">Matematika</span>
+                    </button>
+                    <button onclick="selectMainCategory('history')"
+                        class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-error-red/30 bg-error-red/5 hover:bg-error-red/10 transition-all group">
+                        <span class="text-4xl mb-4 group-hover:scale-110 transition-transform">📜</span>
+                        <span class="font-headline-md text-xl text-error-red">Povijest</span>
+                    </button>
+                    <button onclick="selectMainCategory('geo')"
+                        class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-neon-orange/30 bg-neon-orange/5 hover:bg-neon-orange/10 transition-all group">
+                        <span class="text-4xl mb-4 group-hover:scale-110 transition-transform">🌍</span>
+                        <span class="font-headline-md text-xl text-neon-orange">Geografija</span>
+                    </button>
+                    <button onclick="selectMainCategory('art')"
+                        class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-neon-purple/30 bg-neon-purple/5 hover:bg-neon-purple/10 transition-all group">
+                        <span class="text-4xl mb-4 group-hover:scale-110 transition-transform">🎨</span>
+                        <span class="font-headline-md text-xl text-neon-purple">Umjetnost</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MATH SUB-CATEGORIES VIEW -->
+        <section id="view-math-sub"
+            class="hidden w-full max-w-4xl glass-card rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-purple opacity-50">
+            </div>
+            <div class="text-center mb-10">
+                <h2 class="font-headline-lg text-3xl text-on-surface mb-2">Gradivo</h2>
+                <p class="text-on-surface-variant text-lg">Odaberi lekciju</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <button onclick="selectMathSub('basic')"
+                    class="category-card flex flex-col items-center justify-center p-6 rounded-xl border-2 border-neon-lime/30 bg-neon-lime/5 hover:bg-neon-lime/10 transition-all group">
+                    <span class="text-3xl mb-3 group-hover:scale-110 transition-transform">➕</span>
+                    <span class="font-headline-md text-base text-neon-lime">Zbrajanje</span>
+                </button>
+                <button onclick="selectMathSub('subtraction')"
+                    class="category-card flex flex-col items-center justify-center p-6 rounded-xl border-2 border-error-red/30 bg-error-red/5 hover:bg-error-red/10 transition-all group">
+                    <span class="text-3xl mb-3 group-hover:scale-110 transition-transform">➖</span>
+                    <span class="font-headline-md text-base text-error-red">Oduzimanje</span>
+                </button>
+                <button onclick="selectMathSub('advanced')"
+                    class="category-card flex flex-col items-center justify-center p-6 rounded-xl border-2 border-neon-orange/30 bg-neon-orange/5 hover:bg-neon-orange/10 transition-all group">
+                    <span class="text-3xl mb-3 group-hover:scale-110 transition-transform">✖️</span>
+                    <span class="font-headline-md text-base text-neon-orange">Množenje</span>
+                </button>
+                <button onclick="selectMathSub('division')"
+                    class="category-card flex flex-col items-center justify-center p-6 rounded-xl border-2 border-neon-purple/30 bg-neon-purple/5 hover:bg-neon-purple/10 transition-all group">
+                    <span class="text-3xl mb-3 group-hover:scale-110 transition-transform">➗</span>
+                    <span class="font-headline-md text-base text-neon-purple">Dijeljenje</span>
+                </button>
+                <button onclick="selectMathSub('mix')"
+                    class="category-card flex flex-col items-center justify-center p-6 rounded-xl border-2 border-neon-cyan/30 bg-neon-cyan/5 hover:bg-neon-cyan/10 transition-all group col-span-1 sm:col-span-2 lg:col-span-1">
+                    <span class="text-3xl mb-3 group-hover:scale-110 transition-transform">🎛️</span>
+                    <span class="font-headline-md text-base text-neon-cyan">Kombinacija</span>
+                </button>
+            </div>
+            <div class="mt-12 flex justify-center">
+                <button onclick="goBackTo('categories')"
+                    class="flex items-center gap-2 px-8 py-3 rounded-full border border-white/20 text-on-surface hover:bg-white/10 transition-all font-label-caps text-sm active:scale-95">
+                    <span class="material-symbols-outlined">arrow_back</span> Natrag
+                </button>
+            </div>
+        </section>
+
+        <!-- DIFFICULTY VIEW -->
+        <section id="view-difficulty"
+            class="hidden w-full max-w-4xl glass-card rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-purple opacity-50">
+            </div>
+            <div class="text-center mb-10">
+                <h2 class="font-headline-lg text-3xl text-on-surface mb-2">Brzina Zmije</h2>
+                <p class="text-on-surface-variant text-lg">Izaberi tempo igre</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <button onclick="startGame(200, 0.98, 15)"
+                    class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-success-green/30 bg-success-green/5 hover:bg-success-green/10 transition-all group">
+                    <span class="text-3xl mb-4 group-hover:scale-110 transition-transform">🐢</span>
+                    <span class="font-headline-md text-xl text-success-green">Lagano</span>
+                </button>
+                <button onclick="startGame(155, 0.96, 10)"
+                    class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-neon-orange/30 bg-neon-orange/5 hover:bg-neon-orange/10 transition-all group">
+                    <span class="text-3xl mb-4 group-hover:scale-110 transition-transform">🐍</span>
+                    <span class="font-headline-md text-xl text-neon-orange">Srednje</span>
+                </button>
+                <button onclick="startGame(115, 0.94, 5)"
+                    class="category-card flex flex-col items-center justify-center p-8 rounded-xl border-2 border-error-red/30 bg-error-red/5 hover:bg-error-red/10 transition-all group">
+                    <span class="text-3xl mb-4 group-hover:scale-110 transition-transform">⚡</span>
+                    <span class="font-headline-md text-xl text-error-red">Teško</span>
+                </button>
+            </div>
+            <div class="mt-12 flex justify-center">
+                <button onclick="goBackToCategoryOrSub()"
+                    class="flex items-center gap-2 px-8 py-3 rounded-full border border-white/20 text-on-surface hover:bg-white/10 transition-all font-label-caps text-sm active:scale-95">
+                    <span class="material-symbols-outlined">arrow_back</span> Natrag
+                </button>
+            </div>
+        </section>
+
+        <!-- GAME VIEW -->
+        <section id="view-game" class="hidden w-full max-w-4xl flex flex-col items-center">
+            <div id="game-wrapper" style="touch-action: none; overscroll-behavior: none;"
+                class="relative bg-black border-2 border-surface-elevated rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+                <canvas id="snakeCanvas"></canvas>
+                <div id="countdown" style="display: none;"
+                    class="absolute inset-0 flex items-center justify-center text-8xl font-black text-neon-lime select-none pointer-events-none drop-shadow-[0_0_30px_rgba(34,197,94,0.5)]">
+                    3</div>
+
+                <div id="pause-modal" class="modal">
+                    <h2 class="text-2xl font-extrabold mb-4 text-neon-cyan tracking-wider italic uppercase">Pauza</h2>
+                    <div class="flex flex-col gap-3 w-full max-w-[180px]">
+                        <button onclick="resumeGame()"
+                            class="py-2.5 bg-neon-lime text-surface-deep font-extrabold text-sm rounded-lg shadow-lg hover:shadow-neon-lime/20 hover:scale-105 active:scale-95 duration-200 uppercase">Nastavi</button>
+                        <button onclick="goBackToMenu()"
+                            class="py-2.5 bg-surface-elevated text-on-surface border border-white/10 font-bold text-sm rounded-lg hover:bg-surface-bright/20 hover:scale-105 active:scale-95 duration-200 uppercase">Izbornik</button>
+                    </div>
+                </div>
+
+                <div id="challenge-modal" class="modal">
+                    <div class="w-full max-w-sm px-2 text-center">
+                        <h2 id="challenge-badge-title"
+                            class="text-neon-cyan font-bold text-[10px] mb-1 uppercase tracking-[0.2em]">IZAZOV</h2>
+                        <div id="q-text"
+                            class="text-lg font-black my-2 tracking-tight text-white italic leading-tight px-1 min-h-[3rem] flex items-center justify-center">
+                            ?</div>
+                        <div
+                            class="w-full bg-surface-elevated h-1 rounded-full overflow-hidden mb-3 border border-white/5">
+                            <div id="timer-bar" class="h-full bg-neon-orange w-full transition-all duration-100 linear">
+                            </div>
+                        </div>
+                        <div id="options-container" class="flex flex-row gap-2 w-full justify-between"></div>
+                    </div>
+                </div>
+
+                <div id="game-over-modal" class="modal">
+                    <h2 class="text-3xl font-black text-error-red mb-2 italic uppercase tracking-wider">Kraj Igre</h2>
+                    <p id="game-over-reason"
+                        class="text-on-surface-variant mb-1 uppercase text-[8px] font-bold tracking-widest">Pali ste
+                        ispod praga opstanka</p>
+                    <p class="text-xl font-black mb-4 text-on-surface">Bodovi: <span id="final-score"
+                            class="text-neon-orange font-mono">0</span></p>
+                    <button onclick="goBackToMenu()"
+                        class="bg-white text-black px-6 py-2.5 rounded-full font-black text-sm hover:scale-105 active:scale-95 duration-200 shadow-xl uppercase">Izbornik</button>
+                </div>
+
+                <div id="daily-complete-modal" class="modal">
+                    <span class="text-3xl mb-1">🏆</span>
+                    <h2 class="text-xl font-black text-amber-400 mb-1 italic uppercase tracking-wider">Izazov završen!
+                    </h2>
+                    <p class="text-on-surface-variant mb-2 uppercase text-[8px] font-bold tracking-widest">Odgovorio si
+                        na svih 10 pitanja</p>
+                    <div
+                        class="glass-card rounded-xl p-2.5 mb-3 w-full max-w-[200px] border border-amber-500/20 mx-auto">
+                        <p class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest mb-0.5">Točni
+                            odgovori</p>
+                        <span id="daily-final-score" class="text-3xl font-black text-amber-300 font-mono">0/10</span>
+                    </div>
+                    <button onclick="goBackToMenu()"
+                        class="bg-amber-500 text-surface-deep px-6 py-2.5 rounded-full font-black text-sm hover:scale-105 active:scale-95 duration-200 shadow-xl uppercase mt-2">Izbornik</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard"
+            class="hidden w-full max-w-4xl glass-card rounded-2xl p-6 md:p-12 shadow-2xl relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-purple opacity-50">
+            </div>
+            <div class="text-center mb-8">
+                <h2 class="font-headline-lg text-3xl text-on-surface mb-1">Nadzorna Ploča</h2>
+                <p class="text-on-surface-variant text-xs uppercase tracking-widest">Analitika tvog znanja</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-8 text-center">
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase">Igre</p>
+                    <span id="dash-games" class="font-stats-number text-xl text-white">0</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase">Rekord</p>
+                    <span id="dash-high" class="font-stats-number text-xl text-neon-orange">0</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                    <p class="text-[10px] font-bold text-on-surface-variant uppercase">Točnost</p>
+                    <span id="dash-accuracy" class="font-stats-number text-xl text-neon-lime">0%</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4 max-w-xl mx-auto text-left mb-6">
+                <h3 class="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-2">Uspješnost po
+                    temama:</h3>
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between text-xs font-bold"><span class="text-neon-cyan">🔢
+                            Matematika</span><span id="bar-math-txt">0%</span></div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-white/5">
+                        <div id="bar-math-fill" class="h-full bg-neon-cyan w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between text-xs font-bold"><span class="text-error-red">📜
+                            Povijest</span><span id="bar-history-txt">0%</span></div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-white/5">
+                        <div id="bar-history-fill" class="h-full bg-error-red w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between text-xs font-bold"><span class="text-neon-orange">🌍
+                            Geografija</span><span id="bar-geo-txt">0%</span></div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-white/5">
+                        <div id="bar-geo-fill" class="h-full bg-neon-orange w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between text-xs font-bold"><span class="text-neon-purple">🎨
+                            Umjetnost</span><span id="bar-art-txt">0%</span></div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-white/5">
+                        <div id="bar-art-fill" class="h-full bg-neon-purple w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="max-w-xl mx-auto mt-6 bg-neon-cyan/5 border border-neon-cyan/20 p-4 rounded-xl text-center shadow-lg">
+                <p
+                    class="text-neon-cyan font-bold text-xs uppercase tracking-wider mb-1 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">lightbulb</span> Pametni savjetnik</p>
+                <p id="dash-advice" class="text-xs text-on-surface-variant leading-relaxed">Odigraj par kvizova kako bi
+                    savjetnik analizirao tvoje znanje.</p>
+            </div>
+
+            <div class="mt-8 flex justify-center">
+                <button onclick="goBackTo('categories')"
+                    class="flex items-center gap-2 px-8 py-3 rounded-full border border-white/20 text-on-surface hover:bg-white/10 transition-all font-label-caps text-sm active:scale-95">
+                    <span class="material-symbols-outlined">arrow_back</span> Natrag
+                </button>
+            </div>
+        </section>
+
+        <!-- SETTINGS VIEW -->
+        <section id="view-settings"
+            class="hidden w-full max-w-4xl glass-card rounded-2xl p-6 md:p-12 shadow-2xl relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-lime via-neon-cyan to-neon-purple opacity-50">
+            </div>
+            <div class="text-center mb-8">
+                <h2 class="font-headline-lg text-3xl text-on-surface mb-2">Postavke</h2>
+                <p class="text-on-surface-variant text-lg">Prilagodi stil kretanja, granice i vizuale</p>
+            </div>
+
+            <div class="flex flex-col gap-5 max-w-lg mx-auto">
+                <div class="flex flex-col gap-2 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="flex items-center justify-between">
+                        <div class="text-left">
+                            <span class="font-body-md text-on-surface font-semibold text-sm">Način kretanja</span>
+                            <p class="text-[10px] text-on-surface-variant">Slobodno (360°) ili Retro (mreža pod 90°)</p>
+                        </div>
+                        <div class="flex gap-1 bg-surface-elevated p-1 rounded-lg border border-white/5">
+                            <button id="mode-retro-btn" onclick="setGameMode('retro')"
+                                class="px-3 py-1 text-xs font-bold rounded-md">Retro</button>
+                            <button id="mode-modern-btn" onclick="setGameMode('modern')"
+                                class="px-3 py-1 text-xs font-bold rounded-md">Slobodno</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="flex items-center justify-between">
+                        <div class="text-left">
+                            <span class="font-body-md text-on-surface font-semibold text-sm">Granice ekrana</span>
+                            <p class="text-[10px] text-on-surface-variant">Prolaz kroz rubove (Wrap) ili Čvrsti zidovi
+                                (Classic)</p>
+                        </div>
+                        <div class="flex gap-1 bg-surface-elevated p-1 rounded-lg border border-white/5">
+                            <button id="bounds-wrap-btn" onclick="setBoundsMode('wrap')"
+                                class="px-3 py-1 text-xs font-bold rounded-md">Prolaz</button>
+                            <button id="bounds-classic-btn" onclick="setBoundsMode('classic')"
+                                class="px-3 py-1 text-xs font-bold rounded-md">Zidovi</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="modern-controls-group" class="hidden flex flex-col gap-4">
+                    <div
+                        class="flex flex-col gap-2 p-4 rounded-xl bg-white/5 border border-white/10 border-l-4 border-l-neon-cyan">
+                        <div class="text-left mb-2">
+                            <span class="font-body-md text-on-surface font-semibold text-sm text-neon-cyan">Računalo
+                                (360°)</span>
+                            <p class="text-[10px] text-on-surface-variant">Odaberi željeni stil kretanja na PC-u</p>
+                        </div>
+                        <div
+                            class="grid grid-cols-2 gap-1 bg-surface-elevated p-1 rounded-lg border border-white/5 text-center">
+                            <button id="pc-keyboard-btn" onclick="setDesktopMode('keyboard')"
+                                class="py-2 text-[10px] font-bold rounded-md transition-all">Tipkovnica (A/D)</button>
+                            <button id="pc-mouse-btn" onclick="setDesktopMode('mouse')"
+                                class="py-2 text-[10px] font-bold rounded-md transition-all">Slijedi miša</button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex flex-col gap-2 p-4 rounded-xl bg-white/5 border border-white/10 border-l-4 border-l-neon-purple">
+                        <div class="text-left mb-2">
+                            <span class="font-body-md text-on-surface font-semibold text-sm text-neon-purple">Mobitel
+                                (360°)</span>
+                            <p class="text-[10px] text-on-surface-variant">Odaberi metodu dodira za zaslon</p>
+                        </div>
+                        <div
+                            class="grid grid-cols-2 gap-1 bg-surface-elevated p-1 rounded-lg border border-white/5 text-center">
+                            <button id="touch-trackpad-btn" onclick="setTouchMode('trackpad')"
+                                class="py-2 text-[10px] font-bold rounded-md transition-all">Trackpad</button>
+                            <button id="touch-joystick-btn" onclick="setTouchMode('joystick')"
+                                class="py-2 text-[10px] font-bold rounded-md transition-all">Joystick (Desni)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <span class="font-body-md text-on-surface font-semibold text-sm">Pomoćne linije mreže</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="setting-grid" class="sr-only peer" onchange="toggleSetting('grid')">
+                        <div
+                            class="w-11 h-6 bg-surface-elevated rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-on-surface after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-neon-lime">
+                        </div>
+                    </label>
+                </div>
+
+                <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <span class="font-body-md text-on-surface font-semibold text-sm">Efekat sjaja (Glow)</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="setting-glow" class="sr-only peer" checked
+                            onchange="toggleSetting('glow')">
+                        <div
+                            class="w-11 h-6 bg-surface-elevated rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-on-surface after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-neon-lime">
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-center">
+                <button onclick="goBackTo('categories')"
+                    class="flex items-center gap-2 px-8 py-3 rounded-full border border-white/20 text-on-surface hover:bg-white/10 transition-all font-label-caps text-sm active:scale-95">
+                    <span class="material-symbols-outlined">arrow_back</span> Natrag
+                </button>
+            </div>
+        </section>
+
+        <div class="fixed inset-0 -z-10 pointer-events-none">
+            <div class="absolute top-1/4 -left-20 w-96 h-96 bg-neon-lime/5 blur-[120px] rounded-full"></div>
+            <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-neon-cyan/5 blur-[120px] rounded-full"></div>
+        </div>
+    </main>
+
+    <!-- BottomNavBar -->
+    <nav
+        class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container/85 backdrop-blur-xl rounded-t-xl border-t border-t-white/10 shadow-[0_-4px_12px_rgba(0,0,0,0.5)]">
+        <button onclick="goBackToMenu()"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-neon-lime transition-all active:scale-90 duration-150 py-1">
+            <span class="material-symbols-outlined">home</span>
+            <span class="font-label-caps text-[9px] uppercase tracking-wider">Meni</span>
+        </button>
+        <button onclick="goBackTo('dashboard')"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-neon-cyan transition-all active:scale-90 duration-150 py-1">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span class="font-label-caps text-[9px] uppercase tracking-wider">Statistika</span>
+        </button>
+        <button onclick="goBackTo('settings')"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-neon-purple transition-all active:scale-90 duration-150 py-1">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="font-label-caps text-[9px] uppercase tracking-wider">Postavke</span>
+        </button>
+        <button onclick="location.reload()"
+            class="flex flex-col items-center justify-center text-on-surface-variant hover:text-neon-orange transition-all active:scale-90 duration-150 py-1">
+            <span class="material-symbols-outlined">replay</span>
+            <span class="font-label-caps text-[9px] uppercase tracking-wider">Reset</span>
+        </button>
+    </nav>
+
+    <!-- Version Indicator -->
+    <div
+        class="fixed bottom-2 right-2 text-[8px] text-gray-600 font-mono uppercase tracking-widest pointer-events-none hidden md:block">
+        v1.4.1</div>
+
+    <script>
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('game-wrapper');
+        const countdownEl = document.getElementById('countdown');
+        const GRID = 20;
+
+        let snake, food, dir, nextDir, score, minLimit, lastChallengeScore, interval, speedFactor, isPaused, correctResult, mathTimer, TILES;
+        let selectedCat = '', selectedSub = '';
+        let showGridLines = false; let showGlow = true; let challengeTimeLimit = 10;
+
+        let gameMode = 'modern';
+        let boundsMode = 'wrap';
+        let modernAngle = -Math.PI / 2;
+        let modernTargetAngle = null;
+        let modernSpeed = 1.4;
+        let baseStartSpeedModern = 1.4;
+        let turnSpeed = 0.065;
+        let keysPressed = {};
+
+        let touchMode = 'trackpad';
+        let desktopMode = 'keyboard';
+        let mouseX = null; let mouseY = null;
+
+        let joystickBase = { x: 0, y: 0, radius: 45 };
+        let joystickStick = { x: 0, y: 0, radius: 20 };
+        let isJoystickActive = false;
+
+        let isDailyChallenge = false;
+        let dailyQuestionsAnswered = 0; let dailyCorrect = 0;
+        let isGoldFood = false; let goldFoodTimer = 0;
+        let laserWallSide = null; let laserWallState = 'none'; let laserTimer = null; let isLaserActiveOnDifficulty = false;
+
+        let playerStats = {
+            gamesPlayed: 0, highScore: 0, lastDailyDate: "", lastDailyScore: 0,
+            math: { correct: 0, total: 0 }, history: { correct: 0, total: 0 }, geo: { correct: 0, total: 0 }, art: { correct: 0, total: 0 }
+        };
+
+        const catColors = { math: '#06B6D4', history: '#EF4444', geo: '#F97316', art: '#A855F7' };
+
+        const geoDB = [
+            { q: "Glavni grad Hrvatske?", a: "Zagreb" }, { q: "Glavni grad Italije?", a: "Rim" }, { q: "Glavni grad Njemačke?", a: "Berlin" }, { q: "Glavni grad Japana?", a: "Tokio" },
+            { q: "Glavni grad Francuske?", a: "Pariz" }, { q: "Glavni grad Španjolske?", a: "Madrid" }, { q: "Glavni grad Rusije?", a: "Moskva" }, { q: "Glavni grad Austrije?", a: "Beč" },
+            { q: "Glavni grad Grčke?", a: "Atena" }, { q: "Glavni grad Turske?", a: "Ankara" }, { q: "Glavni grad Portugala?", a: "Lisabon" }, { q: "Glavni grad Brazila?", a: "Brazilija" }
+        ];
+        const historyDB = [
+            { q: "Kada je počeo 2. svj. rat?", a: "1939" }, { q: "Berlinski zid je pao...?", a: "1989" }, { q: "Kolumbo otkriva Ameriku?", a: "1492" },
+            { q: "Kada je počeo 1. svj. rat?", a: "1914" }, { q: "Francuska revolucija počela je...?", a: "1789" }, { q: "Pad Rimskog Carstva (Zapadnog)?", a: "476" },
+            { q: "Kada je završio 2. svj. rat?", a: "1945" }, { q: "Titanic je potonuo...?", a: "1912" }, { q: "Slijetanje na Mjesec?", a: "1969" }
+        ];
+        const artDB = [
+            { q: "Autor Mona Lise?", a: "Leonardo da Vinci" }, { q: "Autor Zvjezdane noći?", a: "Vincent van Gogh" }, { q: "U kojem je gradu Louvre?", a: "Pariz" },
+            { q: "Autor skulpture David?", a: "Michelangelo" }, { q: "Tko je naslikao Guernicu?", a: "Pablo Picasso" }, { q: "Tko je naslikao Stvaranje Adam?", a: "Michelangelo" },
+            { q: "Tko je naslikao Posljednju večeru?", a: "Leonardo da Vinci" }, { q: "Koji je grad dom muzeja Prado?", a: "Madrid" }
+        ];
+
+        function startLaserSystem() {
+            stopLaserSystem();
+            if (!isLaserActiveOnDifficulty) return;
+            laserTimer = setInterval(() => {
+                if (isPaused || laserWallState !== 'none') return;
+                const sides = ['top', 'bottom', 'left', 'right'];
+                laserWallSide = sides[Math.floor(Math.random() * sides.length)];
+                laserWallState = 'warning';
+                setTimeout(() => {
+                    if (!isPaused && laserWallState === 'warning') {
+                        laserWallState = 'active';
+                        setTimeout(() => { if (laserWallState === 'active') { laserWallState = 'none'; laserWallSide = null; } }, 3000);
+                    } else { laserWallState = 'none'; laserWallSide = null; }
+                }, 1500);
+            }, Math.floor(Math.random() * 6000) + 12000);
+        }
+
+        function stopLaserSystem() { clearInterval(laserTimer); laserWallSide = null; laserWallState = 'none'; }
+
+        function loadStatsFromStorage() {
+            const savedData = localStorage.getItem('snake_edu_pro_stats');
+            if (savedData) { try { playerStats = JSON.parse(savedData); } catch (e) { } }
+            updateDailyStatusUI();
+        }
+
+        function saveStatsToStorage() { localStorage.setItem('snake_edu_pro_stats', JSON.stringify(playerStats)); }
+
+        function updateDailyStatusUI() {
+            const todayStr = new Date().toDateString(); const statusTxt = document.getElementById('daily-status-txt');
+            if (playerStats.lastDailyDate === todayStr) { statusTxt.innerText = `Riješeno: ${playerStats.lastDailyScore}/10`; statusTxt.className = "text-sm font-black text-green-400"; }
+            else { statusTxt.innerText = "Nije odigrano"; statusTxt.className = "text-sm font-black text-amber-400"; }
+        }
+
+        function renderDashboard() {
+            document.getElementById('dash-games').innerText = playerStats.gamesPlayed;
+            document.getElementById('dash-high').innerText = playerStats.highScore;
+            let totalCorrect = playerStats.math.correct + playerStats.history.correct + playerStats.geo.correct + playerStats.art.correct;
+            let totalQuestions = playerStats.math.total + playerStats.history.total + playerStats.geo.total + playerStats.art.total;
+            let globalAccuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+            document.getElementById('dash-accuracy').innerText = globalAccuracy + "%";
+
+            const categories = ['math', 'history', 'geo', 'art'];
+            let lowestAccuracy = 101; let weakestCategory = '';
+
+            categories.forEach(cat => {
+                let data = playerStats[cat]; let accuracy = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
+                document.getElementById(`bar-${cat}-txt`).innerText = accuracy + "%";
+                const fill = document.getElementById(`bar-${cat}-fill`); fill.style.width = accuracy + "%";
+                if (accuracy >= 75) fill.className = "h-full bg-neon-lime"; else if (accuracy >= 45) fill.className = "h-full bg-neon-orange"; else fill.className = "h-full bg-error-red";
+                if (data.total > 0 && accuracy < lowestAccuracy) { lowestAccuracy = accuracy; weakestCategory = cat; }
+            });
+
+            const adviceEl = document.getElementById('dash-advice');
+            if (totalQuestions === 0) adviceEl.innerText = "Odigraj par krugova kako bi pokrenuo analitiku i savjetnika.";
+            else if (weakestCategory === '') adviceEl.innerText = "Sve držiš na 100%! Izvrsno znanje.";
+            else {
+                switch (weakestCategory) {
+                    case 'math': adviceEl.innerText = "Zmija najbrže raste u drugim temama. Fokusiraj se na Matematiku!"; break;
+                    case 'history': adviceEl.innerText = "Datumi ti stvaraju mali otpor. Odigraj nekoliko rundi Povijesti!"; break;
+                    case 'geo': adviceEl.innerText = "Glavni gradovi te zbunjuju pod pritiskom. Pokreni Geografiju!"; break;
+                    case 'art': adviceEl.innerText = "Umjetnost i poznati autori su najslabija karika. Ponovi gradivo Umjetnosti!"; break;
+                }
+            }
+        }
+
+        function setGameMode(mode) {
+            gameMode = mode;
+            const retroBtn = document.getElementById('mode-retro-btn');
+            const modernBtn = document.getElementById('mode-modern-btn');
+            const modernGroup = document.getElementById('modern-controls-group');
+
+            if (mode === 'retro') {
+                if (retroBtn) retroBtn.className = "px-3 py-1 text-xs font-bold rounded-md bg-neon-lime text-surface-deep shadow-lg";
+                if (modernBtn) modernBtn.className = "px-3 py-1 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface";
+                if (modernGroup) modernGroup.classList.add('hidden');
+            } else {
+                if (retroBtn) retroBtn.className = "px-3 py-1 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface";
+                if (modernBtn) modernBtn.className = "px-3 py-1 text-xs font-bold rounded-md bg-neon-lime text-surface-deep shadow-lg";
+                if (modernGroup) modernGroup.classList.remove('hidden');
+            }
+        }
+
+        function selectMainCategory(cat) {
+            selectedCat = cat;
+            if (cat === 'math') goBackTo('math-sub');
+            else goBackTo('difficulty');
+        }
+
+        function selectMathSub(sub) { selectedSub = sub; goBackTo('difficulty'); }
+
+        function goBackTo(view) {
+            if (view !== 'game') {
+                isPaused = true; isDailyChallenge = false;
+                clearInterval(mathTimer); stopLaserSystem();
+                document.getElementById('pause-modal').classList.remove('active');
+                document.getElementById('challenge-modal').classList.remove('active');
+                document.getElementById('game-over-modal').classList.remove('active');
+                document.getElementById('daily-complete-modal').classList.remove('active');
+                document.getElementById('hud-score-label').innerText = "BODOVI";
+                document.getElementById('score-val').className = "font-stats-number text-xl text-neon-cyan";
+                const pauseBtn = document.getElementById('header-pause-btn');
+                if (pauseBtn) { pauseBtn.classList.add('opacity-30', 'cursor-not-allowed'); pauseBtn.disabled = true; }
+            }
+            if (view === 'dashboard') renderDashboard();
+            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById('view-' + view);
+            if (target) target.classList.remove('hidden');
+            updateNavigationHighlights(view);
+            if (view === 'game') setupCanvas();
+        }
+
+        function goBackToCategoryOrSub() { if (selectedCat === 'math') goBackTo('math-sub'); else goBackTo('categories'); }
+        function goBackToMenu() { goBackTo('categories'); }
+
+        function updateNavigationHighlights(currentView) {
+            const navCat = document.getElementById('nav-categories');
+            const navDashboard = document.getElementById('nav-dashboard');
+            const navSpeed = document.getElementById('nav-speed');
+            const navSettings = document.getElementById('nav-settings');
+
+            [navCat, navDashboard, navSpeed, navSettings].forEach(btn => {
+                if (btn) btn.className = "flex items-center gap-4 p-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-lg transition-all duration-300 ease-in-out w-full text-left";
+            });
+
+            if (currentView === 'categories' || currentView === 'math-sub') {
+                if (navCat) navCat.className = "flex items-center gap-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all duration-300 ease-in-out w-full text-left";
+            } else if (currentView === 'dashboard') {
+                if (navDashboard) navDashboard.className = "flex items-center gap-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all duration-300 ease-in-out w-full text-left";
+            } else if (currentView === 'difficulty') {
+                if (navSpeed) navSpeed.className = "flex items-center gap-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all duration-300 ease-in-out w-full text-left";
+            } else if (currentView === 'settings') {
+                if (navSettings) navSettings.className = "flex items-center gap-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all duration-300 ease-in-out w-full text-left";
+            }
+        }
+
+        function handleMobileBack() {
+            if (!document.getElementById('view-game').classList.contains('hidden')) goBackToMenu();
+            else if (!document.getElementById('view-difficulty').classList.contains('hidden')) goBackToCategoryOrSub();
+            else if (!document.getElementById('view-math-sub').classList.contains('hidden')) goBackTo('categories');
+            else if (!document.getElementById('view-settings').classList.contains('hidden')) goBackTo('categories');
+            else if (!document.getElementById('view-dashboard').classList.contains('hidden')) goBackTo('categories');
+        }
+
+        function setBoundsMode(mode) {
+            boundsMode = mode;
+            const wrapBtn = document.getElementById('bounds-wrap-btn'); const classicBtn = document.getElementById('bounds-classic-btn');
+            if (mode === 'wrap') { wrapBtn.className = "px-3 py-1 text-xs font-bold rounded-md bg-neon-lime text-surface-deep shadow-lg"; classicBtn.className = "px-3 py-1 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface"; }
+            else { wrapBtn.className = "px-3 py-1 text-xs font-bold rounded-md text-on-surface-variant hover:text-on-surface"; classicBtn.className = "px-3 py-1 text-xs font-bold rounded-md bg-neon-lime text-surface-deep shadow-lg"; }
+        }
+
+        function setTouchMode(mode) {
+            touchMode = mode;
+            const trackpadBtn = document.getElementById('touch-trackpad-btn'); const joystickBtn = document.getElementById('touch-joystick-btn');
+            [trackpadBtn, joystickBtn].forEach(b => { if (b) b.className = "py-2 text-[10px] font-bold rounded-md text-on-surface-variant hover:text-on-surface"; });
+            if (mode === 'trackpad' && trackpadBtn) trackpadBtn.classList.add('setting-tab-active');
+            else if (mode === 'joystick' && joystickBtn) joystickBtn.classList.add('setting-tab-active');
+        }
+
+        function setDesktopMode(mode) {
+            desktopMode = mode;
+            const kbBtn = document.getElementById('pc-keyboard-btn'); const mouseBtn = document.getElementById('pc-mouse-btn');
+            [kbBtn, mouseBtn].forEach(b => { if (b) b.className = "py-2 text-[10px] font-bold rounded-md text-on-surface-variant hover:text-on-surface"; });
+            if (mode === 'keyboard' && kbBtn) kbBtn.classList.add('setting-tab-active');
+            else if (mode === 'mouse' && mouseBtn) mouseBtn.classList.add('setting-tab-active');
+        }
+
+        function toggleSetting(name) {
+            if (name === 'grid') showGridLines = document.getElementById('setting-grid').checked;
+            else if (name === 'glow') { showGlow = document.getElementById('setting-glow').checked; wrapper.style.boxShadow = showGlow ? '0 0 60px rgba(34, 197, 94, 0.15)' : 'none'; }
+        }
+
+        function setupCanvas() {
+            const width = window.innerWidth || document.documentElement.clientWidth || 360;
+            const height = window.innerHeight || document.documentElement.clientHeight || 640;
+            const headerHeight = 64; const isDesktop = width >= 768; const padding = isDesktop ? 160 : 180;
+            const availWidth = isDesktop ? width - 256 - 48 : width - 32; const availHeight = height - headerHeight - padding;
+
+            let size = Math.min(availWidth, availHeight, 420); if (isNaN(size) || size < 280) size = 280;
+            let finalSize = Math.floor(size / GRID) * GRID; if (isNaN(finalSize) || finalSize < 280) finalSize = 280;
+
+            canvas.width = finalSize; canvas.height = finalSize;
+            wrapper.style.width = finalSize + 'px'; wrapper.style.height = finalSize + 'px';
+            TILES = finalSize / GRID;
+
+            joystickBase.x = finalSize - 65; joystickBase.y = finalSize - 65; joystickStick.x = joystickBase.x; joystickStick.y = joystickBase.y;
+            ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function startDailyChallenge() {
+            const categories = ['math', 'history', 'geo', 'art']; selectedCat = categories[Math.floor(Math.random() * categories.length)];
+            if (selectedCat === 'math') { const subcategories = ['basic', 'subtraction', 'advanced', 'division', 'mix']; selectedSub = subcategories[Math.floor(Math.random() * subcategories.length)]; }
+            const difficulties = [{ speed: 200, growth: 0.98, time: 15 }, { speed: 155, growth: 0.96, time: 10 }, { speed: 115, growth: 0.94, time: 5 }];
+            const chosenDiff = difficulties[Math.floor(Math.random() * difficulties.length)];
+
+            isDailyChallenge = true; dailyQuestionsAnswered = 0; dailyCorrect = 0;
+            document.getElementById('hud-score-label').innerText = "DNEVNI IZAZOV";
+            document.getElementById('score-val').className = "font-stats-number text-xl text-amber-400";
+
+            startGame(chosenDiff.speed, chosenDiff.growth, chosenDiff.time);
+        }
+
+        function startGame(startSpeed, growth, challengeTime = 10) {
+            goBackTo('game');
+            const pauseBtn = document.getElementById('header-pause-btn');
+            pauseBtn.classList.remove('opacity-30', 'cursor-not-allowed'); pauseBtn.disabled = false;
+
+            interval = startSpeed; speedFactor = growth; challengeTimeLimit = challengeTime;
+            isLaserActiveOnDifficulty = (startSpeed === 115);
+
+            if (startSpeed === 200) baseStartSpeedModern = 1.4; else if (startSpeed === 155) baseStartSpeedModern = 1.9; else baseStartSpeedModern = 2.4;
+            modernSpeed = baseStartSpeedModern;
+
+            init(); startLaserSystem();
+
+            if (gameMode === 'retro') gameLoop();
+            else { modernAngle = -Math.PI / 2; modernTargetAngle = null; requestAnimationFrame(modernGameLoop); }
+        }
+
+        function init() {
+            if (gameMode === 'retro') {
+                const mid = Math.floor(TILES / 2);
+                snake = [{ x: mid, y: mid }, { x: mid, y: mid + 1 }, { x: mid, y: mid + 2 }];
+                dir = { x: 0, y: -1 }; nextDir = { x: 0, y: -1 };
+            } else {
+                const centerX = canvas.width / 2; const centerY = canvas.height / 2;
+                snake = []; for (let i = 0; i < 15; i++) snake.push({ x: centerX, y: centerY + i * 8 });
+                isJoystickActive = false; joystickStick.x = joystickBase.x; joystickStick.y = joystickBase.y;
+            }
+            score = 0; minLimit = 0; lastChallengeScore = -1; isPaused = false;
+            updateUI(); spawnFood();
+        }
+
+        function updateUI() {
+            if (isDailyChallenge) {
+                document.getElementById('min-limit').innerText = "-";
+                document.getElementById('score-val').innerText = `${dailyQuestionsAnswered}/10`;
+            } else {
+                document.getElementById('score-val').innerText = score;
+                if (score >= 10) minLimit = 5; else if (score >= 5) minLimit = 2; else minLimit = 0;
+                document.getElementById('min-limit').innerText = minLimit;
+            }
+        }
+
+        function spawnFood() {
+            food = { x: Math.floor(Math.random() * TILES), y: Math.floor(Math.random() * TILES) };
+            isGoldFood = (Math.random() < 0.10);
+            if (isGoldFood) goldFoodTimer = 5.0;
+
+            if (gameMode === 'retro') {
+                if (snake.some(s => s.x === food.x && s.y === food.y)) spawnFood();
+            } else {
+                const foodPixelX = food.x * GRID + GRID / 2; const foodPixelY = food.y * GRID + GRID / 2;
+                if (snake.some(s => Math.hypot(s.x - foodPixelX, s.y - foodPixelY) < 15)) spawnFood();
+            }
+        }
+
+        function checkLaserWallCollision(x, y, isPixel = false) {
+            if (laserWallState !== 'active' || !laserWallSide) return false;
+            const threshold = isPixel ? 6 : 0.3; const maxVal = isPixel ? canvas.width : TILES;
+            if (laserWallSide === 'top' && y <= threshold) return true;
+            if (laserWallSide === 'bottom' && y >= maxVal - 1 - threshold) return true;
+            if (laserWallSide === 'left' && x <= threshold) return true;
+            if (laserWallSide === 'right' && x >= maxVal - 1 - threshold) return true;
+            return false;
+        }
+
+        function gameLoop() {
+            if (isPaused || gameMode !== 'retro') return;
+
+            if (isGoldFood) {
+                goldFoodTimer -= (interval / 1000);
+                if (goldFoodTimer <= 0) { isGoldFood = false; spawnFood(); }
+            }
+
+            dir = nextDir; let head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+            if (checkLaserWallCollision(head.x, head.y, false)) {
+                document.getElementById('game-over-reason').innerText = "Zmija je udarila u smrtonosni laserski zid!";
+                if (isDailyChallenge) recordDailyChallenge(dailyCorrect);
+                return showGameOver();
+            }
+
+            if (boundsMode === 'classic') {
+                if (head.x < 0 || head.x >= TILES || head.y < 0 || head.y >= TILES) {
+                    document.getElementById('game-over-reason').innerText = "Zmija je udarila u čvrsti vanjski zid!";
+                    if (isDailyChallenge) recordDailyChallenge(dailyCorrect);
+                    return showGameOver();
+                }
+            } else {
+                if (head.x < 0) head.x = TILES - 1; if (head.x >= TILES) head.x = 0;
+                if (head.y < 0) head.y = TILES - 1; if (head.y >= TILES) head.y = 0;
+            }
+
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    let lost = snake.length - i; snake = snake.slice(0, i);
+                    score = Math.max(0, score - lost);
+                    if (isDailyChallenge) { recordDailyChallenge(dailyCorrect); document.getElementById('game-over-reason').innerText = "Zmija je ugrizla vlastiti rep"; return showGameOver(); }
+                    if (score < minLimit) return showGameOver();
+                    lastChallengeScore = Math.floor(score / 5) * 5; if (score % 5 === 0 && score > 0) lastChallengeScore -= 5;
+                    updateUI(); break;
+                }
+            }
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score += isGoldFood ? 2 : 1; updateUI();
+                if (!isGoldFood) interval = Math.max(85, interval * 0.988);
+                let triggeredGoldBonus = isGoldFood; spawnFood();
+
+                if (isDailyChallenge) { triggerChallenge(triggeredGoldBonus); return; }
+                if (triggeredGoldBonus || (score > 0 && score % 5 === 0 && score !== lastChallengeScore)) {
+                    lastChallengeScore = score; triggerChallenge(triggeredGoldBonus); return;
+                }
+            } else { snake.pop(); }
+
+            draw(); setTimeout(gameLoop, interval);
+        }
+
+        function modernGameLoop() {
+            if (isPaused || gameMode !== 'modern') return;
+
+            if (isGoldFood) {
+                goldFoodTimer -= 0.016;
+                if (goldFoodTimer <= 0) { isGoldFood = false; spawnFood(); }
+            }
+
+            let target = modernAngle;
+
+            if (desktopMode === 'keyboard') {
+                if (keysPressed['ArrowLeft'] || keysPressed['a']) target = modernAngle - 0.14;
+                else if (keysPressed['ArrowRight'] || keysPressed['d']) target = modernAngle + 0.14;
+            } else if (desktopMode === 'mouse' && mouseX !== null && mouseY !== null) {
+                const dx = mouseX - snake[0].x;
+                const dy = mouseY - snake[0].y;
+                if (Math.hypot(dx, dy) > 10) {
+                    target = Math.atan2(dy, dx);
+                }
+            }
+
+            if (touchMode === 'trackpad' && modernTargetAngle !== null) {
+                target = modernTargetAngle;
+            } else if (touchMode === 'joystick' && isJoystickActive) {
+                const dx = joystickStick.x - joystickBase.x; const dy = joystickStick.y - joystickBase.y;
+                if (Math.hypot(dx, dy) > 5) target = Math.atan2(dy, dx);
+            }
+
+            let angleDiff = target - modernAngle;
+            while (angleDiff < -Math.PI) angleDiff += Math.PI * 2; while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+            modernAngle += Math.max(-turnSpeed, Math.min(turnSpeed, angleDiff));
+
+            let head = { x: snake[0].x + Math.cos(modernAngle) * modernSpeed, y: snake[0].y + Math.sin(modernAngle) * modernSpeed };
+
+            if (checkLaserWallCollision(head.x, head.y, true)) {
+                document.getElementById('game-over-reason').innerText = "Zmija je udarila u smrtonosni laserski zid!";
+                if (isDailyChallenge) recordDailyChallenge(dailyCorrect); return showGameOver();
+            }
+
+            if (boundsMode === 'classic') {
+                if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                    document.getElementById('game-over-reason').innerText = "Zmija je udarila u čvrsti vanjski zid!";
+                    if (isDailyChallenge) recordDailyChallenge(dailyCorrect); return showGameOver();
+                }
+            } else {
+                if (head.x < 0) head.x = canvas.width; if (head.x >= canvas.width) head.x = 0;
+                if (head.y < 0) head.y = canvas.height; if (head.y >= canvas.height) head.y = 0;
+            }
+
+            const selfCollisionMinSegment = 18;
+            for (let i = selfCollisionMinSegment; i < snake.length; i++) {
+                let dx = head.x - snake[i].x; let dy = head.y - snake[i].y;
+                if (dx > canvas.width / 2) dx -= canvas.width; if (dx < -canvas.width / 2) dx += canvas.width;
+                if (dy > canvas.height / 2) dy -= canvas.height; if (dy < -canvas.height / 2) dy += canvas.height;
+
+                if (Math.hypot(dx, dy) < 10) {
+                    let lostSegments = Math.floor((snake.length - i) / 2); snake = snake.slice(0, i);
+                    score = Math.max(0, score - lostSegments);
+                    if (isDailyChallenge) { recordDailyChallenge(dailyCorrect); document.getElementById('game-over-reason').innerText = "Zmija je udarila u vlastito tijelo"; return showGameOver(); }
+                    if (score < minLimit) { document.getElementById('game-over-reason').innerText = "Pali ste ispod praga opstanka"; return showGameOver(); }
+                    lastChallengeScore = Math.floor(score / 5) * 5; if (score % 5 === 0 && score > 0) lastChallengeScore -= 5;
+                    updateUI(); break;
+                }
+            }
+
+            snake.unshift(head);
+
+            const foodPixelX = food.x * GRID + GRID / 2; const foodPixelY = food.y * GRID + GRID / 2;
+            if (Math.hypot(head.x - foodPixelX, head.y - foodPixelY) < 15) {
+                score += isGoldFood ? 2 : 1; updateUI();
+                if (!isGoldFood) modernSpeed = Math.min(3.4, modernSpeed * 1.012);
+                const last = snake[snake.length - 1]; snake.push({ x: last.x, y: last.y }); snake.push({ x: last.x, y: last.y });
+                let triggeredGoldBonus = isGoldFood; spawnFood();
+
+                if (isDailyChallenge) { triggerChallenge(triggeredGoldBonus); return; }
+                if (triggeredGoldBonus || (score > 0 && score % 5 === 0 && score !== lastChallengeScore)) {
+                    lastChallengeScore = score; triggerChallenge(triggeredGoldBonus); return;
+                }
+            } else { snake.pop(); }
+
+            const targetDist = 8;
+            for (let i = 1; i < snake.length; i++) {
+                const prev = snake[i - 1]; const curr = snake[i];
+                let dx = prev.x - curr.x; let dy = prev.y - curr.y;
+                if (dx > canvas.width / 2) dx -= canvas.width; if (dx < -canvas.width / 2) dx += canvas.width;
+                if (dy > canvas.height / 2) dy -= canvas.height; if (dy < -canvas.height / 2) dy += canvas.height;
+                const dist = Math.hypot(dx, dy);
+                if (dist > targetDist) {
+                    const angle = Math.atan2(dy, dx);
+                    curr.x = (prev.x - Math.cos(angle) * targetDist + canvas.width) % canvas.width;
+                    curr.y = (prev.y - Math.sin(angle) * targetDist + canvas.height) % canvas.height;
+                }
+            }
+
+            draw(); requestAnimationFrame(modernGameLoop);
+        }
+
+        function draw() {
+            ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (showGridLines) {
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.05)"; ctx.lineWidth = 1;
+                for (let i = 0; i <= TILES; i++) {
+                    ctx.beginPath(); ctx.moveTo(i * GRID, 0); ctx.lineTo(i * GRID, canvas.height); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(0, i * GRID); ctx.lineTo(canvas.width, i * GRID); ctx.stroke();
+                }
+            }
+
+            if (laserWallSide && laserWallState !== 'none') {
+                ctx.save();
+                if (laserWallState === 'warning') {
+                    ctx.strokeStyle = (Math.floor(Date.now() / 150) % 2 === 0) ? "rgba(239, 68, 68, 0.8)" : "rgba(239, 68, 68, 0.1)"; ctx.lineWidth = 6;
+                } else {
+                    ctx.strokeStyle = "#EF4444"; ctx.lineWidth = 8; ctx.shadowBlur = 20; ctx.shadowColor = "#EF4444";
+                }
+                ctx.beginPath();
+                if (laserWallSide === 'top') { ctx.moveTo(0, 4); ctx.lineTo(canvas.width, 4); }
+                else if (laserWallSide === 'bottom') { ctx.moveTo(0, canvas.height - 4); ctx.lineTo(canvas.width, canvas.height - 4); }
+                else if (laserWallSide === 'left') { ctx.moveTo(4, 0); ctx.lineTo(4, canvas.height); }
+                else if (laserWallSide === 'right') { ctx.moveTo(canvas.width - 4, 0); ctx.lineTo(canvas.width - 4, canvas.height); }
+                ctx.stroke(); ctx.restore();
+            }
+
+            const foodPixelX = food.x * GRID + GRID / 2; const foodPixelY = food.y * GRID + GRID / 2;
+            ctx.save();
+            if (isGoldFood) {
+                let goldGlow = 15 + Math.sin(Date.now() / 100) * 8;
+                ctx.shadowBlur = showGlow ? goldGlow : 0; ctx.shadowColor = "#F59E0B"; ctx.fillStyle = "#F59E0B";
+                ctx.beginPath(); ctx.arc(foodPixelX, foodPixelY, GRID / 2.1, 0, Math.PI * 2); ctx.fill();
+                ctx.shadowBlur = 0; ctx.fillStyle = "#FFF"; ctx.font = "bold 9px monospace"; ctx.textAlign = "center";
+                ctx.fillText(goldFoodTimer.toFixed(1) + "s", foodPixelX, foodPixelY - 12);
+            } else {
+                const foodColor = catColors[selectedCat] || '#f43f5e';
+                ctx.shadowBlur = showGlow ? 15 : 0; ctx.shadowColor = foodColor; ctx.fillStyle = foodColor;
+                ctx.beginPath(); ctx.arc(foodPixelX, foodPixelY, GRID / 2.5, 0, Math.PI * 2); ctx.fill();
+            }
+            ctx.restore();
+
+            if (gameMode === 'retro') {
+                snake.forEach((p, i) => {
+                    ctx.fillStyle = i === 0 ? "#4ade80" : "#16a34a";
+                    const x = p.x * GRID + 1; const y = p.y * GRID + 1; const w = GRID - 2; const h = GRID - 2; const r = 5;
+                    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); ctx.fill();
+                });
+            } else {
+                snake.forEach((p, i) => {
+                    ctx.fillStyle = i === 0 ? "#4ade80" : "#16a34a";
+                    ctx.beginPath(); ctx.arc(p.x, p.y, GRID / 2 - 1, 0, Math.PI * 2); ctx.fill();
+                });
+            }
+
+            if (gameMode === 'modern' && touchMode === 'joystick' && isJoystickActive) {
+                ctx.save(); ctx.fillStyle = "rgba(255, 255, 255, 0.08)"; ctx.strokeStyle = "rgba(255, 255, 255, 0.2)"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(joystickBase.x, joystickBase.y, joystickBase.radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = "rgba(6, 182, 212, 0.4)"; ctx.strokeStyle = "#06B6D4";
+                ctx.beginPath(); ctx.arc(joystickStick.x, joystickStick.y, joystickStick.radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore();
+            }
+        }
+
+        function togglePause() {
+            if (document.getElementById('view-game').classList.contains('hidden')) return;
+            if (!isPaused) { isPaused = true; document.getElementById('pause-modal').classList.add('active'); } else resumeGame();
+        }
+
+        function resumeGame() {
+            document.getElementById('pause-modal').classList.remove('active');
+            countdownEl.style.display = 'flex'; let c = 3; countdownEl.innerText = c;
+            let t = setInterval(() => {
+                c--; if (c > 0) countdownEl.innerText = c;
+                else { clearInterval(t); countdownEl.style.display = 'none'; isPaused = false; if (gameMode === 'retro') gameLoop(); else requestAnimationFrame(modernGameLoop); }
+            }, 600);
+        }
+
+        function triggerChallenge(isGoldBonus = false) {
+            isPaused = true; const container = document.getElementById('options-container'); container.innerHTML = '';
+            document.getElementById('challenge-modal').classList.add('active');
+            let options = [];
+            const badge = document.getElementById('challenge-badge-title');
+            if (isGoldBonus) { badge.innerText = "🏆 ZLATNI BONUS KVIZ (RESET BRZINE)"; badge.className = "text-amber-400 font-extrabold text-[10px] tracking-widest"; }
+            else { badge.innerText = selectedCat === 'math' ? "MATEMATIKA" : selectedCat.toUpperCase(); badge.className = "text-neon-cyan font-bold text-[10px] tracking-[0.2em]"; }
+
+            if (selectedCat === 'math') {
+                let a, b; let currentSub = selectedSub;
+                if (selectedSub === 'mix') { const subModes = ['basic', 'subtraction', 'advanced', 'division']; currentSub = subModes[Math.floor(Math.random() * subModes.length)]; }
+                if (currentSub === 'advanced') { a = Math.floor(Math.random() * 11) + 2; b = Math.floor(Math.random() * 11) + 2; correctResult = a * b; document.getElementById('q-text').innerText = `${a} × ${b} = ?`; }
+                else if (currentSub === 'subtraction') { a = Math.floor(Math.random() * 41) + 10; b = Math.floor(Math.random() * (a - 4)) + 2; correctResult = a - b; document.getElementById('q-text').innerText = `${a} − ${b} = ?`; }
+                else if (currentSub === 'division') { b = Math.floor(Math.random() * 9) + 2; correctResult = Math.floor(Math.random() * 9) + 2; a = b * correctResult; document.getElementById('q-text').innerText = `${a} ÷ ${b} = ?`; }
+                else { a = Math.floor(Math.random() * 30) + 5; b = Math.floor(Math.random() * 30) + 5; correctResult = a + b; document.getElementById('q-text').innerText = `${a} + ${b} = ?`; }
+                options.push(correctResult);
+                while (options.length < 3) { let off = Math.floor(Math.random() * 5) + 1; let wrong = Math.random() > 0.5 ? correctResult + off : correctResult - off; if (wrong > 0 && !options.includes(wrong)) options.push(wrong); }
+            } else {
+                let db = selectedCat === 'geo' ? geoDB : (selectedCat === 'history' ? historyDB : artDB);
+                let item = db[Math.floor(Math.random() * db.length)]; correctResult = item.a; document.getElementById('q-text').innerText = item.q; options.push(correctResult);
+                while (options.length < 3) { let randomItem = db[Math.floor(Math.random() * db.length)]; if (!options.includes(randomItem.a)) options.push(randomItem.a); }
+            }
+
+            options.sort(() => Math.random() - 0.5);
+            options.forEach(opt => {
+                const btn = document.createElement('button'); btn.className = 'opt-btn'; btn.innerText = opt;
+                btn.onclick = () => finalize(String(opt).toLowerCase() === String(correctResult).toLowerCase(), isGoldBonus);
+                container.appendChild(btn);
+            });
+
+            let sec = challengeTimeLimit; clearInterval(mathTimer);
+            mathTimer = setInterval(() => {
+                sec -= 0.1; document.getElementById('timer-bar').style.width = (sec / challengeTimeLimit) * 100 + "%";
+                if (sec <= 0) finalize(false, isGoldBonus);
+            }, 100);
+        }
+
+        function finalize(correct, isGoldBonus = false) {
+            clearInterval(mathTimer); document.getElementById('challenge-modal').classList.remove('active');
+            playerStats[selectedCat].total += 1; if (correct) playerStats[selectedCat].correct += 1;
+
+            if (isDailyChallenge) {
+                dailyQuestionsAnswered++; if (correct) dailyCorrect++;
+                if (dailyQuestionsAnswered >= 10) { updateUI(); recordDailyChallenge(dailyCorrect); showDailyComplete(dailyCorrect); return; }
+                if (!correct) {
+                    let cut = Math.max(1, Math.floor(snake.length * 0.4)); for (let i = 0; i < cut; i++) if (snake.length > 2) snake.pop();
+                    score = Math.max(0, score - Math.floor(cut / 3));
+                } else {
+                    if (isGoldBonus) { interval = (interval === 115) ? 115 : (interval === 155 ? 155 : 200); modernSpeed = baseStartSpeedModern; }
+                    else { if (gameMode === 'retro') interval = Math.min(200, interval * 1.15); else modernSpeed = Math.max(baseStartSpeedModern, modernSpeed * 0.85); }
+                }
+                updateUI(); isPaused = false; if (gameMode === 'retro') gameLoop(); else requestAnimationFrame(modernGameLoop); return;
+            }
+
+            if (correct) {
+                if (isGoldBonus) { interval = (interval === 115) ? 115 : (interval === 155 ? 155 : 200); modernSpeed = baseStartSpeedModern; }
+                else { if (gameMode === 'retro') interval = Math.min(200, interval * 1.15); else modernSpeed = Math.max(baseStartSpeedModern, modernSpeed * 0.85); }
+            } else {
+                let cut = Math.max(1, Math.floor(snake.length * 0.4)); for (let i = 0; i < cut; i++) if (snake.length > 2) snake.pop();
+                score = Math.max(0, score - (gameMode === 'retro' ? cut : Math.floor(cut / 3)));
+                if (score < minLimit) { recordGamePlayed(); document.getElementById('game-over-reason').innerText = "Pali ste ispod praga opstanka"; return showGameOver(); }
+            }
+            saveStatsToStorage(); updateUI(); isPaused = false;
+            if (gameMode === 'retro') gameLoop(); else requestAnimationFrame(modernGameLoop);
+        }
+
+        function recordDailyChallenge(correctCount) {
+            const todayStr = new Date().toDateString(); playerStats.lastDailyDate = todayStr; playerStats.lastDailyScore = correctCount; playerStats.gamesPlayed += 1;
+            if (correctCount > playerStats.highScore) playerStats.highScore = correctCount;
+            saveStatsToStorage(); updateDailyStatusUI();
+        }
+
+        function showDailyComplete(correctCount) { isPaused = true; stopLaserSystem(); document.getElementById('daily-final-score').innerText = `${correctCount}/10`; document.getElementById('daily-complete-modal').classList.add('active'); }
+        function recordGamePlayed() { playerStats.gamesPlayed += 1; if (score > playerStats.highScore) playerStats.highScore = score; saveStatsToStorage(); }
+        function showGameOver() { isPaused = true; stopLaserSystem(); document.getElementById('final-score').innerText = score; document.getElementById('game-over-modal').classList.add('active'); }
+
+        function getTouchCanvasPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (canvas.width / (rect.width || 1)),
+                y: (clientY - rect.top) * (canvas.height / (rect.height || 1))
+            };
+        }
+
+        window.addEventListener('mousemove', e => {
+            if (desktopMode !== 'mouse' || gameMode !== 'modern' || isPaused) return;
+            const pos = getTouchCanvasPos(e);
+            mouseX = pos.x; mouseY = pos.y;
+        });
+
+        window.addEventListener('keydown', e => {
+            const key = e.key.toLowerCase();
+            keysPressed[e.key] = true; keysPressed[key] = true;
+            if (e.key === 'Escape' || e.key === ' ') { togglePause(); e.preventDefault(); return; }
+            if (isPaused) return;
+
+            if (gameMode === 'retro') {
+                if ((e.key === 'ArrowUp' || key === 'w') && dir.y !== 1) nextDir = { x: 0, y: -1 };
+                if ((e.key === 'ArrowDown' || key === 's') && dir.y !== -1) nextDir = { x: 0, y: 1 };
+                if ((e.key === 'ArrowLeft' || key === 'a') && dir.x !== 1) nextDir = { x: -1, y: 0 };
+                if ((e.key === 'ArrowRight' || key === 'd') && dir.x !== -1) nextDir = { x: 1, y: 0 };
+            }
+        });
+        window.addEventListener('keyup', e => { keysPressed[e.key] = false; keysPressed[e.key.toLowerCase()] = false; });
+
+        window.addEventListener('touchstart', e => {
+            tsX = e.touches[0].clientX; tsY = e.touches[0].clientY;
+            if (!document.getElementById('view-game').classList.contains('hidden') && gameMode === 'modern' && e.target.closest('#game-wrapper')) {
+                const pos = getTouchCanvasPos(e);
+                if (touchMode === 'joystick' && Math.hypot(pos.x - joystickBase.x, pos.y - joystickBase.y) <= joystickBase.radius + 15) { isJoystickActive = true; joystickStick.x = pos.x; joystickStick.y = pos.y; }
+            }
+        }, { passive: true });
+        window.addEventListener('touchmove', e => {
+            if (!document.getElementById('view-game').classList.contains('hidden') && e.target.closest('#game-wrapper')) {
+                if (e.cancelable) e.preventDefault();
+                if (gameMode === 'modern' && !isPaused) {
+                    const pos = getTouchCanvasPos(e);
+                    if (touchMode === 'joystick' && isJoystickActive) {
+                        const dx = pos.x - joystickBase.x; const dy = pos.y - joystickBase.y; const dist = Math.hypot(dx, dy);
+                        if (dist <= joystickBase.radius) { joystickStick.x = pos.x; joystickStick.y = pos.y; }
+                        else { const angle = Math.atan2(dy, dx); joystickStick.x = joystickBase.x + Math.cos(angle) * joystickBase.radius; joystickStick.y = joystickBase.y + Math.sin(angle) * joystickBase.radius; }
+                    } else if (touchMode === 'trackpad') {
+                        let dxSwipe = e.touches[0].clientX - tsX; let dySwipe = e.touches[0].clientY - tsY;
+                        if (Math.abs(dxSwipe) > 5 || Math.abs(dySwipe) > 5) modernTargetAngle = Math.atan2(dySwipe, dxSwipe);
+                    }
+                }
+            }
+        }, { passive: false });
+        window.addEventListener('touchend', e => {
+            if (gameMode === 'modern') { isJoystickActive = false; joystickStick.x = joystickBase.x; joystickStick.y = joystickBase.y; modernTargetAngle = null; return; }
+            if (isPaused) return;
+            let dxSwipe = e.changedTouches[0].clientX - tsX; let dySwipe = e.changedTouches[0].clientY - tsY;
+            if (Math.abs(dxSwipe) > 20 || Math.abs(dySwipe) > 20) {
+                if (Math.abs(dxSwipe) > Math.abs(dySwipe)) { if (dxSwipe > 0 && dir.x !== -1) nextDir = { x: 1, y: 0 }; else if (dxSwipe < 0 && dir.x !== 1) nextDir = { x: -1, y: 0 }; }
+                else { if (dySwipe > 0 && dir.y !== -1) nextDir = { x: 0, y: 1 }; else if (dySwipe < 0 && dir.y !== 1) nextDir = { x: 0, y: -1 }; }
+            }
+        }, { passive: true });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => { if (newWorker.state === 'installed' && navigator.serviceWorker.controller) location.reload(); });
+                    });
+                }).catch(() => { });
+            });
+        }
+
+        window.onresize = setupCanvas; loadStatsFromStorage(); setupCanvas();
+        setGameMode('modern'); setBoundsMode('wrap'); setTouchMode('trackpad'); setDesktopMode('keyboard');
+        updateNavigationHighlights('categories');
+    </script>
+</body>
+
+</html>
