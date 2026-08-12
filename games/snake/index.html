@@ -165,7 +165,11 @@
             <h1 onclick="goBackToMenu()"
                 class="font-display-xl-mobile text-2xl font-extrabold text-neon-lime cursor-pointer">Snake Edu</h1>
         </div>
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-4 md:gap-6">
+            <!-- NOVO: Gumb za povratak na početni Hub -->
+            <button onclick="window.location.href='../../index.html'" class="px-3 py-1.5 rounded-full border border-white/20 text-xs font-bold text-on-surface hover:bg-white/10 transition-all flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">home</span> Hub
+            </button>
             <div class="hidden md:flex gap-8">
                 <span onclick="goBackToMenu()"
                     class="text-on-surface-variant hover:text-neon-lime transition-colors cursor-pointer font-label-caps text-sm">Izbornik</span>
@@ -652,7 +656,7 @@
     <!-- Version Indicator -->
     <div
         class="fixed bottom-2 right-2 text-[8px] text-gray-600 font-mono uppercase tracking-widest pointer-events-none hidden md:block">
-        v1.4.1</div>
+        v1.4.2</div>
 
     <script>
         const canvas = document.getElementById('snakeCanvas');
@@ -1361,3 +1365,4 @@
 </body>
 
 </html>
+
