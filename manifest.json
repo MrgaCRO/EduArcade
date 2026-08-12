@@ -1,0 +1,20 @@
+{
+    "name": "Snake Edu Pro",
+    "short_name": "SnakeEdu",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#020617",
+    "theme_color": "#020617",
+    "icons": [
+        {
+            "src": "https://via.placeholder.com/192x192.png?text=Snake",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://via.placeholder.com/512x512.png?text=Snake",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
