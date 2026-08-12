@@ -1,41 +1,57 @@
 <!DOCTYPE html>
 <html class="dark" lang="hr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EduArcade Hub</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-<style>
-body { background-color: #020617; color: #dce1fb; font-family: 'Plus Jakarta Sans', sans-serif; }
-.glass-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EduArcade Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #020617; color: #dce1fb; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
 </head>
-<body class="min-h-screen p-8">
-<header class="max-w-4xl mx-auto mb-12 text-center">
-<h1 class="text-5xl font-black text-green-400 mb-4">EduArcade</h1>
-<p class="text-slate-400">Uči kroz igru. Izaberi svoj izazov!</p>
-</header>
+<body class="min-h-screen p-6 flex flex-col justify-between">
+    <div>
+        <header class="max-w-4xl mx-auto mb-10 text-center pt-6">
+            <h1 class="text-4xl sm:text-5xl font-black text-green-400 mb-2">EduArcade</h1>
+            <p class="text-sm sm:text-base text-slate-400">Uči kroz igru. Izaberi svoj izazov!</p>
+        </header>
 
-<div id="game-grid" class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-<!-- Ovdje će JavaScript automatski iscrtati kartice -->
-</div>
+        <div id="game-grid" class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <!-- Kartice se dinamički iscrtavaju -->
+        </div>
+    </div>
 
-<script>
-const gamesList = [
-{ id: 'snake', name: 'Snake Edu', desc: 'Vježbaj kroz kretanje i kvizove', color: 'green', icon: '🐍', url: 'games/snake/index.html' },
-{ id: 'tablic', name: 'Tablić', desc: 'Matematika i strategija kroz karte', color: 'purple', icon: '🃏', url: 'games/tablic/index.html' }
- ];
+    <footer class="text-center py-6 text-xs text-slate-600 font-mono">
+        EduArcade Portal v1.0
+    </footer>
 
-const grid = document.getElementById('game-grid');
-gamesList.forEach(game => {
-const card = document.createElement('div');
-card.className = glass-card p-8 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all border border-white/10 hover:border-cyan-500/50;
-card.onclick = () => window.location.href = game.url;
-card.innerHTML = &lt;div class="text-5xl mb-4"&gt;${game.icon}</div>
-<h2 class="text-2xl font-black mb-2 text-white">${game.name}&lt;/h2&gt; &lt;p class="text-sm text-slate-400"&gt;${game.desc}&lt;/p&gt;;
-grid.appendChild(card);
-});
-</script>
+    <script>
+        const gamesList = [
+            { id: 'snake', name: 'Snake Edu', desc: 'Vježbaj kroz kretanje i kvizove', color: 'green', icon: '🐍', url: 'games/snake/index.html' },
+            { id: 'tablic', name: 'Tablić', desc: 'Matematika i strategija kroz karte', color: 'purple', icon: '🃏', url: 'games/tablic/index.html' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('game-grid');
+            if (!grid) return;
+            
+            grid.innerHTML = ''; // Očisti sadržaj prije iscrtavanja
+            
+            gamesList.forEach(game => {
+                const card = document.createElement('div');
+                card.className = "glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:scale-[1.02] active:scale-95 transition-all border border-white/10 hover:border-cyan-500/50 flex flex-col items-center sm:items-start text-center sm:text-left";
+                card.onclick = () => window.location.href = game.url;
+                card.innerHTML = `
+                    <div class="text-4xl sm:text-5xl mb-3">${game.icon}</div>
+                    <h2 class="text-xl sm:text-2xl font-black mb-1 text-white">${game.name}</h2>
+                    <p class="text-xs sm:text-sm text-slate-400">${game.desc}</p>
+                `;
+                grid.appendChild(card);
+            });
+        });
+    </script>
 </body>
 </html>
+
