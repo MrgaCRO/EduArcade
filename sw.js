@@ -1,8 +1,11 @@
-const cacheName = 'snake-edu-v1.4.0'; // Nadograđeno na v1.4.0 - Praćenje miša i WASD kontrole
+const cacheName = 'edu-arcade-hub-v1.1.0'; // Promijenjen naziv verzije - prisiljava mobitel na osvježavanje!
 const assets = [
   './',
   'index.html',
-  'manifest.json'
+  'manifest.json',
+  'games/snake/index.html',
+  'games/tablic/index.html',
+  'games/pasijans/index.html'
 ];
 
 self.addEventListener('install', e => {
@@ -20,7 +23,7 @@ self.addEventListener('activate', e => {
       return Promise.all(
         keys.map(key => {
           if (key !== cacheName) {
-            return caches.delete(key);
+            return caches.delete(key); // Briše stare verzije keša s mobitela
           }
         })
       );
