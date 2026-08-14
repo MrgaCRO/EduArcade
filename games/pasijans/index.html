@@ -287,7 +287,7 @@
         }
 
         function getOverlap() {
-            return window.innerWidth <= 768 ? 20 : 30;
+            return window.innerWidth <= 768 ? 26 : 38; // Veći razmak za otvorene karte
         }
 
         function render() {
@@ -337,7 +337,7 @@
 
             // 4. Tableau
             const overlap = getOverlap();
-            const faceDownOverlap = window.innerWidth <= 768 ? 8 : 12; // Malo šire da nisu potpuno zbijene
+            const faceDownOverlap = window.innerWidth <= 768 ? 14 : 20; // Povećan razmak neotvorenih za efekt trokuta
             
             document.querySelectorAll('.tableau').forEach((slot, colIdx) => {
                 slot.innerHTML = '';
