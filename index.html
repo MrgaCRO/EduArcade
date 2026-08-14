@@ -22,116 +22,206 @@
             backdrop-filter: blur(12px); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
         }
+
+        /* Animated neon glow on title */
         .neon-title {
-            text-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, 0.1); }
+            50% { text-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.2); }
+        }
+
+        /* Floating hero icon */
+        .hero-float {
+            animation: heroFloat 4s ease-in-out infinite;
+        }
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        /* Staggered card entrance */
+        .game-card {
+            opacity: 0;
+            transform: translateY(24px);
+            animation: cardSlideIn 0.5s ease-out forwards;
+        }
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
+        .game-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes cardSlideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NOVO badge pulse */
+        .badge-new {
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+        }
+
+        /* Filter button active state */
+        .filter-btn.active {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.5);
+            color: #4ade80;
+        }
+
+        /* Stat counter animation */
+        .stat-value {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Hidden by filter */
+        .game-card.filter-hidden {
+            display: none !important;
         }
     </style>
 </head>
-<body class="min-h-screen p-6 md:p-12 flex flex-col justify-between selection:bg-green-500/30">
+<body class="min-h-screen p-4 sm:p-6 md:p-12 flex flex-col justify-between selection:bg-green-500/30">
 
     <!-- Dinamička pozadinska svjetla -->
     <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
         <div class="absolute top-1/4 -left-20 w-96 h-96 bg-green-500/10 blur-[140px] rounded-full"></div>
         <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyan-500/10 blur-[140px] rounded-full"></div>
+        <div class="absolute top-3/4 left-1/2 w-64 h-64 bg-purple-500/5 blur-[120px] rounded-full"></div>
     </div>
 
     <main>
         <!-- Zaglavlje Portala -->
-        <header class="max-w-4xl mx-auto mb-10 text-center pt-4">
+        <header class="max-w-4xl mx-auto mb-8 text-center pt-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-black tracking-widest uppercase mb-4">
                 <span class="material-symbols-outlined text-sm">sports_esports</span> Edukativna Arkadna Platforma
             </div>
-            <h1 class="text-4xl sm:text-6xl font-black text-green-400 mb-3 neon-title tracking-tight">EduArcade</h1>
+            <div class="flex justify-center items-center gap-4 mb-3">
+                <span class="text-5xl sm:text-6xl hero-float inline-block" aria-hidden="true">🕹️</span>
+                <h1 class="text-4xl sm:text-6xl font-black text-green-400 neon-title tracking-tight">EduArcade</h1>
+            </div>
             <p class="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">Zabavi se, razgibaj reflekse i testiraj svoje znanje kroz kolekciju pametnih igara.</p>
         </header>
 
-        <!-- Status / HUD bar -->
-        <div class="max-w-4xl mx-auto mb-8 flex justify-between items-center glass-card rounded-xl p-4 border border-white/5 shadow-lg text-xs font-mono">
-            <div class="flex items-center gap-2 text-slate-400">
-                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Sustav aktivan
+        <!-- Statistika Igrača -->
+        <div class="max-w-4xl mx-auto mb-6 grid grid-cols-3 gap-3 text-center">
+            <div class="glass-card rounded-xl p-3 sm:p-4 border border-white/5">
+                <div class="text-lg sm:text-2xl font-black text-green-400 stat-value" id="stat-games">0</div>
+                <div class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Odigrano</div>
             </div>
-            <div class="text-cyan-400 font-bold">Dostupne igre: 4</div>
+            <div class="glass-card rounded-xl p-3 sm:p-4 border border-white/5">
+                <div class="text-lg sm:text-2xl font-black text-cyan-400 stat-value" id="stat-highscore">0</div>
+                <div class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Najbolji rezultat</div>
+            </div>
+            <div class="glass-card rounded-xl p-3 sm:p-4 border border-white/5">
+                <div class="text-lg sm:text-2xl font-black text-purple-400 stat-value" id="stat-levels">0</div>
+                <div class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Leveli</div>
+            </div>
         </div>
 
-        <!-- Mreža Igara (Izravno upisane kartice u HTML) -->
-        <div id="game-grid" class="max-w-4xl lg:max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Filteri -->
+        <div class="max-w-4xl mx-auto mb-6 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <button class="filter-btn active whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition-all" data-filter="sve">
+                Sve igre
+            </button>
+            <button class="filter-btn whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition-all" data-filter="arkadne">
+                🎮 Arkadne
+            </button>
+            <button class="filter-btn whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition-all" data-filter="kartaske">
+                🃏 Kartaške
+            </button>
+            <button class="filter-btn whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 transition-all" data-filter="edukativne">
+                📚 Edukativne
+            </button>
+        </div>
+
+        <!-- Mreža Igara -->
+        <div id="game-grid" class="max-w-4xl lg:max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             
             <!-- 1. SNAKE EDU PRO -->
-            <a href="games/snake/index.html" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-green-500/50 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] flex flex-col justify-between group block no-underline">
+            <a href="games/snake/index.html" class="game-card glass-card p-4 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-95 transition-all duration-300 border border-white/10 hover:border-green-500/50 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] flex flex-col justify-between group block no-underline" data-category="arkadne edukativne">
                 <article class="flex flex-col h-full justify-between">
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:-rotate-3 transition-all" aria-hidden="true">🐍</span>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Akcija & Kviz</span>
+                        <div class="flex justify-between items-start mb-3 sm:mb-4">
+                            <span class="text-3xl sm:text-5xl p-2 sm:p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:-rotate-3 transition-all" aria-hidden="true">🐍</span>
+                            <span class="hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Akcija & Kviz</span>
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-green-400 transition-colors flex items-center justify-between">
-                            Snake Edu Pro
-                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-green-400" aria-hidden="true">arrow_forward</span>
+                        <h2 class="text-base sm:text-2xl font-black mb-1 sm:mb-2 text-white group-hover:text-green-400 transition-colors flex items-center justify-between">
+                            Snake Edu
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-green-400 text-base sm:text-2xl" aria-hidden="true">arrow_forward</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Vježbaj matematičke operacije, povijest i geografiju uz klasičnu zmiju s modernim 360° kontrolama.</p>
+                        <p class="hidden sm:block text-xs sm:text-sm text-slate-400 leading-relaxed">Vježbaj matematičke operacije, povijest i geografiju uz klasičnu zmiju s modernim 360° kontrolama.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-green-400 gap-1">
-                        Pokreni igru <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
+                    <div class="mt-3 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center text-[11px] sm:text-xs font-bold text-green-400 gap-1">
+                        Pokreni <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
                     </div>
                 </article>
             </a>
 
             <!-- 2. TABLIĆ -->
-            <a href="games/tablic/index.html" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-purple-500/50 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col justify-between group block no-underline">
+            <a href="games/tablic/index.html" class="game-card glass-card p-4 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-95 transition-all duration-300 border border-white/10 hover:border-purple-500/50 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)] flex flex-col justify-between group block no-underline" data-category="kartaske">
                 <article class="flex flex-col h-full justify-between">
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:rotate-3 transition-all" aria-hidden="true">🃏</span>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Strategija & Brojevi</span>
+                        <div class="flex justify-between items-start mb-3 sm:mb-4">
+                            <span class="text-3xl sm:text-5xl p-2 sm:p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:rotate-3 transition-all" aria-hidden="true">🃏</span>
+                            <span class="hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Strategija & Brojevi</span>
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-purple-400 transition-colors flex items-center justify-between">
+                        <h2 class="text-base sm:text-2xl font-black mb-1 sm:mb-2 text-white group-hover:text-purple-400 transition-colors flex items-center justify-between">
                             Tablić
-                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-purple-400" aria-hidden="true">arrow_forward</span>
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-purple-400 text-base sm:text-2xl" aria-hidden="true">arrow_forward</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Klasična kartaška igra strategije i zbrajanja brojeva protiv pametnog računalnog suparnika.</p>
+                        <p class="hidden sm:block text-xs sm:text-sm text-slate-400 leading-relaxed">Klasična kartaška igra strategije i zbrajanja brojeva protiv pametnog računalnog suparnika.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-purple-400 gap-1">
-                        Pokreni igru <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
+                    <div class="mt-3 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center text-[11px] sm:text-xs font-bold text-purple-400 gap-1">
+                        Pokreni <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
                     </div>
                 </article>
             </a>
 
             <!-- 3. KLONDIKE PASIJANS -->
-            <a href="games/pasijans/index.html" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.2)] flex flex-col justify-between group block no-underline">
+            <a href="games/pasijans/index.html" class="game-card glass-card p-4 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-95 transition-all duration-300 border border-white/10 hover:border-cyan-500/50 hover:shadow-[0_0_25px_rgba(6,182,212,0.2)] flex flex-col justify-between group block no-underline" data-category="kartaske">
                 <article class="flex flex-col h-full justify-between">
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:-rotate-3 transition-all" aria-hidden="true">🎴</span>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Logika & Strpljenje</span>
+                        <div class="flex justify-between items-start mb-3 sm:mb-4">
+                            <span class="text-3xl sm:text-5xl p-2 sm:p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:-rotate-3 transition-all" aria-hidden="true">🎴</span>
+                            <span class="hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Logika & Strpljenje</span>
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-cyan-400 transition-colors flex items-center justify-between">
-                            Klondike Pasijans
-                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" aria-hidden="true">arrow_forward</span>
+                        <h2 class="text-base sm:text-2xl font-black mb-1 sm:mb-2 text-white group-hover:text-cyan-400 transition-colors flex items-center justify-between">
+                            Pasijans
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400 text-base sm:text-2xl" aria-hidden="true">arrow_forward</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Klasična kartaška igra strpljenja i slaganja nizova od asa do kralja po znakovima.</p>
+                        <p class="hidden sm:block text-xs sm:text-sm text-slate-400 leading-relaxed">Klasična kartaška igra strpljenja i slaganja nizova od asa do kralja po znakovima.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-cyan-400 gap-1">
-                        Pokreni igru <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
+                    <div class="mt-3 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center text-[11px] sm:text-xs font-bold text-cyan-400 gap-1">
+                        Pokreni <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
                     </div>
                 </article>
             </a>
 
             <!-- 4. PAC-MAN EDU -->
-            <a href="games/pacman/index.html" class="glass-card p-6 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-98 transition-all duration-300 border border-white/10 hover:border-yellow-500/50 hover:shadow-[0_0_25px_rgba(234,179,8,0.2)] flex flex-col justify-between group block no-underline">
+            <a href="games/pacman/index.html" class="game-card glass-card p-4 sm:p-8 rounded-2xl cursor-pointer hover:-translate-y-1 active:scale-95 transition-all duration-300 border border-white/10 hover:border-yellow-500/50 hover:shadow-[0_0_25px_rgba(234,179,8,0.2)] flex flex-col justify-between group block no-underline relative" data-category="arkadne edukativne">
+                <!-- NOVO! badge -->
+                <div class="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-green-500 text-slate-950 text-[9px] sm:text-[10px] font-black tracking-wider uppercase badge-new z-10 shadow-lg">
+                    NOVO!
+                </div>
                 <article class="flex flex-col h-full justify-between">
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-4xl sm:text-5xl p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:-rotate-3 transition-all" aria-hidden="true">🟡</span>
-                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Labirint & Kviz</span>
+                        <div class="flex justify-between items-start mb-3 sm:mb-4">
+                            <span class="text-3xl sm:text-5xl p-2 sm:p-3 bg-white/5 rounded-xl border border-white/5 group-hover:scale-110 group-hover:-rotate-3 transition-all" aria-hidden="true">🟡</span>
+                            <span class="hidden sm:inline-block px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-white/5 border border-white/10 text-slate-300">Labirint & Kviz</span>
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-black mb-2 text-white group-hover:text-yellow-400 transition-colors flex items-center justify-between">
+                        <h2 class="text-base sm:text-2xl font-black mb-1 sm:mb-2 text-white group-hover:text-yellow-400 transition-colors flex items-center justify-between">
                             Pac-Man Edu
-                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-yellow-400" aria-hidden="true">arrow_forward</span>
+                            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-yellow-400 text-base sm:text-2xl" aria-hidden="true">arrow_forward</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Skupi sve točkice, bježi od duhova i spasi život točnim odgovorom kada te uhvate!</p>
+                        <p class="hidden sm:block text-xs sm:text-sm text-slate-400 leading-relaxed">Skupi sve točkice, bježi od duhova i spasi život točnim odgovorom kada te uhvate!</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-xs font-bold text-yellow-400 gap-1">
-                        Pokreni igru <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
+                    <div class="mt-3 sm:mt-6 pt-3 sm:pt-4 border-t border-white/5 flex items-center text-[11px] sm:text-xs font-bold text-yellow-400 gap-1">
+                        Pokreni <span class="material-symbols-outlined text-sm" aria-hidden="true">play_arrow</span>
                     </div>
                 </article>
             </a>
@@ -145,11 +235,63 @@
     </footer>
 
     <script>
+        // Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js');
             });
         }
+
+        // --- STATISTIKA IGRAČA ---
+        function loadStats() {
+            const gamesPlayed = parseInt(localStorage.getItem('ea_games_played') || '0');
+            const highScore = parseInt(localStorage.getItem('ea_high_score') || '0');
+            const levelsCleared = parseInt(localStorage.getItem('ea_levels_cleared') || '0');
+
+            animateCounter('stat-games', gamesPlayed);
+            animateCounter('stat-highscore', highScore);
+            animateCounter('stat-levels', levelsCleared);
+        }
+
+        function animateCounter(id, target) {
+            const el = document.getElementById(id);
+            if (target === 0) { el.textContent = '0'; return; }
+            
+            let current = 0;
+            const step = Math.max(1, Math.floor(target / 30));
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                el.textContent = current.toLocaleString('hr-HR');
+            }, 30);
+        }
+
+        loadStats();
+
+        // --- FILTERI ---
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.game-card').forEach(card => {
+                    if (filter === 'sve') {
+                        card.classList.remove('filter-hidden');
+                    } else {
+                        const categories = card.dataset.category || '';
+                        if (categories.includes(filter)) {
+                            card.classList.remove('filter-hidden');
+                        } else {
+                            card.classList.add('filter-hidden');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
