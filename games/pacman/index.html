@@ -48,23 +48,23 @@
     <!-- Game Area -->
     <main class="flex-1 flex flex-col justify-start items-center w-full relative h-full">
         <canvas id="gameCanvas" class="glass-card rounded-xl shadow-2xl border border-white/10 touch-none"></canvas>
-        
-        <!-- Virtual D-Pad -->
-        <div id="dpad" class="hidden relative mt-2 mb-24 w-40 h-40 shrink-0">
-            <button class="dpad-btn absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="UP">
-                <span class="material-symbols-outlined text-white">keyboard_arrow_up</span>
-            </button>
-            <button class="dpad-btn absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="DOWN">
-                <span class="material-symbols-outlined text-white">keyboard_arrow_down</span>
-            </button>
-            <button class="dpad-btn absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="LEFT">
-                <span class="material-symbols-outlined text-white">keyboard_arrow_left</span>
-            </button>
-            <button class="dpad-btn absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="RIGHT">
-                <span class="material-symbols-outlined text-white">keyboard_arrow_right</span>
-            </button>
-        </div>
     </main>
+
+    <!-- Virtual D-Pad (fiksiran na dnu ekrana) -->
+    <div id="dpad" class="hidden fixed z-40 w-40 h-40" style="bottom: max(1.5rem, env(safe-area-inset-bottom, 0px) + 1.5rem); left: 50%; transform: translateX(-50%);">
+        <button class="dpad-btn absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="UP">
+            <span class="material-symbols-outlined text-white">keyboard_arrow_up</span>
+        </button>
+        <button class="dpad-btn absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="DOWN">
+            <span class="material-symbols-outlined text-white">keyboard_arrow_down</span>
+        </button>
+        <button class="dpad-btn absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="LEFT">
+            <span class="material-symbols-outlined text-white">keyboard_arrow_left</span>
+        </button>
+        <button class="dpad-btn absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="RIGHT">
+            <span class="material-symbols-outlined text-white">keyboard_arrow_right</span>
+        </button>
+    </div>
 
     <!-- Postavke Modal -->
     <div id="settings-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center z-50 p-4">

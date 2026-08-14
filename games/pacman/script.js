@@ -239,8 +239,6 @@ function hideSettings() {
     gamePaused = false;
     
     if (CONTROL_MODE === 'dpad') {
-        document.getElementById('dpad').style.position = 'absolute';
-        document.getElementById('dpad').style.bottom = '20px';
         document.getElementById('dpad').classList.remove('hidden');
     } else {
         document.getElementById('dpad').classList.add('hidden');
@@ -256,8 +254,6 @@ function startGame() {
     }
     
     if (CONTROL_MODE === 'dpad') {
-        document.getElementById('dpad').style.position = 'absolute';
-        document.getElementById('dpad').style.bottom = '20px';
         document.getElementById('dpad').classList.remove('hidden');
     } else {
         document.getElementById('dpad').classList.add('hidden');

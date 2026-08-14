@@ -1,4 +1,4 @@
-const cacheName = 'edu-arcade-hub-v1.4.3'; // Promijenjen naziv verzije - prisiljava mobitel na osvježavanje!
+const cacheName = 'edu-arcade-hub-v1.4.4'; // Promijenjen naziv verzije - prisiljava mobitel na osvježavanje!
 const assets = [
   './',
   'index.html',
