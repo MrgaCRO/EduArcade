@@ -239,6 +239,25 @@ function hideSettings() {
     gamePaused = false;
     
     if (CONTROL_MODE === 'dpad') {
+        document.getElementById('dpad').style.position = 'absolute';
+        document.getElementById('dpad').style.bottom = '20px';
+        document.getElementById('dpad').classList.remove('hidden');
+    } else {
+        document.getElementById('dpad').classList.add('hidden');
+    }
+}
+
+function startGame() {
+    document.getElementById('settings-modal').classList.add('hidden');
+    document.getElementById('gameover-modal').classList.add('hidden');
+    
+    if (gameOver || lives <= 0 || dotsLeft === 0) {
+        resetGame();
+    }
+    
+    if (CONTROL_MODE === 'dpad') {
+        document.getElementById('dpad').style.position = 'absolute';
+        document.getElementById('dpad').style.bottom = '20px';
         document.getElementById('dpad').classList.remove('hidden');
     } else {
         document.getElementById('dpad').classList.add('hidden');
@@ -250,15 +269,6 @@ function hideSettings() {
             document.documentElement.requestFullscreen().catch(e => console.log(e));
         }
     } catch (e) {}
-}
-
-function startGame() {
-    document.getElementById('settings-modal').classList.add('hidden');
-    document.getElementById('gameover-modal').classList.add('hidden');
-    
-    if (gameOver || lives <= 0 || dotsLeft === 0) {
-        resetGame();
-    }
     
     gameOver = false;
     gamePaused = false;
