@@ -233,6 +233,25 @@ function showSettings() {
     document.getElementById('gameover-modal').classList.add('hidden');
 }
 
+function hideSettings() {
+    document.getElementById('settings-modal').classList.add('hidden');
+    document.getElementById('settings-modal').classList.remove('flex');
+    gamePaused = false;
+    
+    if (CONTROL_MODE === 'dpad') {
+        document.getElementById('dpad').classList.remove('hidden');
+    } else {
+        document.getElementById('dpad').classList.add('hidden');
+    }
+    
+    // Ulazak u Fullscreen mode (skriva Android navigacijsku traku)
+    try {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(e => console.log(e));
+        }
+    } catch (e) {}
+}
+
 function startGame() {
     document.getElementById('settings-modal').classList.add('hidden');
     document.getElementById('gameover-modal').classList.add('hidden');
