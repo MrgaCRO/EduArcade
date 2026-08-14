@@ -51,18 +51,18 @@
     </main>
 
     <!-- Virtual D-Pad (fiksiran na dnu ekrana) -->
-    <div id="dpad" class="hidden fixed z-40 w-40 h-40" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem); left: 50%; transform: translateX(-50%);">
-        <button class="dpad-btn absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="UP">
-            <span class="material-symbols-outlined text-white">keyboard_arrow_up</span>
+    <div id="dpad" class="hidden fixed z-40" style="width:100px; height:100px; bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem); left: 50%; transform: translateX(-50%);">
+        <button class="dpad-btn absolute top-0 left-1/2 -translate-x-1/2 w-9 h-9 rounded-lg bg-white/15 active:bg-yellow-500/50 flex justify-center items-center border border-white/10" data-dir="UP">
+            <span class="material-symbols-outlined text-white text-lg">keyboard_arrow_up</span>
         </button>
-        <button class="dpad-btn absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="DOWN">
-            <span class="material-symbols-outlined text-white">keyboard_arrow_down</span>
+        <button class="dpad-btn absolute bottom-0 left-1/2 -translate-x-1/2 w-9 h-9 rounded-lg bg-white/15 active:bg-yellow-500/50 flex justify-center items-center border border-white/10" data-dir="DOWN">
+            <span class="material-symbols-outlined text-white text-lg">keyboard_arrow_down</span>
         </button>
-        <button class="dpad-btn absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="LEFT">
-            <span class="material-symbols-outlined text-white">keyboard_arrow_left</span>
+        <button class="dpad-btn absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg bg-white/15 active:bg-yellow-500/50 flex justify-center items-center border border-white/10" data-dir="LEFT">
+            <span class="material-symbols-outlined text-white text-lg">keyboard_arrow_left</span>
         </button>
-        <button class="dpad-btn absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="RIGHT">
-            <span class="material-symbols-outlined text-white">keyboard_arrow_right</span>
+        <button class="dpad-btn absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg bg-white/15 active:bg-yellow-500/50 flex justify-center items-center border border-white/10" data-dir="RIGHT">
+            <span class="material-symbols-outlined text-white text-lg">keyboard_arrow_right</span>
         </button>
     </div>
 
@@ -88,11 +88,19 @@
                 </div>
             </div>
 
-            <div class="mb-8">
+            <div class="mb-5">
                 <label class="block text-xs text-slate-400 font-bold mb-2 uppercase tracking-wider">Kontrole (Mobitel)</label>
                 <div class="grid grid-cols-2 gap-2" id="control-selector">
                     <button data-val="swipe" class="setting-btn active px-3 py-2 rounded-lg border border-yellow-500/50 bg-yellow-500/20 text-yellow-400 text-sm font-bold transition-all">Swipe</button>
                     <button data-val="dpad" class="setting-btn px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-slate-300 text-sm font-bold hover:bg-white/10 transition-all">Strelice</button>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-xs text-slate-400 font-bold mb-2 uppercase tracking-wider">Puni Zaslon</label>
+                <div class="grid grid-cols-2 gap-2" id="fullscreen-selector">
+                    <button data-val="off" class="setting-btn active px-3 py-2 rounded-lg border border-yellow-500/50 bg-yellow-500/20 text-yellow-400 text-sm font-bold transition-all">Isključeno</button>
+                    <button data-val="on" class="setting-btn px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-slate-300 text-sm font-bold hover:bg-white/10 transition-all">Uključeno</button>
                 </div>
             </div>
 

@@ -6,6 +6,7 @@ const livesEl = document.getElementById('livesContainer');
 let GAME_MODE = 'classic';
 let CONTROL_MODE = 'swipe';
 let DIFFICULTY = 'medium';
+let FULLSCREEN_MODE = false;
 
 const speeds = {
     slow: { pacman: 0.06, ghosts: 0.05 },
@@ -227,6 +228,16 @@ document.querySelectorAll('#control-selector button').forEach(btn => {
     });
 });
 
+document.querySelectorAll('#fullscreen-selector button').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#fullscreen-selector button').forEach(b => b.classList.remove('active', 'bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400'));
+        document.querySelectorAll('#fullscreen-selector button').forEach(b => b.classList.add('bg-white/5', 'border-white/10', 'text-slate-300'));
+        e.target.classList.add('active', 'bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400');
+        e.target.classList.remove('bg-white/5', 'border-white/10', 'text-slate-300');
+        FULLSCREEN_MODE = (e.target.dataset.val === 'on');
+    });
+});
+
 function showSettings() {
     gamePaused = true;
     document.getElementById('settings-modal').classList.remove('hidden');
@@ -257,6 +268,15 @@ function startGame() {
         document.getElementById('dpad').classList.remove('hidden');
     } else {
         document.getElementById('dpad').classList.add('hidden');
+    }
+    
+    // Fullscreen samo ako je korisnik odabrao
+    if (FULLSCREEN_MODE) {
+        try {
+            if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+            }
+        } catch (e) {}
     }
     
     gameOver = false;
