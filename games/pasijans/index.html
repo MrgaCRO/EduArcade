@@ -17,13 +17,16 @@
         @media (max-width: 768px) {
             :root {
                 --card-w: calc((100vw - 28px) / 7);
-                --card-h: calc(var(--card-w) * 1.45);
+                --card-h: calc(var(--card-w) * 1.5);
                 --card-overlap: calc(var(--card-h) * 0.22);
             }
             .card {
                 padding: 4px 2px;
                 border-width: 1px;
                 border-radius: 6px;
+            }
+            .card.card-back {
+                border-width: 2px;
             }
             .pile-slot {
                 border-radius: 6px;
@@ -71,11 +74,12 @@
         .card.black { color: #0f172a; }
 
         .card-back {
-            background-color: #0f172a;
+            background-color: #020617;
+            border: 2px solid #22c55e;
+            box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.2);
             background-image: 
-                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 8px, transparent 0, transparent 16px),
-                linear-gradient(135deg, #1e293b, #0f172a);
-            border-color: #475569;
+                repeating-linear-gradient(45deg, rgba(34, 197, 94, 0.08) 0, rgba(34, 197, 94, 0.08) 4px, transparent 4px, transparent 10px),
+                repeating-linear-gradient(-45deg, rgba(34, 197, 94, 0.08) 0, rgba(34, 197, 94, 0.08) 4px, transparent 4px, transparent 10px);
             cursor: default;
         }
 
@@ -149,13 +153,13 @@
 
         <!-- Donji red (7 Stupaca za igru) -->
         <div class="flex justify-between gap-[2px] sm:gap-1 md:gap-3 flex-1 glass-card p-1 sm:p-3 md:p-5 rounded-2xl min-h-[500px] overflow-hidden" id="tableau-container">
-            <div class="pile-slot tableau relative flex-1" data-column="0"></div>
-            <div class="pile-slot tableau relative flex-1" data-column="1"></div>
-            <div class="pile-slot tableau relative flex-1" data-column="2"></div>
-            <div class="pile-slot tableau relative flex-1" data-column="3"></div>
-            <div class="pile-slot tableau relative flex-1" data-column="4"></div>
-            <div class="pile-slot tableau relative flex-1" data-column="5"></div>
-            <div class="pile-slot tableau relative flex-1" data-column="6"></div>
+            <div class="pile-slot tableau relative" data-column="0"></div>
+            <div class="pile-slot tableau relative" data-column="1"></div>
+            <div class="pile-slot tableau relative" data-column="2"></div>
+            <div class="pile-slot tableau relative" data-column="3"></div>
+            <div class="pile-slot tableau relative" data-column="4"></div>
+            <div class="pile-slot tableau relative" data-column="5"></div>
+            <div class="pile-slot tableau relative" data-column="6"></div>
         </div>
     </main>
 
@@ -296,7 +300,7 @@
             wasteEl.innerHTML = '';
             if (waste.length > 0) {
                 const numToShow = Math.min(3, waste.length);
-                const horizontalOverlap = window.innerWidth <= 768 ? 12 : 20;
+                const horizontalOverlap = window.innerWidth <= 768 ? 12 : 20; // Vraćeno širenje karata
                 for (let i = numToShow; i > 0; i--) {
                     const cardIndex = waste.length - i;
                     const card = waste[cardIndex];
@@ -333,13 +337,17 @@
 
             // 4. Tableau
             const overlap = getOverlap();
+            const faceDownOverlap = window.innerWidth <= 768 ? 8 : 12; // Malo šire da nisu potpuno zbijene
+            
             document.querySelectorAll('.tableau').forEach((slot, colIdx) => {
                 slot.innerHTML = '';
                 const colCards = tableau[colIdx];
+                let currentTop = 0;
+                
                 colCards.forEach((card, cardIdx) => {
                     const cardEl = document.createElement('div');
                     cardEl.className = `card ${card.faceUp ? card.color : 'card-back'}`;
-                    cardEl.style.top = `${cardIdx * overlap}px`;
+                    cardEl.style.top = `${currentTop}px`;
                     cardEl.style.left = '0px';
                     cardEl.innerHTML = renderCardInner(card);
 
@@ -349,8 +357,12 @@
                         if (cardIdx === colCards.length - 1) {
                             cardEl.ondblclick = () => autoMoveToFoundation(card, { type: 'tableau', col: colIdx });
                         }
-                    } else if (cardIdx === colCards.length - 1) {
-                        cardEl.onclick = () => { card.faceUp = true; render(); };
+                        currentTop += overlap;
+                    } else {
+                        if (cardIdx === colCards.length - 1) {
+                            cardEl.onclick = () => { card.faceUp = true; render(); };
+                        }
+                        currentTop += faceDownOverlap;
                     }
                     slot.appendChild(cardEl);
                 });
