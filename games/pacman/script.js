@@ -259,13 +259,6 @@ function startGame() {
         document.getElementById('dpad').classList.add('hidden');
     }
     
-    // Ulazak u Fullscreen mode (skriva Android navigacijsku traku)
-    try {
-        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(e => console.log(e));
-        }
-    } catch (e) {}
-    
     gameOver = false;
     gamePaused = false;
     if (reqAnimationId) cancelAnimationFrame(reqAnimationId);
