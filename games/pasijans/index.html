@@ -16,9 +16,17 @@
 
         @media (max-width: 768px) {
             :root {
-                --card-w: 58px;
-                --card-h: 84px;
-                --card-overlap: 20px;
+                --card-w: calc((100vw - 28px) / 7);
+                --card-h: calc(var(--card-w) * 1.45);
+                --card-overlap: calc(var(--card-h) * 0.22);
+            }
+            .card {
+                padding: 4px 2px;
+                border-width: 1px;
+                border-radius: 6px;
+            }
+            .pile-slot {
+                border-radius: 6px;
             }
         }
 
@@ -63,9 +71,11 @@
         .card.black { color: #0f172a; }
 
         .card-back {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px solid #475569;
-            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 8px, transparent 0, transparent 16px);
+            background-color: #0f172a;
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 8px, transparent 0, transparent 16px),
+                linear-gradient(135deg, #1e293b, #0f172a);
+            border-color: #475569;
             cursor: default;
         }
 
@@ -88,7 +98,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-3 md:p-6 selection:bg-green-500/30">
+<body class="min-h-screen flex flex-col justify-between p-1 sm:p-3 md:p-6 selection:bg-green-500/30">
 
     <!-- Dinamička pozadina -->
     <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
@@ -119,7 +129,7 @@
     <main class="max-w-6xl mx-auto w-full flex-1 flex flex-col gap-4 md:gap-6">
         
         <!-- Gornji red (Špil, Otpad i 4 Temelja) -->
-        <div class="flex justify-between items-center glass-card p-3 md:p-5 rounded-2xl shadow-lg">
+        <div class="flex justify-between items-center glass-card p-2 sm:p-3 md:p-5 rounded-2xl shadow-lg">
             <!-- Špil i Otpad -->
             <div class="flex gap-2 md:gap-4">
                 <div id="stock-pile" onclick="drawStockCard()" class="pile-slot cursor-pointer flex items-center justify-center text-xl md:text-2xl text-slate-500 hover:border-green-400/40 transition-colors">
@@ -138,7 +148,7 @@
         </div>
 
         <!-- Donji red (7 Stupaca za igru) -->
-        <div class="flex justify-between gap-1 md:gap-3 flex-1 glass-card p-3 md:p-5 rounded-2xl min-h-[500px] overflow-hidden" id="tableau-container">
+        <div class="flex justify-between gap-[2px] sm:gap-1 md:gap-3 flex-1 glass-card p-1 sm:p-3 md:p-5 rounded-2xl min-h-[500px] overflow-hidden" id="tableau-container">
             <div class="pile-slot tableau relative flex-1" data-column="0"></div>
             <div class="pile-slot tableau relative flex-1" data-column="1"></div>
             <div class="pile-slot tableau relative flex-1" data-column="2"></div>
@@ -260,12 +270,12 @@
         function renderCardInner(card) {
             if (!card.faceUp) return `<div class="card card-back absolute"></div>`;
             return `
-                <div class="flex justify-between items-start leading-none text-xs md:text-sm">
+                <div class="flex justify-between items-start leading-none text-[10px] sm:text-xs md:text-sm">
                     <span>${card.name}</span>
                     <span>${card.suit}</span>
                 </div>
-                <div class="text-center text-xl md:text-3xl my-auto select-none">${card.suit}</div>
-                <div class="flex justify-between items-end leading-none text-xs md:text-sm rotate-180">
+                <div class="text-center text-lg sm:text-xl md:text-3xl my-auto select-none">${card.suit}</div>
+                <div class="flex justify-between items-end leading-none text-[10px] sm:text-xs md:text-sm rotate-180">
                     <span>${card.name}</span>
                     <span>${card.suit}</span>
                 </div>
