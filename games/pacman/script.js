@@ -244,6 +244,11 @@ function showSettings() {
     document.getElementById('gameover-modal').classList.add('hidden');
 }
 
+function restartGame() {
+    gameOver = true; // Force reset next time they click start
+    showSettings();
+}
+
 function hideSettings() {
     document.getElementById('settings-modal').classList.add('hidden');
     document.getElementById('settings-modal').classList.remove('flex');
@@ -522,24 +527,77 @@ function endGame(win) {
     document.getElementById('finalScore').innerText = score;
 }
 
-// EDUKATIVNI MOD - Dummy podaci
-const questions = [
-    { q: "Koliko je 5 + 7?", a: ["11", "12", "13", "14"], correct: 1 },
-    { q: "Glavni grad Hrvatske?", a: ["Split", "Osijek", "Zagreb", "Zadar"], correct: 2 },
-    { q: "Koliko je 3 x 8?", a: ["24", "21", "27", "18"], correct: 0 }
-];
+// EDUKATIVNI MOD - Open Trivia DB integracija
+let eduQuestionsPool = [];
 
-function triggerEduQuestion() {
+// Funkcija za preuzimanje novih pitanja u pozadini
+async function fetchEduQuestions() {
+    try {
+        const res = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
+        const data = await res.json();
+        if (data.results) {
+            data.results.forEach(q => {
+                // OpenTDB vraća HTML entitete (npr. &quot;), pa ih moramo dekodirati
+                function decodeHTML(text) {
+                    let txt = document.createElement('textarea');
+                    txt.innerHTML = text;
+                    return txt.value;
+                }
+                
+                let correctAnswer = decodeHTML(q.correct_answer);
+                let allAnswers = q.incorrect_answers.map(decodeHTML);
+                allAnswers.push(correctAnswer);
+                
+                // Izmiješaj odgovore nasumično
+                allAnswers.sort(() => Math.random() - 0.5);
+                let correctIdx = allAnswers.indexOf(correctAnswer);
+                
+                eduQuestionsPool.push({
+                    q: decodeHTML(q.question),
+                    a: allAnswers,
+                    correct: correctIdx
+                });
+            });
+        }
+    } catch(e) {
+        console.error("Greška pri dohvaćanju pitanja s API-ja", e);
+    }
+}
+
+// Odmah inicijalno povuci pitanja
+fetchEduQuestions();
+
+async function triggerEduQuestion() {
     const modal = document.getElementById('edu-modal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     
-    let q = questions[Math.floor(Math.random() * questions.length)];
+    // Prikaz učitavanja dok se ne dohvati pitanje (ako je pool prazan)
+    document.getElementById('edu-question').innerText = "Loading question...";
+    document.getElementById('edu-answers').innerHTML = '';
+    
+    if (eduQuestionsPool.length === 0) {
+        await fetchEduQuestions();
+    }
+    
+    // Fallback ako nema interneta
+    if (eduQuestionsPool.length === 0) {
+        eduQuestionsPool.push({ q: "What is 2 + 2?", a: ["3", "4", "5", "6"], correct: 1 });
+    }
+    
+    // Uzmi zadnje pitanje iz poola i makni ga
+    let q = eduQuestionsPool.pop();
+    
+    // Ako smo pri kraju, dopuni pool u pozadini za sljedeći put
+    if (eduQuestionsPool.length <= 3) {
+        fetchEduQuestions();
+    }
+    
     document.getElementById('edu-question').innerText = q.q;
     
     let answersHtml = '';
     q.a.forEach((ans, idx) => {
-        answersHtml += `<button onclick="answerEdu(${idx === q.correct})" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/20 transition-all">${ans}</button>`;
+        answersHtml += `<button onclick="answerEdu(${idx === q.correct})" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/20 transition-all text-sm sm:text-base">${ans}</button>`;
     });
     document.getElementById('edu-answers').innerHTML = answersHtml;
 }

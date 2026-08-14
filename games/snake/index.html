@@ -698,6 +698,32 @@
 
         const catColors = { math: '#06B6D4', history: '#EF4444', geo: '#F97316', art: '#A855F7' };
 
+        // OpenTDB integracija
+        const openTdbCategories = { geo: 22, history: 23, art: 25 };
+        let eduQuestionsPool = { geo: [], history: [], art: [] };
+
+        async function fetchEduQuestionsForSnake(cat) {
+            if (!openTdbCategories[cat]) return;
+            try {
+                const res = await fetch(`https://opentdb.com/api.php?amount=10&category=${openTdbCategories[cat]}&type=multiple`);
+                const data = await res.json();
+                if (data.results) {
+                    data.results.forEach(q => {
+                        function decodeHTML(text) { let txt = document.createElement('textarea'); txt.innerHTML = text; return txt.value; }
+                        let correctAnswer = decodeHTML(q.correct_answer);
+                        let allAnswers = q.incorrect_answers.map(decodeHTML);
+                        allAnswers.push(correctAnswer);
+                        eduQuestionsPool[cat].push({ q: decodeHTML(q.question), a: correctAnswer, options: allAnswers });
+                    });
+                }
+            } catch(e) { console.error("Greška API-ja:", e); }
+        }
+        
+        // Inicijalno povlačenje
+        fetchEduQuestionsForSnake('geo');
+        fetchEduQuestionsForSnake('history');
+        fetchEduQuestionsForSnake('art');
+
         const geoDB = [
             { q: "Glavni grad Hrvatske?", a: "Zagreb" }, { q: "Glavni grad Italije?", a: "Rim" }, { q: "Glavni grad Njemačke?", a: "Berlin" }, { q: "Glavni grad Japana?", a: "Tokio" },
             { q: "Glavni grad Francuske?", a: "Pariz" }, { q: "Glavni grad Španjolske?", a: "Madrid" }, { q: "Glavni grad Rusije?", a: "Moskva" }, { q: "Glavni grad Austrije?", a: "Beč" },
@@ -1226,8 +1252,21 @@
                 while (options.length < 3) { let off = Math.floor(Math.random() * 5) + 1; let wrong = Math.random() > 0.5 ? correctResult + off : correctResult - off; if (wrong > 0 && !options.includes(wrong)) options.push(wrong); }
             } else {
                 let db = selectedCat === 'geo' ? geoDB : (selectedCat === 'history' ? historyDB : artDB);
-                let item = db[Math.floor(Math.random() * db.length)]; correctResult = item.a; document.getElementById('q-text').innerText = item.q; options.push(correctResult);
-                while (options.length < 3) { let randomItem = db[Math.floor(Math.random() * db.length)]; if (!options.includes(randomItem.a)) options.push(randomItem.a); }
+                let fallback = () => {
+                    let item = db[Math.floor(Math.random() * db.length)]; correctResult = item.a; document.getElementById('q-text').innerText = item.q; options.push(correctResult);
+                    while (options.length < 3) { let randomItem = db[Math.floor(Math.random() * db.length)]; if (!options.includes(randomItem.a)) options.push(randomItem.a); }
+                };
+
+                if (eduQuestionsPool[selectedCat] && eduQuestionsPool[selectedCat].length > 0) {
+                    let item = eduQuestionsPool[selectedCat].pop();
+                    if (eduQuestionsPool[selectedCat].length <= 3) fetchEduQuestionsForSnake(selectedCat);
+                    
+                    correctResult = item.a;
+                    document.getElementById('q-text').innerText = item.q;
+                    item.options.forEach(o => options.push(o));
+                } else {
+                    fallback();
+                }
             }
 
             options.sort(() => Math.random() - 0.5);
