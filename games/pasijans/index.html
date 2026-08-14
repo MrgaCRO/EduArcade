@@ -285,14 +285,25 @@
             const wasteEl = document.getElementById('waste-pile');
             wasteEl.innerHTML = '';
             if (waste.length > 0) {
-                const topCard = waste[waste.length - 1];
-                const cardEl = document.createElement('div');
-                cardEl.className = `card ${topCard.color} cursor-grab active:cursor-grabbing`;
-                cardEl.style.top = '0px'; cardEl.style.left = '0px';
-                cardEl.innerHTML = renderCardInner(topCard);
-                attachDragEvents(cardEl, { type: 'waste', card: topCard });
-                cardEl.ondblclick = () => autoMoveToFoundation(topCard, { type: 'waste' });
-                wasteEl.appendChild(cardEl);
+                const numToShow = Math.min(3, waste.length);
+                const horizontalOverlap = window.innerWidth <= 768 ? 12 : 20;
+                for (let i = numToShow; i > 0; i--) {
+                    const cardIndex = waste.length - i;
+                    const card = waste[cardIndex];
+                    const isTop = (i === 1);
+                    
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card ${card.color} ${isTop ? 'cursor-grab active:cursor-grabbing' : ''}`;
+                    cardEl.style.top = '0px'; 
+                    cardEl.style.left = `${(numToShow - i) * horizontalOverlap}px`;
+                    cardEl.innerHTML = renderCardInner(card);
+                    
+                    if (isTop) {
+                        attachDragEvents(cardEl, { type: 'waste', card: card });
+                        cardEl.ondblclick = () => autoMoveToFoundation(card, { type: 'waste' });
+                    }
+                    wasteEl.appendChild(cardEl);
+                }
             }
 
             // 3. Foundations
@@ -432,7 +443,7 @@
 
             let valid = false;
             if (!targetCard) {
-                if (movingLead.name === 'K') valid = true;
+                valid = true;
             } else if (targetCard.faceUp && targetCard.color !== movingLead.color && targetCard.val === movingLead.val + 1) {
                 valid = true;
             }
