@@ -39,6 +39,7 @@
     <!-- HUD -->
     <div class="max-w-3xl mx-auto w-full flex justify-between items-center px-2 mb-2 font-mono text-sm md:text-base font-bold text-yellow-400">
         <div>SCORE: <span id="scoreVal">0</span></div>
+        <div class="text-white text-xs md:text-sm bg-white/10 px-2 py-1 rounded-md border border-white/10">LEVEL <span id="levelVal">1</span></div>
         <div class="flex gap-1" id="livesContainer">
             <span>💛</span><span>💛</span><span>💛</span>
         </div>
@@ -49,7 +50,7 @@
         <canvas id="gameCanvas" class="glass-card rounded-xl shadow-2xl border border-white/10 touch-none"></canvas>
         
         <!-- Virtual D-Pad -->
-        <div id="dpad" class="hidden relative mt-6 w-40 h-40">
+        <div id="dpad" class="hidden relative mt-2 mb-10 w-40 h-40">
             <button class="dpad-btn absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-xl bg-white/10 active:bg-yellow-500/50 flex justify-center items-center border border-white/5" data-dir="UP">
                 <span class="material-symbols-outlined text-white">keyboard_arrow_up</span>
             </button>
@@ -78,6 +79,15 @@
                 </div>
             </div>
 
+            <div class="mb-5">
+                <label class="block text-xs text-slate-400 font-bold mb-2 uppercase tracking-wider">Težina Igre</label>
+                <div class="grid grid-cols-3 gap-2" id="difficulty-selector">
+                    <button data-val="slow" class="setting-btn px-2 py-2 rounded-lg border border-white/10 bg-white/5 text-slate-300 text-xs font-bold hover:bg-white/10 transition-all">Sporo</button>
+                    <button data-val="medium" class="setting-btn active px-2 py-2 rounded-lg border border-yellow-500/50 bg-yellow-500/20 text-yellow-400 text-xs font-bold transition-all">Srednje</button>
+                    <button data-val="fast" class="setting-btn px-2 py-2 rounded-lg border border-white/10 bg-white/5 text-slate-300 text-xs font-bold hover:bg-white/10 transition-all">Brzo</button>
+                </div>
+            </div>
+
             <div class="mb-8">
                 <label class="block text-xs text-slate-400 font-bold mb-2 uppercase tracking-wider">Kontrole (Mobitel)</label>
                 <div class="grid grid-cols-2 gap-2" id="control-selector">
@@ -97,6 +107,15 @@
             <h2 id="end-title" class="text-2xl font-black text-red-400 mb-2">Game Over</h2>
             <p class="text-sm text-slate-300 mb-6">Tvoj rezultat: <span id="finalScore" class="font-bold text-yellow-400 font-mono">0</span></p>
             <button onclick="showSettings()" class="w-full py-3 bg-yellow-500 text-slate-950 font-black rounded-xl hover:bg-yellow-400 transition-all shadow-lg active:scale-95">Igraj ponovno</button>
+        </div>
+    </div>
+
+    <!-- Level Up Modal -->
+    <div id="levelup-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center z-50 p-4 pointer-events-none transition-opacity duration-300">
+        <div class="glass-card p-8 rounded-3xl max-w-sm w-full text-center border border-yellow-500/40 shadow-2xl animate-pulse">
+            <div class="text-6xl mb-3">🚀</div>
+            <h2 class="text-3xl font-black text-yellow-400 mb-2">Level Up!</h2>
+            <p class="text-sm text-slate-300 font-mono">Učitavanje nove mape...</p>
         </div>
     </div>
 

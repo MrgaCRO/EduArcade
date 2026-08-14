@@ -5,12 +5,22 @@ const livesEl = document.getElementById('livesContainer');
 
 let GAME_MODE = 'classic';
 let CONTROL_MODE = 'swipe';
+let DIFFICULTY = 'medium';
+
+const speeds = {
+    slow: { pacman: 0.06, ghosts: 0.05 },
+    medium: { pacman: 0.1, ghosts: 0.08 },
+    fast: { pacman: 0.14, ghosts: 0.12 }
+};
 
 let score = 0;
 let lives = 3;
+let level = 1;
 let gameOver = false;
 let gamePaused = true;
 let reqAnimationId;
+
+const levelEl = document.getElementById('levelVal');
 
 const TILE_SIZE = 20;
 const MAP_COLS = 19;
@@ -61,8 +71,88 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-function resetGame() {
-    map = JSON.parse(JSON.stringify(initialMap));
+function generateMap() {
+    let newMap = [];
+    for(let r=0; r<MAP_ROWS; r++) {
+        let row = [];
+        for(let c=0; c<MAP_COLS; c++) { row.push(0); }
+        newMap.push(row);
+    }
+    
+    // Zidovi po rubovima
+    for(let r=0; r<MAP_ROWS; r++) {
+        newMap[r][0] = 1; newMap[r][MAP_COLS-1] = 1;
+    }
+    for(let c=0; c<MAP_COLS; c++) {
+        newMap[0][c] = 1; newMap[MAP_ROWS-1][c] = 1;
+    }
+    
+    // Tunel
+    newMap[9][0] = 2; newMap[9][MAP_COLS-1] = 2;
+    
+    // Ghost house (centar)
+    for(let r=8; r<=11; r++) {
+        for(let c=7; c<=11; c++) {
+            if(r===8 || r===11 || c===7 || c===11) {
+                if(r===8 && c===9) newMap[r][c] = 2; // izlaz
+                else newMap[r][c] = 1;
+            } else {
+                newMap[r][c] = 2;
+            }
+        }
+    }
+    newMap[15][9] = 2; // Pacman spawn
+    
+    // Generiranje nasumičnih zidova (samo parni indeksi za izbjegavanje slijepih ulica)
+    for(let r=2; r<=18; r+=2) {
+        for(let c=2; c<=8; c+=2) {
+            // Preskoči središnji dio oko kućice
+            if (r >= 6 && r <= 13 && c >= 5) continue;
+            if (r >= 14 && r <= 16 && c >= 7) continue;
+            
+            if (Math.random() < 0.7) {
+                newMap[r][c] = 1;
+                let dir = Math.random();
+                if (dir < 0.4 && c+1 <= 8) newMap[r][c+1] = 1; // Produži desno
+                else if (dir < 0.8 && r+1 <= 18) newMap[r+1][c] = 1; // Produži dolje
+            }
+        }
+    }
+    
+    // Zrcaljenje na desnu stranu
+    for(let r=0; r<MAP_ROWS; r++) {
+        for(let c=0; c<=8; c++) {
+            newMap[r][MAP_COLS - 1 - c] = newMap[r][c];
+        }
+    }
+    
+    // Power Pellets
+    let ppLocs = [[2,2], [2,16], [18,2], [18,16]];
+    ppLocs.forEach(loc => {
+        newMap[loc[0]][loc[1]] = 3;
+        // Oslobodi jedan blok ispod da power pellet nikad nije blokiran
+        if(newMap[loc[0]+1][loc[1]] === 1) newMap[loc[0]+1][loc[1]] = 0;
+    });
+
+    return newMap;
+}
+
+function resetGame(keepScore = false) {
+    if (keepScore) {
+        map = generateMap();
+    } else {
+        level = 1;
+        levelEl.innerText = level;
+        // Vraćanje brzina na zadane
+        speeds.slow = { pacman: 0.06, ghosts: 0.05 };
+        speeds.medium = { pacman: 0.1, ghosts: 0.08 };
+        speeds.fast = { pacman: 0.14, ghosts: 0.12 };
+        
+        map = JSON.parse(JSON.stringify(initialMap));
+        score = 0;
+        lives = 3;
+    }
+    
     dotsLeft = 0;
     for(let r=0; r<MAP_ROWS; r++) {
         for(let c=0; c<MAP_COLS; c++) {
@@ -70,8 +160,6 @@ function resetGame() {
         }
     }
     
-    score = 0;
-    lives = 3;
     scoreEl.innerText = score;
     updateLivesUI();
     
@@ -79,16 +167,20 @@ function resetGame() {
 }
 
 function resetPositions() {
+    let s = speeds[DIFFICULTY];
+    
     pacman.x = 9; pacman.y = 15;
     pacman.px = 9; pacman.py = 15;
     pacman.dirX = 0; pacman.dirY = 0;
     pacman.nextDirX = 0; pacman.nextDirY = 0;
+    pacman.speed = s.pacman;
+    pacman.lastNodeX = 9; pacman.lastNodeY = 15;
     
     ghosts = [
-        { x: 9, y: 7, px: 9, py: 7, dirX: 1, dirY: 0, color: '#ef4444', speed: 0.08, scared: 0, lastNodeX: 9, lastNodeY: 7 },
-        { x: 8, y: 9, px: 8, py: 9, dirX: -1, dirY: 0, color: '#ec4899', speed: 0.08, scared: 0, lastNodeX: 8, lastNodeY: 9 },
-        { x: 9, y: 9, px: 9, py: 9, dirX: 0, dirY: -1, color: '#06b6d4', speed: 0.08, scared: 0, lastNodeX: 9, lastNodeY: 9 },
-        { x: 10, y: 9, px: 10, py: 9, dirX: 1, dirY: 0, color: '#f59e0b', speed: 0.08, scared: 0, lastNodeX: 10, lastNodeY: 9 }
+        { x: 9, y: 7, px: 9, py: 7, dirX: 1, dirY: 0, color: '#ef4444', speed: s.ghosts, scared: 0, lastNodeX: 9, lastNodeY: 7 },
+        { x: 8, y: 9, px: 8, py: 9, dirX: -1, dirY: 0, color: '#ec4899', speed: s.ghosts, scared: 0, lastNodeX: 8, lastNodeY: 9 },
+        { x: 9, y: 9, px: 9, py: 9, dirX: 0, dirY: -1, color: '#06b6d4', speed: s.ghosts, scared: 0, lastNodeX: 9, lastNodeY: 9 },
+        { x: 10, y: 9, px: 10, py: 9, dirX: 1, dirY: 0, color: '#f59e0b', speed: s.ghosts, scared: 0, lastNodeX: 10, lastNodeY: 9 }
     ];
 }
 
@@ -106,6 +198,16 @@ document.querySelectorAll('#mode-selector button').forEach(btn => {
         e.target.classList.add('active', 'bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400');
         e.target.classList.remove('bg-white/5', 'border-white/10', 'text-slate-300');
         GAME_MODE = e.target.dataset.val;
+    });
+});
+
+document.querySelectorAll('#difficulty-selector button').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#difficulty-selector button').forEach(b => b.classList.remove('active', 'bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400'));
+        document.querySelectorAll('#difficulty-selector button').forEach(b => b.classList.add('bg-white/5', 'border-white/10', 'text-slate-300'));
+        e.target.classList.add('active', 'bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400');
+        e.target.classList.remove('bg-white/5', 'border-white/10', 'text-slate-300');
+        DIFFICULTY = e.target.dataset.val;
     });
 });
 
@@ -263,7 +365,7 @@ function updatePacman() {
     }
     
     if (dotsLeft === 0) {
-        endGame(true);
+        levelUp();
     }
 }
 
@@ -348,6 +450,29 @@ function die() {
     } else {
         endGame(false);
     }
+}
+
+function levelUp() {
+    gamePaused = true;
+    level++;
+    levelEl.innerText = level;
+    
+    const modal = document.getElementById('levelup-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        
+        // Povećaj težinu blago svakim nivoom
+        let s = speeds[DIFFICULTY];
+        s.pacman = Math.min(0.22, s.pacman + 0.01);
+        s.ghosts = Math.min(0.20, s.ghosts + 0.015); // Duhovi rastu mrvicu brže
+        
+        resetGame(true);
+        gamePaused = false;
+    }, 2500);
 }
 
 function endGame(win) {
@@ -505,13 +630,26 @@ function draw() {
     });
 }
 
-function loop() {
-    if (!gamePaused) {
-        updatePacman();
-        updateGhosts();
-    }
-    draw();
+let lastTime = 0;
+const FPS = 60;
+const frameDelay = 1000 / FPS;
+
+function loop(timestamp) {
     reqAnimationId = requestAnimationFrame(loop);
+    
+    if (!lastTime) lastTime = timestamp;
+    let dt = timestamp - lastTime;
+    
+    // Ograničavanje na maksimalno 60 FPS
+    if (dt >= frameDelay) {
+        lastTime = timestamp - (dt % frameDelay);
+        
+        if (!gamePaused) {
+            updatePacman();
+            updateGhosts();
+        }
+        draw();
+    }
 }
 
 // Inicijalizacija pri učitavanju
