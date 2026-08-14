@@ -1,11 +1,14 @@
-const cacheName = 'edu-arcade-hub-v1.2.0'; // Promijenjen naziv verzije - prisiljava mobitel na osvježavanje!
+const cacheName = 'edu-arcade-hub-v1.3.0'; // Promijenjen naziv verzije - prisiljava mobitel na osvježavanje!
 const assets = [
   './',
   'index.html',
   'manifest.json',
   'games/snake/index.html',
   'games/tablic/index.html',
-  'games/pasijans/index.html'
+  'games/pasijans/index.html',
+  'games/pacman/index.html',
+  'games/pacman/style.css',
+  'games/pacman/script.js'
 ];
 
 self.addEventListener('install', e => {

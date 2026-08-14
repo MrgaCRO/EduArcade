@@ -1,0 +1,50 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #020617;
+    color: #dce1fb;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none; /* Prevents scrolling while swiping */
+    overflow: hidden; /* Pac-Man doesn't need scrolling */
+}
+
+.glass-card {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(14px);
+}
+
+/* Canvas styling for crisp edges */
+canvas {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    max-height: 60vh; /* Responsive height */
+    object-fit: contain;
+}
+
+/* Settings button active state */
+.setting-btn {
+    transition: all 0.2s ease;
+}
+
+.setting-btn.active {
+    border-color: rgba(234, 179, 8, 0.5) !important;
+    background-color: rgba(234, 179, 8, 0.2) !important;
+    color: #facc15 !important;
+}
+
+/* D-Pad specific styles */
+#dpad {
+    transform: scale(0.8);
+    transform-origin: bottom center;
+}
+
+@media (min-width: 768px) {
+    #dpad {
+        transform: scale(1);
+    }
+    canvas {
+        max-height: 70vh;
+    }
+}
