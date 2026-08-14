@@ -3,11 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pasijans - EduArcade</title>
+    <title>Klondike Pasijans - EduArcade</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <style>
+        :root {
+            --card-w: 90px;
+            --card-h: 130px;
+            --card-overlap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --card-w: 58px;
+                --card-h: 84px;
+                --card-overlap: 20px;
+            }
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #020617;
@@ -17,89 +31,105 @@
             flex-direction: column;
             overflow-x: hidden;
             user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
         }
+
         .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        /* Stilovi za karte */
+
         .card {
-            width: 68px;
-            height: 98px;
+            width: var(--card-w);
+            height: var(--card-h);
             background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
             position: absolute;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 6px;
-            font-weight: bold;
-            color: #222;
+            padding: 6px 8px;
+            font-weight: 800;
+            color: #0f172a;
             border: 2px solid #cbd5e1;
-            cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-sizing: border-box;
+            touch-action: none;
         }
-        .card.red { color: #ef4444; }
+
+        .card.red { color: #dc2626; }
         .card.black { color: #0f172a; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 12px rgba(0,0,0,0.4); z-index: 50; }
-        .card.selected { border: 3px solid #22c55e !important; box-shadow: 0 0 15px rgba(34, 197, 94, 0.6); z-index: 60; }
+
         .card-back {
             background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px solid #334155;
+            border: 2px solid #475569;
             background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 8px, transparent 0, transparent 16px);
             cursor: default;
         }
-        .card-back:hover { transform: none; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
 
         .pile-slot {
-            width: 68px;
-            height: 98px;
+            width: var(--card-w);
+            height: var(--card-h);
             border: 2px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
+            border-radius: 10px;
             position: relative;
             background: rgba(255, 255, 255, 0.02);
+            box-sizing: border-box;
+            flex-shrink: 0;
         }
 
-        @media (max-width: 600px) {
-            .card, .pile-slot { width: 50px; height: 72px; }
+        .dragging-group {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 selection:bg-green-500/30">
+<body class="min-h-screen flex flex-col justify-between p-3 md:p-6 selection:bg-green-500/30">
+
+    <!-- Dinamička pozadina -->
+    <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+        <div class="absolute top-1/4 -left-20 w-96 h-96 bg-green-500/10 blur-[140px] rounded-full"></div>
+        <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyan-500/10 blur-[140px] rounded-full"></div>
+    </div>
 
     <!-- Zaglavlje -->
-    <header class="max-w-5xl mx-auto w-full glass-card rounded-2xl p-4 mb-6 flex justify-between items-center border border-white/10 shadow-lg">
-        <div class="flex items-center gap-2">
-            <span class="text-2xl">🎴</span>
-            <h1 class="text-xl sm:text-2xl font-black text-green-400">Klondike Pasijans</h1>
-        </div>
+    <header class="max-w-6xl mx-auto w-full glass-card rounded-2xl p-3 md:p-4 mb-4 flex justify-between items-center border border-white/10 shadow-xl">
         <div class="flex items-center gap-3">
-            <button onclick="window.location.href='../../index.html'" class="px-3 py-1.5 rounded-full border border-white/20 text-xs font-bold text-slate-200 hover:bg-white/10 transition-all flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm">home</span> Hub
+            <span class="text-3xl">🎴</span>
+            <div>
+                <h1 class="text-lg md:text-2xl font-black text-green-400 leading-tight">Klondike Pasijans</h1>
+                <p class="text-[10px] md:text-xs text-slate-400 font-mono">Povuci kartu ili dvoklikni za temelj</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 md:gap-4">
+            <button onclick="window.location.href='../../index.html'" class="px-3 py-2 rounded-xl border border-white/15 text-xs font-bold text-slate-200 hover:bg-white/10 transition-all flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">home</span> <span class="hidden sm:inline">Hub</span>
             </button>
-            <button onclick="startNewGame()" class="px-4 py-1.5 bg-green-500 hover:bg-green-400 text-slate-950 font-extrabold text-xs rounded-full transition-all shadow-md">
+            <button onclick="startNewGame()" class="px-4 py-2 bg-green-500 hover:bg-green-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow-lg active:scale-95">
                 Nova igra
             </button>
         </div>
     </header>
 
-    <!-- Glavni dio igre -->
-    <main class="max-w-5xl mx-auto w-full flex-1 flex flex-col gap-8">
+    <!-- Glavna površina stola -->
+    <main class="max-w-6xl mx-auto w-full flex-1 flex flex-col gap-4 md:gap-6">
         
-        <!-- Gornji red: Špil, Otpad i Temelji -->
-        <div class="flex justify-between items-center glass-card p-4 rounded-2xl">
+        <!-- Gornji red (Špil, Otpad i 4 Temelja) -->
+        <div class="flex justify-between items-center glass-card p-3 md:p-5 rounded-2xl shadow-lg">
             <!-- Špil i Otpad -->
-            <div class="flex gap-4">
-                <div id="stock-pile" onclick="drawStockCard()" class="pile-slot cursor-pointer flex items-center justify-center text-slate-500 text-xs font-bold">
+            <div class="flex gap-2 md:gap-4">
+                <div id="stock-pile" onclick="drawStockCard()" class="pile-slot cursor-pointer flex items-center justify-center text-xl md:text-2xl text-slate-500 hover:border-green-400/40 transition-colors">
                     🔄
                 </div>
                 <div id="waste-pile" class="pile-slot relative"></div>
             </div>
 
-            <!-- Temeljne gomile (A do K po bojama) -->
-            <div class="flex gap-2 sm:gap-4">
+            <!-- Temelji (A-K po znakovima) -->
+            <div class="flex gap-1.5 md:gap-4">
                 <div class="pile-slot foundation" data-suit="♥"></div>
                 <div class="pile-slot foundation" data-suit="♦"></div>
                 <div class="pile-slot foundation" data-suit="♠"></div>
@@ -107,8 +137,8 @@
             </div>
         </div>
 
-        <!-- Donji red: 7 kolona stola -->
-        <div class="flex justify-between gap-1 sm:gap-4 flex-1 glass-card p-4 rounded-2xl min-h-[360px] overflow-x-auto" id="tableau-container">
+        <!-- Donji red (7 Stupaca za igru) -->
+        <div class="flex justify-between gap-1 md:gap-3 flex-1 glass-card p-3 md:p-5 rounded-2xl min-h-[500px] overflow-hidden" id="tableau-container">
             <div class="pile-slot tableau relative flex-1" data-column="0"></div>
             <div class="pile-slot tableau relative flex-1" data-column="1"></div>
             <div class="pile-slot tableau relative flex-1" data-column="2"></div>
@@ -119,20 +149,18 @@
         </div>
     </main>
 
-    <!-- Modal za pobjedu -->
-    <div id="win-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="glass-card p-8 rounded-3xl max-w-sm w-full text-center border border-green-500/30 shadow-2xl">
-            <div class="text-6xl mb-4">🏆</div>
+    <!-- Plutajući kontejner za vučene karte -->
+    <div id="drag-ghost" class="dragging-group hidden"></div>
+
+    <!-- Pobjednički modal -->
+    <div id="win-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="glass-card p-8 rounded-3xl max-w-sm w-full text-center border border-green-500/40 shadow-2xl">
+            <div class="text-6xl mb-3">🏆</div>
             <h2 class="text-2xl font-black text-green-400 mb-2">Čestitamo!</h2>
-            <p class="text-sm text-slate-400 mb-6">Uspješno si složio cijeli pasijans i pobijedio u igri!</p>
-            <button onclick="startNewGame()" class="w-full py-3 bg-green-500 text-slate-950 font-extrabold rounded-xl hover:bg-green-400 transition-all shadow-lg">Igraj ponovno</button>
+            <p class="text-sm text-slate-300 mb-6">Uspješno si riješio cijeli pasijans!</p>
+            <button onclick="startNewGame()" class="w-full py-3 bg-green-500 text-slate-950 font-black rounded-xl hover:bg-green-400 transition-all shadow-lg active:scale-95">Igraj ponovno</button>
         </div>
     </div>
-
-    <!-- Podnožje -->
-    <footer class="text-center py-4 text-xs text-slate-600 font-mono mt-8">
-        EduArcade &bull; Pasijans
-    </footer>
 
     <script>
         const SUITS = [
@@ -153,7 +181,9 @@
         let waste = [];
         let foundations = { '♥': [], '♦': [], '♠': [], '♣': [] };
         let tableau = [[], [], [], [], [], [], []];
-        let selection = null; // { type: 'waste'|'tableau', colIndex, cardIndex }
+
+        // Drag & Drop State
+        let dragState = null;
 
         function initDeck() {
             deck = [];
@@ -163,7 +193,6 @@
                     deck.push({ id: id++, suit: suit.symbol, color: suit.color, name: rank.name, val: rank.val, faceUp: false });
                 });
             });
-            // Promiješaj špil
             for (let i = deck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -176,10 +205,10 @@
             waste = [];
             foundations = { '♥': [], '♦': [], '♠': [], '♣': [] };
             tableau = [[], [], [], [], [], [], []];
-            selection = null;
+            dragState = null;
             document.getElementById('win-modal').classList.add('hidden');
+            document.getElementById('win-modal').classList.remove('flex');
 
-            // Podjeli karte u 7 kolona
             for (let col = 0; col < 7; col++) {
                 for (let row = col; row < 7; row++) {
                     let card = deck.pop();
@@ -187,13 +216,12 @@
                     tableau[row].push(card);
                 }
             }
-            // Ostatak u stock
             stock = deck;
             render();
         }
 
         function drawStockCard() {
-            selection = null;
+            if (dragState) return;
             if (stock.length === 0) {
                 stock = waste.reverse();
                 waste = [];
@@ -206,194 +234,258 @@
             render();
         }
 
-        function handleCardClick(type, colIdx, cardIdx) {
-            let clickedCard = null;
-            if (type === 'waste') {
-                if (waste.length === 0) return;
-                clickedCard = waste[waste.length - 1];
-            } else if (type === 'tableau') {
-                clickedCard = tableau[colIdx][cardIdx];
-                if (!clickedCard.faceUp) {
-                    // Ako je zadnja karta licem prema dolje, okreni je
-                    if (cardIdx === tableau[colIdx].length - 1) {
-                        clickedCard.faceUp = true;
-                        render();
-                    }
-                    return;
-                }
-            }
-
-            if (!selection) {
-                if (type === 'waste' || type === 'tableau') {
-                    selection = { type, colIdx, cardIdx };
-                    render();
-                }
-            } else {
-                // Pokušaj premještanja
-                tryMove(selection, { type, colIdx, cardIdx });
-            }
-        }
-
-        function tryMove(from, to) {
-            let movingCards = [];
-            if (from.type === 'waste') {
-                movingCards = [waste[waste.length - 1]];
-            } else if (from.type === 'tableau') {
-                movingCards = tableau[from.colIdx].slice(from.cardIdx);
-            }
-
-            let targetCard = null;
-            if (to.type === 'tableau') {
-                let col = tableau[to.colIdx];
-                if (col.length > 0) targetCard = col[col.length - 1];
-
-                let canPlace = false;
-                if (!targetCard) {
-                    if (movingCards[0].name === 'K') canPlace = true; // Samo kralj na prazno
-                } else {
-                    if (targetCard.color !== movingCards[0].color && targetCard.val === movingCards[0].val + 1) {
-                        canPlace = true;
-                    }
-                }
-
-                if (canPlace) {
-                    executeMove(from, to, movingCards);
-                }
-            }
-            selection = null;
-            render();
-            checkWin();
-        }
-
-        function tryMoveToFoundation(suit) {
-            if (!selection) return;
-            let movingCard = null;
-            if (selection.type === 'waste' && waste.length > 0) {
-                movingCard = waste[waste.length - 1];
-            } else if (selection.type === 'tableau') {
-                let col = tableau[selection.colIdx];
-                if (selection.cardIdx === col.length - 1) {
-                    movingCard = col[col.length - 1];
-                }
-            }
-
-            if (!movingCard || movingCard.suit !== suit) {
-                selection = null;
-                render();
-                return;
-            }
-
-            let fPile = foundations[suit];
+        function autoMoveToFoundation(card, fromSource) {
+            let fPile = foundations[card.suit];
             let topCard = fPile.length > 0 ? fPile[fPile.length - 1] : null;
 
             let canMove = false;
-            if (!topCard && movingCard.name === 'A') canMove = true;
-            else if (topCard && movingCard.val === topCard.val + 1) canMove = true;
+            if (!topCard && card.name === 'A') canMove = true;
+            else if (topCard && card.val === topCard.val + 1) canMove = true;
 
             if (canMove) {
-                if (selection.type === 'waste') {
-                    foundations[suit].push(waste.pop());
-                } else if (selection.type === 'tableau') {
-                    foundations[suit].push(tableau[selection.colIdx].pop());
-                    let col = tableau[selection.colIdx];
+                if (fromSource.type === 'waste') {
+                    foundations[card.suit].push(waste.pop());
+                } else if (fromSource.type === 'tableau') {
+                    foundations[card.suit].push(tableau[fromSource.col].pop());
+                    let col = tableau[fromSource.col];
                     if (col.length > 0) col[col.length - 1].faceUp = true;
                 }
+                render();
+                checkWin();
+                return true;
             }
-            selection = null;
-            render();
-            checkWin();
+            return false;
         }
 
-        function executeMove(from, to, movingCards) {
-            if (from.type === 'waste') {
-                waste.pop();
-            } else if (from.type === 'tableau') {
-                tableau[from.colIdx].splice(from.cardIdx, movingCards.length);
-                let col = tableau[from.colIdx];
-                if (col.length > 0) col[col.length - 1].faceUp = true;
-            }
-            tableau[to.colIdx].push(...movingCards);
+        function renderCardInner(card) {
+            if (!card.faceUp) return `<div class="card card-back absolute"></div>`;
+            return `
+                <div class="flex justify-between items-start leading-none text-xs md:text-sm">
+                    <span>${card.name}</span>
+                    <span>${card.suit}</span>
+                </div>
+                <div class="text-center text-xl md:text-3xl my-auto select-none">${card.suit}</div>
+                <div class="flex justify-between items-end leading-none text-xs md:text-sm rotate-180">
+                    <span>${card.name}</span>
+                    <span>${card.suit}</span>
+                </div>
+            `;
         }
 
-        function checkWin() {
-            let totalFoundations = Object.values(foundations).reduce((acc, pile) => acc + pile.length, 0);
-            if (totalFoundations === 52) {
-                document.getElementById('win-modal').classList.remove('hidden');
-            }
-        }
-
-        function renderCardHtml(card, isSelected) {
-            let selectedClass = isSelected ? 'selected' : '';
-            if (!card.faceUp) {
-                return `<div class="card card-back absolute"></div>`;
-            }
-            return `<div class="card ${card.color} absolute ${selectedClass}">
-                <div class="text-xs leading-none"><span>${card.name}</span><br><span>${card.suit}</span></div>
-                <div class="text-center text-xl my-auto">${card.suit}</div>
-                <div class="text-xs leading-none rotate-180 text-right"><span>${card.name}</span><br><span>${card.suit}</span></div>
-            </div>`;
+        function getOverlap() {
+            return window.innerWidth <= 768 ? 20 : 30;
         }
 
         function render() {
-            // Render Stock
-            let stockEl = document.getElementById('stock-pile');
-            stockEl.innerHTML = stock.length > 0 ? `<div class="card card-back absolute"></div>` : `<span class="text-xs">🔄</span>`;
+            // 1. Stock
+            const stockEl = document.getElementById('stock-pile');
+            stockEl.innerHTML = stock.length > 0 ? `<div class="card card-back absolute" style="top:0; left:0;"></div>` : `<span class="text-xl md:text-2xl opacity-40">🔄</span>`;
 
-            // Render Waste
-            let wasteEl = document.getElementById('waste-pile');
+            // 2. Waste
+            const wasteEl = document.getElementById('waste-pile');
             wasteEl.innerHTML = '';
             if (waste.length > 0) {
-                let topWaste = waste[waste.length - 1];
-                let isSelected = selection && selection.type === 'waste';
-                let div = document.createElement('div');
-                div.innerHTML = renderCardHtml(topWaste, isSelected);
-                div.onclick = () => handleCardClick('waste');
-                wasteEl.appendChild(div.firstElementChild);
+                const topCard = waste[waste.length - 1];
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${topCard.color} cursor-grab active:cursor-grabbing`;
+                cardEl.style.top = '0px'; cardEl.style.left = '0px';
+                cardEl.innerHTML = renderCardInner(topCard);
+                attachDragEvents(cardEl, { type: 'waste', card: topCard });
+                cardEl.ondblclick = () => autoMoveToFoundation(topCard, { type: 'waste' });
+                wasteEl.appendChild(cardEl);
             }
 
-            // Render Foundations
+            // 3. Foundations
             document.querySelectorAll('.foundation').forEach(slot => {
-                let suit = slot.dataset.suit;
-                slot.innerHTML = `<div class="absolute inset-0 flex items-center justify-center text-slate-600 text-lg">${suit}</div>`;
-                slot.onclick = () => tryMoveToFoundation(suit);
-                let pile = foundations[suit];
+                const suit = slot.dataset.suit;
+                slot.innerHTML = `<div class="absolute inset-0 flex items-center justify-center text-slate-600 text-2xl font-bold opacity-30 select-none">${suit}</div>`;
+                const pile = foundations[suit];
                 if (pile.length > 0) {
-                    let topCard = pile[pile.length - 1];
-                    let div = document.createElement('div');
-                    div.innerHTML = renderCardHtml(topCard, false);
-                    slot.appendChild(div.firstElementChild);
+                    const topCard = pile[pile.length - 1];
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card ${topCard.color}`;
+                    cardEl.style.top = '0px'; cardEl.style.left = '0px';
+                    cardEl.innerHTML = renderCardInner(topCard);
+                    slot.appendChild(cardEl);
                 }
             });
 
-            // Render Tableau
-            let tableauContainers = document.querySelectorAll('.tableau');
-            tableauContainers.forEach((slot, colIdx) => {
+            // 4. Tableau
+            const overlap = getOverlap();
+            document.querySelectorAll('.tableau').forEach((slot, colIdx) => {
                 slot.innerHTML = '';
-                slot.onclick = (e) => {
-                    // Ako se klikne prazan dio kolone, a imamo selekciju, provjeri jel možemo staviti kralja
-                    if (selection && tableau[colIdx].length === 0) {
-                        tryMove(selection, { type: 'tableau', colIdx });
-                    }
-                };
-
-                let colCards = tableau[colIdx];
+                const colCards = tableau[colIdx];
                 colCards.forEach((card, cardIdx) => {
-                    let isSelected = selection && selection.type === 'tableau' && selection.colIdx === colIdx && cardIdx >= selection.cardIdx;
-                    let div = document.createElement('div');
-                    div.innerHTML = renderCardHtml(card, isSelected);
-                    let cardEl = div.firstElementChild;
-                    cardEl.style.top = `${cardIdx * 24}px`;
-                    cardEl.onclick = (e) => {
-                        e.stopPropagation();
-                        handleCardClick('tableau', colIdx, cardIdx);
-                    };
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card ${card.faceUp ? card.color : 'card-back'}`;
+                    cardEl.style.top = `${cardIdx * overlap}px`;
+                    cardEl.style.left = '0px';
+                    cardEl.innerHTML = renderCardInner(card);
+
+                    if (card.faceUp) {
+                        cardEl.classList.add('cursor-grab', 'active:cursor-grabbing');
+                        attachDragEvents(cardEl, { type: 'tableau', col: colIdx, idx: cardIdx, card });
+                        if (cardIdx === colCards.length - 1) {
+                            cardEl.ondblclick = () => autoMoveToFoundation(card, { type: 'tableau', col: colIdx });
+                        }
+                    } else if (cardIdx === colCards.length - 1) {
+                        cardEl.onclick = () => { card.faceUp = true; render(); };
+                    }
                     slot.appendChild(cardEl);
                 });
             });
         }
 
+        // DRAG AND DROP HANDLERS (POINTER EVENTS ZA MIŠ I TOUCH)
+        function attachDragEvents(el, sourceInfo) {
+            el.onpointerdown = (e) => {
+                if (e.button !== 0 && e.pointerType === 'mouse') return;
+                e.preventDefault();
+                startDrag(e, sourceInfo, el);
+            };
+        }
+
+        function startDrag(e, source, originalEl) {
+            let movingCards = [];
+            if (source.type === 'waste') {
+                movingCards = [waste[waste.length - 1]];
+            } else if (source.type === 'tableau') {
+                movingCards = tableau[source.col].slice(source.idx);
+            }
+
+            const rect = originalEl.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+
+            const ghost = document.getElementById('drag-ghost');
+            ghost.innerHTML = '';
+            ghost.classList.remove('hidden');
+
+            const overlap = getOverlap();
+            movingCards.forEach((c, idx) => {
+                const cEl = document.createElement('div');
+                cEl.className = `card ${c.color}`;
+                cEl.style.top = `${idx * overlap}px`;
+                cEl.style.left = '0px';
+                cEl.innerHTML = renderCardInner(c);
+                ghost.appendChild(cEl);
+            });
+
+            dragState = {
+                source,
+                cards: movingCards,
+                offsetX,
+                offsetY
+            };
+
+            moveGhost(e.clientX, e.clientY);
+
+            window.onpointermove = (ev) => {
+                if (!dragState) return;
+                moveGhost(ev.clientX, ev.clientY);
+            };
+
+            window.onpointerup = (ev) => {
+                if (!dragState) return;
+                endDrag(ev);
+            };
+        }
+
+        function moveGhost(clientX, clientY) {
+            const ghost = document.getElementById('drag-ghost');
+            ghost.style.left = `${clientX - dragState.offsetX}px`;
+            ghost.style.top = `${clientY - dragState.offsetY}px`;
+        }
+
+        function endDrag(e) {
+            const ghost = document.getElementById('drag-ghost');
+            ghost.classList.add('hidden');
+            ghost.innerHTML = '';
+
+            window.onpointermove = null;
+            window.onpointerup = null;
+
+            // Sakrij ghost privremeno kako bi elementFromPoint vidio slot ispod
+            const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+            if (dropTarget) {
+                const tableauSlot = dropTarget.closest('.tableau');
+                const foundationSlot = dropTarget.closest('.foundation');
+
+                if (tableauSlot) {
+                    const targetCol = parseInt(tableauSlot.dataset.column);
+                    tryDropOnTableau(targetCol);
+                } else if (foundationSlot && dragState.cards.length === 1) {
+                    const targetSuit = foundationSlot.dataset.suit;
+                    tryDropOnFoundation(targetSuit);
+                }
+            }
+
+            dragState = null;
+            render();
+            checkWin();
+        }
+
+        function tryDropOnTableau(targetCol) {
+            const movingLead = dragState.cards[0];
+            const col = tableau[targetCol];
+            const targetCard = col.length > 0 ? col[col.length - 1] : null;
+
+            let valid = false;
+            if (!targetCard) {
+                if (movingLead.name === 'K') valid = true;
+            } else if (targetCard.faceUp && targetCard.color !== movingLead.color && targetCard.val === movingLead.val + 1) {
+                valid = true;
+            }
+
+            if (valid) {
+                if (dragState.source.type === 'waste') {
+                    waste.pop();
+                } else if (dragState.source.type === 'tableau') {
+                    tableau[dragState.source.col].splice(dragState.source.idx);
+                    const sourceCol = tableau[dragState.source.col];
+                    if (sourceCol.length > 0) sourceCol[sourceCol.length - 1].faceUp = true;
+                }
+                tableau[targetCol].push(...dragState.cards);
+            }
+        }
+
+        function tryDropOnFoundation(targetSuit) {
+            const card = dragState.cards[0];
+            if (card.suit !== targetSuit) return;
+
+            const fPile = foundations[targetSuit];
+            const topCard = fPile.length > 0 ? fPile[fPile.length - 1] : null;
+
+            let valid = false;
+            if (!topCard && card.name === 'A') valid = true;
+            else if (topCard && card.val === topCard.val + 1) valid = true;
+
+            if (valid) {
+                if (dragState.source.type === 'waste') {
+                    foundations[targetSuit].push(waste.pop());
+                } else if (dragState.source.type === 'tableau') {
+                    foundations[targetSuit].push(tableau[dragState.source.col].pop());
+                    const sourceCol = tableau[dragState.source.col];
+                    if (sourceCol.length > 0) sourceCol[sourceCol.length - 1].faceUp = true;
+                }
+            }
+        }
+
+        function checkWin() {
+            const totalFoundations = Object.values(foundations).reduce((acc, pile) => acc + pile.length, 0);
+            if (totalFoundations === 52) {
+                const winModal = document.getElementById('win-modal');
+                winModal.classList.remove('hidden');
+                winModal.classList.add('flex');
+            }
+        }
+
         window.onload = () => {
             startNewGame();
+        };
+
+        window.onresize = () => {
+            render();
         };
     </script>
 </body>
