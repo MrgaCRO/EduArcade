@@ -36,8 +36,16 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
+    fetch(e.request)
+      .then(res => {
+        // Spremi svježu kopiju u keš za offline pristup
+        const clone = res.clone();
+        caches.open(cacheName).then(cache => cache.put(e.request, clone));
+        return res;
+      })
+      .catch(() => {
+        // Nema interneta - vrati keširan odgovor
+        return caches.match(e.request);
+      })
   );
 });
