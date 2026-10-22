@@ -305,40 +305,7 @@
                         </div>
 
                         <!-- Leaderboard Rankings -->
-                        <div class="flex flex-col gap-space-xs">
-                            <div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-high/90">
-                                <div class="flex items-center gap-space-sm">
-                                    <span class="w-6 h-6 rounded-full bg-arcade-amber text-canvas-deep font-bold font-label-sm text-label-sm flex items-center justify-center">1</span>
-                                    <div class="flex flex-col">
-                                        <span class="font-label-lg text-label-lg text-on-surface font-bold">Luka K.</span>
-                                        <span class="font-label-sm text-label-sm text-on-surface-variant">Razina 7 • Majstor</span>
-                                    </div>
-                                </div>
-                                <span class="font-counter-number text-headline-md text-arcade-amber font-extrabold">24.850</span>
-                            </div>
-
-                            <div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low">
-                                <div class="flex items-center gap-space-sm">
-                                    <span class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface font-bold font-label-sm text-label-sm flex items-center justify-center">2</span>
-                                    <div class="flex flex-col">
-                                        <span class="font-label-lg text-label-lg text-on-surface font-semibold">Ana M.</span>
-                                        <span class="font-label-sm text-label-sm text-on-surface-variant">Razina 5 • Stručnjak</span>
-                                    </div>
-                                </div>
-                                <span class="font-counter-number text-headline-md text-arcade-cyan font-bold">19.200</span>
-                            </div>
-
-                            <!-- Current Player Position -->
-                            <div class="flex items-center justify-between p-space-sm rounded-lg bg-primary/10 border border-primary/20">
-                                <div class="flex items-center gap-space-sm">
-                                    <span class="w-6 h-6 rounded-full bg-primary text-on-primary font-bold font-label-sm text-label-sm flex items-center justify-center">3</span>
-                                    <div class="flex flex-col">
-                                        <span class="font-label-lg text-label-lg text-primary font-bold" id="sidebarPlayerName">Ti (Gost)</span>
-                                        <span class="font-label-sm text-label-sm text-on-surface-variant">Upravo igraš...</span>
-                                    </div>
-                                </div>
-                                <span class="font-counter-number text-headline-md text-arcade-emerald font-extrabold" id="sidebarPlayerScore">0</span>
-                            </div>
+                        <div id="pacman-mini-leaderboard" class="flex flex-col gap-space-xs">
                         </div>
                     </div>
 
@@ -483,6 +450,7 @@
         </div>
     </footer>
 
+    <script src="../shared/edu-engine.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

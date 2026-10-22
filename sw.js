@@ -1,8 +1,9 @@
-const cacheName = 'edu-arcade-hub-v2.5.0';
+const cacheName = 'edu-arcade-hub-v2.6.0';
 const assets = [
   './',
   'index.html',
   'manifest.json',
+  'games/shared/edu-engine.js',
   'games/snake/index.html',
   'games/tablic/index.html',
   'games/pasijans/index.html',

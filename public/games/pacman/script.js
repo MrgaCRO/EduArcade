@@ -189,6 +189,20 @@ function updateScoreUI() {
     scoreEl.innerText = score.toLocaleString('hr-HR');
     const sidebarScore = document.getElementById('sidebarPlayerScore');
     if (sidebarScore) sidebarScore.innerText = score.toLocaleString('hr-HR');
+    if (window.EduEngine) {
+        window.EduEngine.renderMiniLeaderboard('pacman-mini-leaderboard', 'pacman', score);
+        const st = window.EduEngine.getState();
+        const modeLbl = document.getElementById('activeModeLabel');
+        if (modeLbl) {
+            if (st.mode === 'casual') modeLbl.innerText = '🕹️ Ležerno (Bez kviza)';
+            else if (st.mode === 'school') {
+                const pack = window.EduEngine.getActiveSchoolPack();
+                modeLbl.innerText = `🎓 ${pack ? pack.grade : 'Školski Kviz'}`;
+            } else {
+                modeLbl.innerText = `🏆 Natjecanje (🔥${st.streak || 0})`;
+            }
+        }
+    }
 }
 
 function updateLivesUI() {
@@ -436,7 +450,29 @@ function updatePacman() {
             map[cy][cx] = 2;
             score += 50;
             dotsLeft--;
-            ghosts.forEach(g => g.scared = 300); // 300 frameova ranjivosti
+            const currentEduMode = window.EduEngine ? window.EduEngine.getState().mode : (GAME_MODE === 'edu' ? 'competitive' : 'casual');
+            if (currentEduMode !== 'casual' && window.EduEngine) {
+                gamePaused = true;
+                window.EduEngine.askQuestion({
+                    reason: '⚡ Energetska Kapsula! Odgovori točno za +200 bonus bodova i duže plave duhove!',
+                    xpReward: 75,
+                    gameId: 'pacman',
+                    currentGameScore: score + 200,
+                    onCorrect: () => {
+                        score += 200;
+                        ghosts.forEach(g => g.scared = 380);
+                        updateScoreUI();
+                        gamePaused = false;
+                    },
+                    onWrong: () => {
+                        ghosts.forEach(g => g.scared = 150);
+                        updateScoreUI();
+                        gamePaused = false;
+                    }
+                });
+            } else {
+                ghosts.forEach(g => g.scared = 300); // 300 frameova ranjivosti
+            }
         }
         scoreEl.innerText = score.toLocaleString('hr-HR');
         updateScoreUI();
@@ -516,18 +552,18 @@ function die() {
     lives--;
     updateLivesUI();
     
-    if (lives > 0) {
-        if (GAME_MODE === 'edu') {
-            triggerEduQuestion();
-        } else {
-            // Klasični mod, samo resetiraj pozicije
+    const currentEduMode = window.EduEngine ? window.EduEngine.getState().mode : (GAME_MODE === 'edu' ? 'competitive' : 'casual');
+    if (currentEduMode !== 'casual' && GAME_MODE === 'edu') {
+        triggerEduQuestion();
+    } else {
+        if (lives > 0) {
             setTimeout(() => {
                 resetPositions();
                 gamePaused = false;
             }, 1000);
+        } else {
+            endGame(false);
         }
-    } else {
-        endGame(false);
     }
 }
 
@@ -564,80 +600,31 @@ function endGame(win) {
     document.getElementById('finalScore').innerText = score;
 }
 
-// EDUKATIVNI MOD - Open Trivia DB integracija
-let eduQuestionsPool = [];
-
-// Funkcija za preuzimanje novih pitanja u pozadini
-async function fetchEduQuestions() {
-    try {
-        const res = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
-        const data = await res.json();
-        if (data.results) {
-            data.results.forEach(q => {
-                // OpenTDB vraća HTML entitete (npr. &quot;), pa ih moramo dekodirati
-                function decodeHTML(text) {
-                    let txt = document.createElement('textarea');
-                    txt.innerHTML = text;
-                    return txt.value;
-                }
-                
-                let correctAnswer = decodeHTML(q.correct_answer);
-                let allAnswers = q.incorrect_answers.map(decodeHTML);
-                allAnswers.push(correctAnswer);
-                
-                // Izmiješaj odgovore nasumično
-                allAnswers.sort(() => Math.random() - 0.5);
-                let correctIdx = allAnswers.indexOf(correctAnswer);
-                
-                eduQuestionsPool.push({
-                    q: decodeHTML(q.question),
-                    a: allAnswers,
-                    correct: correctIdx
-                });
-            });
-        }
-    } catch(e) {
-        console.error("Greška pri dohvaćanju pitanja s API-ja", e);
-    }
-}
-
-// Odmah inicijalno povuci pitanja
-fetchEduQuestions();
+// EDUKATIVNI MOD - Hrvatska baza pitanja putem EduEngine
+let currentQuizSubject = 'math';
 
 async function triggerEduQuestion() {
     const modal = document.getElementById('edu-modal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    
-    // Prikaz učitavanja dok se ne dohvati pitanje (ako je pool prazan)
-    document.getElementById('edu-question').innerText = "Loading question...";
-    document.getElementById('edu-answers').innerHTML = '';
-    
-    if (eduQuestionsPool.length === 0) {
-        await fetchEduQuestions();
+
+    let qObj;
+    if (window.EduEngine) {
+        qObj = window.EduEngine.getNextQuestion();
+    } else {
+        qObj = { subject: 'math', subjectLabel: 'Matematika', q: 'Koliko je 7 × 8?', a: '56', options: ['48', '54', '56', '64'] };
     }
-    
-    // Fallback ako nema interneta
-    if (eduQuestionsPool.length === 0) {
-        eduQuestionsPool.push({ q: "What is 2 + 2?", a: ["3", "4", "5", "6"], correct: 1 });
-    }
-    
-    // Uzmi zadnje pitanje iz poola i makni ga
-    let q = eduQuestionsPool.pop();
-    
-    // Ako smo pri kraju, dopuni pool u pozadini za sljedeći put
-    if (eduQuestionsPool.length <= 3) {
-        fetchEduQuestions();
-    }
-    
-    document.getElementById('edu-question').innerText = q.q;
-    
+    currentQuizSubject = qObj.subject;
+
+    document.getElementById('edu-question').innerText = qObj.q;
+
     const letters = ['A', 'B', 'C', 'D'];
     let answersHtml = '';
-    q.a.forEach((ans, idx) => {
+    qObj.options.forEach((ans, idx) => {
         const letter = letters[idx] || (idx + 1);
+        const isCorrect = String(ans).trim().toLowerCase() === String(qObj.a).trim().toLowerCase();
         answersHtml += `
-        <button onclick="answerEdu(${idx === q.correct})" type="button" class="quiz-btn flex items-center justify-between p-3.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-white/5 hover:border-arcade-cyan/40 transition-all text-left group cursor-pointer">
+        <button onclick="answerEdu(${isCorrect})" type="button" class="quiz-btn flex items-center justify-between p-3.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-white/5 hover:border-arcade-cyan/40 transition-all text-left group cursor-pointer">
             <div class="flex items-center gap-3">
                 <span class="w-7 h-7 rounded-lg bg-surface-container-lowest text-on-surface-variant group-hover:text-arcade-cyan font-bold text-xs flex items-center justify-center shrink-0">${letter}</span>
                 <span class="text-sm font-semibold text-on-surface">${ans}</span>
@@ -652,24 +639,26 @@ window.answerEdu = function(correct) {
     const modal = document.getElementById('edu-modal');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
-    
+
     if (correct) {
-        // Spasio se, vrati život i pozicije
         lives = Math.min(3, lives + 1);
         score += 500;
+        if (window.EduEngine) {
+            window.EduEngine.recordAnswer(currentQuizSubject, true, 100, 'pacman', score);
+        }
         updateScoreUI();
         updateLivesUI();
         resetPositions();
         gamePaused = false;
     } else {
-        // Krivo, gubi taj život i ide dalje
+        if (window.EduEngine) {
+            window.EduEngine.recordAnswer(currentQuizSubject, false, 0, 'pacman', score);
+        }
         resetPositions();
         gamePaused = false;
-        
-        // Ako je pao na 0 života tijekom ovog procesa, kraj
-        if (lives === 0) endGame(false);
+        if (lives <= 0) endGame(false);
     }
-}
+};
 
 
 function draw() {

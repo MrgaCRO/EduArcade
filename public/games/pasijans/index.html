@@ -418,20 +418,16 @@
                         </div>
                     </div>
 
-                    <!-- Quick Telemetry & Hotkeys Overview -->
-                    <div class="md:col-span-4 flex items-center justify-between p-space-md rounded-2xl bg-surface-container-high/60 backdrop-blur-md border border-surface-card-border">
-                        <div class="flex items-center gap-space-sm">
-                            <span class="material-symbols-outlined text-arcade-cyan text-[20px]">keyboard</span>
-                            <div class="flex flex-col">
-                                <span class="font-label-sm text-label-sm text-on-surface-variant">BRZE TIPKE</span>
-                                <span class="font-label-md text-label-md text-on-surface">Dvoklik za temelj</span>
+                    <!-- Mini Top 3 Leaderboard & Hotkeys Overview -->
+                    <div class="md:col-span-4 flex flex-col gap-space-xs p-space-md rounded-2xl bg-surface-container-high/60 backdrop-blur-md border border-surface-card-border">
+                        <div class="flex items-center justify-between">
+                            <span class="font-label-sm text-label-sm text-arcade-amber font-extrabold uppercase tracking-wider">🏆 Ljestvica • Pasijans</span>
+                            <div class="flex items-center gap-1">
+                                <kbd class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-on-surface font-label-sm text-[10px] shadow">H</kbd>
+                                <kbd class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-on-surface font-label-sm text-[10px] shadow">Z</kbd>
                             </div>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <kbd class="px-2 py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-[11px] shadow">H</kbd>
-                            <span class="text-on-surface-variant text-xs">+</span>
-                            <kbd class="px-2 py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-[11px] shadow">Z</kbd>
-                        </div>
+                        <div id="pasijans-mini-leaderboard" class="flex flex-col gap-1"></div>
                     </div>
                 </div>
             </div>
@@ -465,6 +461,7 @@
         </div>
     </footer>
 
+    <script src="../shared/edu-engine.js"></script>
     <script>
         const SUITS = [
             { symbol: '♥', color: 'red' },
@@ -502,7 +499,7 @@
             if (historyStack.length > 30) historyStack.shift();
         }
 
-        function undoMove() {
+        function performUndoMove() {
             if (historyStack.length === 0) return;
             const prev = JSON.parse(historyStack.pop());
             stock = prev.stock;
@@ -510,13 +507,34 @@
             foundations = prev.foundations;
             tableau = prev.tableau;
             movesCount = prev.movesCount;
-            scoreCount = Math.max(0, prev.scoreCount - 5);
+            scoreCount = Math.max(0, prev.scoreCount);
             hintedCardId = null;
             updateStatsUI();
             render();
         }
 
-        function showHint() {
+        function undoMove() {
+            if (historyStack.length === 0) return;
+            if (window.EduEngine && EduEngine.getState().mode !== 'casual') {
+                EduEngine.askQuestion({
+                    title: "↩️ Vrati Potez: Edu Kviz",
+                    rewardText: "Odgovori točno za povratak poteza bez kazne i +50 bodova!",
+                    xpReward: 75,
+                    timeLimit: 14,
+                    onResult: (correct) => {
+                        if (correct) {
+                            performUndoMove();
+                            scoreCount += 50;
+                            updateStatsUI();
+                        }
+                    }
+                });
+            } else {
+                performUndoMove();
+            }
+        }
+
+        function performShowHint() {
             hintedCardId = null;
             const banner = document.getElementById('hintBannerText');
             // 1. Check if waste top card can move to foundation or tableau
@@ -568,15 +586,41 @@
                             return;
                         }
                     }
-                    break; // Check only top-most faceUp card of a sequence
+                    break;
                 }
             }
             banner.innerText = `Savjet: Klikni na Talon (Špil) za otvaranje nove karte!`;
         }
 
+        function showHint() {
+            if (window.EduEngine && EduEngine.getState().mode !== 'casual') {
+                EduEngine.askQuestion({
+                    title: "💡 Pomoć (Savjet): Edu Kviz",
+                    rewardText: "Odgovori točno za pametni savjet i +75 bodova!",
+                    xpReward: 100,
+                    timeLimit: 14,
+                    onResult: (correct) => {
+                        if (correct) {
+                            scoreCount += 75;
+                            updateStatsUI();
+                            performShowHint();
+                        } else {
+                            document.getElementById('hintBannerText').innerText = `❌ Netočan odgovor! Pokušaj ponovno za savjet.`;
+                        }
+                    }
+                });
+            } else {
+                performShowHint();
+            }
+        }
+
         function updateStatsUI() {
             document.getElementById('moves-counter').innerText = movesCount;
             document.getElementById('score-counter').innerText = scoreCount.toLocaleString('hr-HR');
+            if (window.EduEngine) {
+                EduEngine.updateHighScore('pasijans', scoreCount);
+                EduEngine.renderMiniLeaderboard('pasijans-mini-leaderboard', 'pasijans', scoreCount);
+            }
         }
 
         function initDeck() {
@@ -632,6 +676,26 @@
 
         function drawStockCard() {
             if (dragState) return;
+            if (stock.length === 0 && waste.length > 0 && window.EduEngine && EduEngine.getState().mode !== 'casual') {
+                EduEngine.askQuestion({
+                    title: "🔄 Novi Krug Špila (Talon): Edu Kviz",
+                    rewardText: "Odgovori točno za okretanje špila i +100 bodova!",
+                    xpReward: 100,
+                    timeLimit: 14,
+                    onResult: (correct) => {
+                        saveHistory();
+                        hintedCardId = null;
+                        stock = waste.reverse();
+                        waste = [];
+                        stock.forEach(c => c.faceUp = false);
+                        movesCount++;
+                        if (correct) scoreCount += 100;
+                        updateStatsUI();
+                        render();
+                    }
+                });
+                return;
+            }
             saveHistory();
             hintedCardId = null;
             if (stock.length === 0) {

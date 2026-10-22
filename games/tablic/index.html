@@ -533,6 +533,18 @@
             </div>
           </div>
 
+          <!-- MINI TOP 3 LEADERBOARD -->
+          <div class="rounded-2xl bg-surface-card p-space-md sm:p-space-lg shadow-[0_15px_35px_rgba(0,0,0,0.5)] border border-surface-card-border">
+            <div class="flex items-center justify-between mb-space-sm">
+              <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-space-xs">
+                <span class="material-symbols-outlined text-arcade-amber text-[20px]">leaderboard</span>
+                Ljestvica • Tablić
+              </h3>
+              <span class="font-label-sm text-label-sm text-arcade-emerald bg-arcade-emerald/15 px-2 py-0.5 rounded font-bold">Top 3</span>
+            </div>
+            <div id="tablic-mini-leaderboard" class="flex flex-col gap-1.5"></div>
+          </div>
+
           <!-- DNEVNIK POTEZA -->
           <div class="rounded-2xl bg-surface-card p-space-md sm:p-space-lg shadow-[0_15px_35px_rgba(0,0,0,0.5)] border border-surface-card-border">
             <div class="flex items-center justify-between mb-space-sm">
@@ -575,6 +587,7 @@
   </div>
 </div>
 
+<script src="../shared/edu-engine.js"></script>
 <script>
 let audioEnabled = true;
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -725,7 +738,7 @@ function findAllValidCaptureSubsets(tableCards, playedCard) {
         let n = tableCards.length; let totalSubsets = 1 << n;
         for (let i = 1; i < totalSubsets; i++) {
             let sub = [];
-            for (let j = 0; j < n; j++) { if ((i >> j) & 1) sub.push(cards[j]); }
+            for (let j = 0; j < n; j++) { if ((i >> j) & 1) sub.push(tableCards[j]); }
             if (canPartitionCards(sub, targetVal)) {
                 if (!validSubsets.some(existing => isSameCardSet(existing, sub))) validSubsets.push(sub);
             }
@@ -793,7 +806,27 @@ function handleAutoCapture() {
         let score = evaluateCaptureScore(set, isTabla);
         if (score > bestScore) { bestScore = score; bestSet = set; }
     }
-    executePlay(selectedHandCardIndex, bestSet);
+    const handIdx = selectedHandCardIndex;
+    if (window.EduEngine && EduEngine.getState().mode !== 'casual') {
+        EduEngine.askQuestion({
+            title: "✨ Pametna Pomoć: Automatsko Nošenje",
+            rewardText: "Točan odgovor otključava najbolji potez i donosi +1 bonus bod!",
+            xpReward: 100,
+            timeLimit: 14,
+            onResult: (correct) => {
+                if (correct) {
+                    matchScorePlayer += 1;
+                    logMessage(`🎓 Točan odgovor u kvizu! Automatski odnesen najbolji set (+1 bonus bod).`, 'player');
+                    executePlay(handIdx, bestSet);
+                } else {
+                    logMessage(`❌ Netočan odgovor! Pokušaj ručno zbrojiti karte sa stola.`);
+                }
+                updateUI();
+            }
+        });
+    } else {
+        executePlay(handIdx, bestSet);
+    }
 }
 
 function handleConfirmCapture() {
@@ -823,6 +856,23 @@ function executePlay(handCardIndex, capturedCards) {
             if (isPlayer) playerTablas++; else cpuTablas++;
             showTablaAnimation(); playSound('tabla');
             logMessage(`${isPlayer ? '👤 Ti si ostvario' : '🤖 Mate je ostvario'} TABLU! (+1b)`, 'tabla');
+            if (isPlayer && window.EduEngine && EduEngine.getState().mode !== 'casual') {
+                setTimeout(() => {
+                    EduEngine.askQuestion({
+                        title: "🔥 TABLA BONUS KVIZ! (+2 BODA)",
+                        rewardText: "Počistio si stol! Odgovori točno za +2 dodatna boda u meču i +150 EduXP",
+                        xpReward: 150,
+                        timeLimit: 14,
+                        onResult: (correct) => {
+                            if (correct) {
+                                matchScorePlayer += 2;
+                                logMessage(`🏆 TABLA KVIZ TOČAN! Osvojeno +2 dodatna boda u meču!`, 'tabla');
+                                updateUI();
+                            }
+                        }
+                    });
+                }, 700);
+            }
         } else {
             playSound('capture');
             let textCards = capturedCards.map(c => `${c.rank}${c.suit.symbol}`).join(', ');
@@ -978,6 +1028,11 @@ function updateUI() {
     document.getElementById('cpuTablaCount').innerText = cpuTablas;
     document.getElementById('matchScorePlayer').innerText = matchScorePlayer;
     document.getElementById('matchScoreCpu').innerText = matchScoreCpu;
+
+    if (window.EduEngine) {
+        EduEngine.updateHighScore('tablic', matchScorePlayer);
+        EduEngine.renderMiniLeaderboard('tablic-mini-leaderboard', 'tablic', matchScorePlayer);
+    }
 
     const dealtCards = 52 - deck.length;
     const pct = Math.round((dealtCards / 52) * 100);
