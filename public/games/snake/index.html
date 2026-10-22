@@ -1725,9 +1725,21 @@
             }
         }, { passive: true });
 
+        window.addEventListener('message', (e) => {
+            if (window.parent === window) {
+                if (e.data === 'go_home') { window.location.href = '../../index.html'; return; }
+                if (e.data && e.data.type === 'navigate' && e.data.to) {
+                    const target = String(e.data.to).replace(/^\//, '').trim();
+                    window.location.href = `../${target}/index.html`;
+                    return;
+                }
+            }
+        });
+
         window.onresize = setupCanvas; loadStatsFromStorage(); setupCanvas();
         setGameMode('modern'); setBoundsMode('wrap'); setTouchMode('trackpad'); setDesktopMode('keyboard');
         updateNavigationHighlights('categories');
+        window.parent.postMessage('game_ready', '*');
     </script>
 </body>
 

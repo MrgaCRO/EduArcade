@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html class="dark" lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Klondike Pasijans - EduArcade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "canvas-deep": "#020617",
+              "secondary-fixed": "#a2eeff",
+              "secondary": "#5de6ff",
+              "secondary-fixed-dim": "#2fd9f4",
+              "outline-variant": "#3d4a3d",
+              "surface-card-border": "#1E293B",
+              "on-primary": "#003915",
+              "arcade-amber": "#F59E0B",
+              "outline": "#869585",
+              "on-secondary-fixed": "#001f25",
+              "primary": "#4be277",
+              "inverse-surface": "#dae2fd",
+              "surface-container-lowest": "#060e20",
+              "arcade-emerald": "#4ADE80",
+              "surface-card": "#0F172A",
+              "on-tertiary-container": "#5f00a3",
+              "tertiary-fixed": "#f0dbff",
+              "on-primary-fixed-variant": "#005321",
+              "error": "#ffb4ab",
+              "inverse-primary": "#006e2f",
+              "on-surface-variant": "#bccbb9",
+              "on-background": "#dae2fd",
+              "on-primary-container": "#004b1e",
+              "on-error": "#690005",
+              "primary-fixed-dim": "#4ae176",
+              "primary-fixed": "#6bff8f",
+              "on-primary-fixed": "#002109",
+              "primary-container": "#22c55e",
+              "surface-container": "#171f33",
+              "arcade-purple": "#C084FC",
+              "surface": "#0b1326",
+              "on-secondary": "#00363e",
+              "on-secondary-container": "#00515d",
+              "tertiary": "#deb8ff",
+              "arcade-cyan": "#22D3EE",
+              "on-surface": "#dae2fd",
+              "inverse-on-surface": "#283044",
+              "on-tertiary": "#490080",
+              "surface-bright": "#31394d",
+              "surface-dim": "#0b1326",
+              "on-tertiary-fixed": "#2c0051",
+              "surface-tint": "#4ae176",
+              "tertiary-fixed-dim": "#ddb7ff",
+              "error-container": "#93000a",
+              "tertiary-container": "#cb94ff",
+              "secondary-container": "#00cbe6",
+              "background": "#0b1326",
+              "on-tertiary-fixed-variant": "#6900b3",
+              "on-secondary-fixed-variant": "#004e5a",
+              "surface-container-high": "#222a3d",
+              "on-error-container": "#ffdad6",
+              "surface-variant": "#2d3449",
+              "surface-container-highest": "#2d3449",
+              "surface-container-low": "#131b2e"
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px"
+            },
+            spacing: {
+              "space-sm": "0.5rem",
+              "space-2xl": "3rem",
+              "space-lg": "1.5rem",
+              "space-md": "1rem",
+              "gutter-mobile": "1rem",
+              "space-xl": "2rem",
+              "gutter": "1.5rem",
+              "margin-mobile": "1rem",
+              "margin": "2rem",
+              "space-xs": "0.25rem"
+            },
+            fontFamily: {
+              "body-lg": ["Plus Jakarta Sans"],
+              "label-sm": ["Plus Jakarta Sans"],
+              "headline-md": ["Plus Jakarta Sans"],
+              "counter-number": ["Plus Jakarta Sans"],
+              "display-lg": ["Plus Jakarta Sans"],
+              "body-md": ["Plus Jakarta Sans"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "label-lg": ["Plus Jakarta Sans"],
+              "label-md": ["Plus Jakarta Sans"],
+              "display-lg-mobile": ["Plus Jakarta Sans"],
+              "headline-xl": ["Plus Jakarta Sans"]
+            },
+            fontSize: {
+              "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "700" }],
+              "headline-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }],
+              "counter-number": ["28px", { lineHeight: "32px", fontWeight: "800" }],
+              "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "800" }],
+              "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+              "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "700" }],
+              "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "600" }],
+              "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "600" }],
+              "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "800" }],
+              "headline-xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }]
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+        :root {
+            --card-w: 96px;
+            --card-h: 138px;
+            --card-overlap: 32px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --card-w: calc((100vw - 44px) / 7);
+                --card-h: calc(var(--card-w) * 1.48);
+                --card-overlap: calc(var(--card-h) * 0.22);
+            }
+            .card {
+                padding: 4px 3px;
+                border-width: 1px;
+                border-radius: 8px;
+            }
+            .pile-slot {
+                border-radius: 8px;
+            }
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617;
+            color: #dae2fd;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        .card {
+            width: var(--card-w);
+            height: var(--card-h);
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 7px 8px;
+            font-weight: 800;
+            color: #0f172a;
+            border: 1.5px solid #cbd5e1;
+            box-sizing: border-box;
+            touch-action: none;
+            transition: box-shadow 0.15s ease;
+        }
+
+        .card.red { color: #e11d48; }
+        .card.black { color: #020617; }
+
+        .card.hint-glow {
+            box-shadow: 0 0 24px rgba(74, 222, 128, 0.85) !important;
+            border: 2.5px solid #4ADE80 !important;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #131b2e, #060e20);
+            border: 1.5px solid rgba(75, 226, 119, 0.4);
+            box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.15), 0 4px 10px rgba(0, 0, 0, 0.45);
+            cursor: default;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pile-slot {
+            width: var(--card-w);
+            height: var(--card-h);
+            border: 1.5px dashed rgba(255, 255, 255, 0.14);
+            border-radius: 12px;
+            position: relative;
+            background: rgba(23, 31, 51, 0.35);
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .dragging-group {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            filter: drop-shadow(0 18px 28px rgba(0,0,0,0.65));
+        }
+    </style>
+</head>
+<body class="bg-canvas-deep font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary min-h-screen flex flex-col justify-between">
+
+    <!-- Unified Top Header -->
+    <header class="fixed top-0 w-full z-50 bg-surface-card/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.4)] border-b border-surface-card-border">
+        <div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md max-w-[1600px] mx-auto">
+            <div class="flex items-center gap-space-lg">
+                <button onclick="window.parent.postMessage('go_home', '*');" class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg bg-surface-container-high/80 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    <span class="font-label-md text-label-md hidden sm:inline">Povratak na EduArcade</span>
+                </button>
+                <div class="flex items-center gap-space-sm">
+                    <div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.35)]">
+                        <span class="material-symbols-outlined text-on-primary-container text-[22px]">sports_esports</span>
+                    </div>
+                    <div class="hidden md:flex flex-col">
+                        <span class="font-headline-md text-headline-md text-on-surface leading-none tracking-tight">EduArcade</span>
+                        <span class="font-label-sm text-label-sm text-arcade-cyan uppercase">Uči kroz igru</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="hidden xl:flex items-center gap-space-xs p-1 rounded-xl bg-surface-container-lowest/80">
+                <a onclick="window.parent.postMessage({type:'navigate', to:'/pacman'}, '*');" class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Pac-Man Edu</a>
+                <a onclick="window.parent.postMessage({type:'navigate', to:'/tablic'}, '*');" class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Tablić</a>
+                <a aria-current="page" class="px-space-md py-space-xs rounded-lg transition-all bg-surface-container-high text-primary font-bold shadow-[0_0_12px_rgba(74,222,128,0.2)] cursor-pointer">Pasijans</a>
+                <a onclick="window.parent.postMessage({type:'navigate', to:'/snake'}, '*');" class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Snake Edu</a>
+            </nav>
+
+            <div class="flex items-center gap-space-sm">
+                <div class="flex items-center gap-space-xs p-1 rounded-xl bg-surface-container-low/90">
+                    <button onclick="undoMove()" aria-label="Poništi potez" title="Poništi potez (Z)" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-arcade-cyan hover:bg-surface-container-high transition-colors cursor-pointer" type="button">
+                        <span class="material-symbols-outlined text-[19px]">undo</span>
+                    </button>
+                    <button onclick="showHint()" aria-label="Pomoć" title="Pomoć (H)" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-arcade-amber hover:bg-surface-container-high transition-colors cursor-pointer" type="button">
+                        <span class="material-symbols-outlined text-[19px]">lightbulb</span>
+                    </button>
+                    <button onclick="startNewGame()" aria-label="Nova ruka" title="Nova ruka" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-arcade-emerald hover:bg-surface-container-high transition-colors cursor-pointer" type="button">
+                        <span class="material-symbols-outlined text-[19px]">refresh</span>
+                    </button>
+                </div>
+                <div class="h-6 w-px bg-surface-container-highest hidden sm:block"></div>
+                <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ring-2 ring-primary/30" title="Profil igrača">
+                    <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full pt-16 bg-canvas-deep flex-1">
+        <div class="flex flex-col w-full">
+            <!-- Top Ambient Glow Aura & Header Ribbon -->
+            <div class="relative w-full overflow-hidden px-gutter py-space-md">
+                <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[720px] h-[220px] bg-primary/10 blur-[100px] pointer-events-none rounded-full"></div>
+                <div class="absolute top-1/3 right-10 w-[300px] h-[180px] bg-arcade-cyan/10 blur-[90px] pointer-events-none rounded-full"></div>
+
+                <!-- Arcade Header Stats & Action Ribbon -->
+                <div class="relative max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md bg-surface-card/90 rounded-2xl p-space-md shadow-2xl backdrop-blur-xl border border-surface-card-border">
+                    <!-- Title & Live Telemetry -->
+                    <div class="flex flex-wrap items-center gap-space-md">
+                        <div class="flex items-center gap-space-sm pr-space-md">
+                            <div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shadow-[0_0_15px_rgba(75,226,119,0.25)]">
+                                <span class="material-symbols-outlined text-[24px]">style</span>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-headline-md text-headline-md text-on-surface">Klondike Pasijans</span>
+                                    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary/15 text-primary">KLASIČNI MOD</span>
+                                </div>
+                                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider" id="hintBannerText">Trening strateškog planiranja • Dvoklik za temelj</p>
+                            </div>
+                        </div>
+
+                        <!-- Telemetry Counters -->
+                        <div class="flex items-center gap-space-xs bg-surface-container-lowest/90 px-space-md py-space-xs rounded-xl">
+                            <div class="flex items-center gap-2 px-space-sm">
+                                <span class="material-symbols-outlined text-arcade-cyan text-[18px]">timer</span>
+                                <div class="flex flex-col">
+                                    <span class="font-label-sm text-label-sm text-on-surface-variant">VRIJEME</span>
+                                    <span class="font-counter-number text-counter-number text-arcade-cyan leading-none" id="game-timer">00:00</span>
+                                </div>
+                            </div>
+                            <div class="w-px h-8 bg-surface-container-highest"></div>
+                            <div class="flex items-center gap-2 px-space-sm">
+                                <span class="material-symbols-outlined text-arcade-amber text-[18px]">footprint</span>
+                                <div class="flex flex-col">
+                                    <span class="font-label-sm text-label-sm text-on-surface-variant">POTEZI</span>
+                                    <span class="font-counter-number text-counter-number text-arcade-amber leading-none" id="moves-counter">0</span>
+                                </div>
+                            </div>
+                            <div class="w-px h-8 bg-surface-container-highest"></div>
+                            <div class="flex items-center gap-2 px-space-sm">
+                                <span class="material-symbols-outlined text-arcade-emerald text-[18px]">military_tech</span>
+                                <div class="flex flex-col">
+                                    <span class="font-label-sm text-label-sm text-on-surface-variant">BODOVI</span>
+                                    <span class="font-counter-number text-counter-number text-primary leading-none" id="score-counter">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Row -->
+                    <div class="flex items-center flex-wrap gap-space-xs justify-end">
+                        <button onclick="undoMove()" class="flex items-center gap-2 px-space-md py-space-xs rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-all active:scale-95 hover:shadow-[0_0_12px_rgba(255,255,255,0.1)] cursor-pointer" id="btn-undo" type="button">
+                            <span class="material-symbols-outlined text-[20px] text-on-surface-variant">undo</span>
+                            <span class="font-label-md text-label-md">Poništi potez</span>
+                        </button>
+                        <button onclick="showHint()" class="flex items-center gap-2 px-space-md py-space-xs rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-all active:scale-95 group cursor-pointer" id="btn-hint" type="button">
+                            <span class="material-symbols-outlined text-[20px] text-arcade-amber group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.8)]">lightbulb</span>
+                            <span class="font-label-md text-label-md">Pomoć (Hint)</span>
+                        </button>
+                        <button onclick="startNewGame()" class="flex items-center gap-2 px-space-md py-space-xs rounded-xl bg-primary text-on-primary font-bold transition-all shadow-[0_0_18px_rgba(34,197,94,0.35)] hover:shadow-[0_0_24px_rgba(34,197,94,0.6)] active:scale-95 cursor-pointer" id="btn-new" type="button">
+                            <span class="material-symbols-outlined text-[20px]">refresh</span>
+                            <span class="font-label-md text-label-md">Nova ruka</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pasijans Luxury Table Surface -->
+            <div class="w-full px-gutter pb-space-lg">
+                <div class="max-w-7xl mx-auto rounded-3xl bg-surface-container-lowest/90 p-3 sm:p-space-lg lg:p-space-xl shadow-[inset_0_0_60px_rgba(0,0,0,0.8)] relative overflow-hidden border border-surface-card-border">
+                    <!-- Subtle Digital Felt Background Mesh -->
+                    <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#22c55e_1px,transparent_1px)] [background-size:24px_24px]"></div>
+                    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <!-- TOP ROW: Talon (Draw Pile + Waste) & 4 Foundation Slots -->
+                    <div class="relative z-10 flex flex-wrap items-start justify-between gap-3 sm:gap-space-lg pb-space-lg">
+                        <!-- LEFT: Talon / Kup karata -->
+                        <div class="flex items-start gap-2 sm:gap-space-md">
+                            <div class="flex flex-col items-center gap-1.5">
+                                <div id="stock-pile" onclick="drawStockCard()" class="pile-slot cursor-pointer flex items-center justify-center text-xl md:text-2xl text-slate-400 hover:border-primary/50 transition-colors"></div>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider hidden sm:inline">Talon (Špil)</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1.5">
+                                <div id="waste-pile" class="pile-slot relative" style="border-color: transparent; background: transparent;"></div>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider hidden sm:inline">Otvoreno</span>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT: 4 Foundations / Temeljne Baze (A -> K) -->
+                        <div class="flex items-start gap-1.5 sm:gap-3">
+                            <div class="flex flex-col items-center gap-1.5">
+                                <div class="pile-slot foundation" data-suit="♠"></div>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Pik ♠</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1.5">
+                                <div class="pile-slot foundation" data-suit="♥"></div>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Herc ♥</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1.5">
+                                <div class="pile-slot foundation" data-suit="♦"></div>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Karo ♦</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1.5">
+                                <div class="pile-slot foundation" data-suit="♣"></div>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant hidden sm:inline">Tref ♣</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEPARATOR WITH TACTILE GLOW -->
+                    <div class="w-full h-px bg-gradient-to-r from-transparent via-surface-container-high to-transparent my-space-xs"></div>
+
+                    <!-- BOTTOM PLAYING FIELD: 7 Tableau Columns -->
+                    <div class="pt-space-sm relative z-10">
+                        <div class="flex items-center justify-between mb-space-md px-1">
+                            <div class="flex items-center gap-2">
+                                <span class="font-label-md text-label-md text-arcade-cyan uppercase tracking-wider font-bold">Glavno polje za slaganje (Tableau)</span>
+                                <span class="text-on-surface-variant font-body-md text-body-md hidden sm:inline">• Silazni redoslijed, izmjenične boje</span>
+                            </div>
+                            <div class="hidden sm:flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+                                <span class="w-2.5 h-2.5 rounded-full bg-arcade-emerald shadow-[0_0_8px_#4ade80]"></span>
+                                <span>Dvoklik za automatski temelj</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between gap-[2px] sm:gap-2 md:gap-3 min-h-[470px] pb-space-lg" id="tableau-container">
+                            <div class="pile-slot tableau relative" data-column="0"></div>
+                            <div class="pile-slot tableau relative" data-column="1"></div>
+                            <div class="pile-slot tableau relative" data-column="2"></div>
+                            <div class="pile-slot tableau relative" data-column="3"></div>
+                            <div class="pile-slot tableau relative" data-column="4"></div>
+                            <div class="pile-slot tableau relative" data-column="5"></div>
+                            <div class="pile-slot tableau relative" data-column="6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Educational Strategy & Arcade Motivation Footer Ribbon -->
+            <div class="w-full px-gutter pb-space-xl">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
+                    <!-- Tip of the Day Box -->
+                    <div class="md:col-span-8 flex items-center gap-space-md p-space-md rounded-2xl bg-surface-card/90 shadow-lg backdrop-blur-md border border-surface-card-border">
+                        <div class="w-12 h-12 rounded-xl bg-arcade-amber/15 flex items-center justify-center shrink-0 text-arcade-amber">
+                            <span class="material-symbols-outlined text-[26px]">psychology</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-center gap-2">
+                                <span class="font-label-sm text-label-sm text-arcade-amber uppercase tracking-wider font-extrabold">Edukativni savjet dana</span>
+                                <span class="font-label-sm text-label-sm text-on-surface-variant">• Kognitivna strategija</span>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface mt-0.5">
+                                Savjet: Prvo otkrivaj skrivene karte u najdužim stupcima kako bi oslobodio prostor za Kraljeve i povećao opcije manevriranja!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Telemetry & Hotkeys Overview -->
+                    <div class="md:col-span-4 flex items-center justify-between p-space-md rounded-2xl bg-surface-container-high/60 backdrop-blur-md border border-surface-card-border">
+                        <div class="flex items-center gap-space-sm">
+                            <span class="material-symbols-outlined text-arcade-cyan text-[20px]">keyboard</span>
+                            <div class="flex flex-col">
+                                <span class="font-label-sm text-label-sm text-on-surface-variant">BRZE TIPKE</span>
+                                <span class="font-label-md text-label-md text-on-surface">Dvoklik za temelj</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <kbd class="px-2 py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-[11px] shadow">H</kbd>
+                            <span class="text-on-surface-variant text-xs">+</span>
+                            <kbd class="px-2 py-1 rounded bg-surface-container-lowest text-on-surface font-label-sm text-[11px] shadow">Z</kbd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Plutajući kontejner za vučene karte -->
+    <div id="drag-ghost" class="dragging-group hidden"></div>
+
+    <!-- Pobjednički modal -->
+    <div id="win-modal" class="fixed inset-0 bg-canvas-deep/85 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="bg-surface-card p-8 rounded-2xl max-w-sm w-full text-center border border-primary/40 shadow-2xl">
+            <div class="text-6xl mb-3">🏆</div>
+            <h2 class="text-2xl font-black text-primary mb-2">Čestitamo!</h2>
+            <p class="text-sm text-on-surface-variant mb-6">Uspješno si riješio cijeli pasijans!</p>
+            <button onclick="startNewGame()" class="w-full py-3 bg-primary-container text-on-primary-container font-black rounded-xl hover:bg-primary transition-all shadow-lg active:scale-95 cursor-pointer">Igraj ponovno</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full bg-surface-container-lowest py-space-lg border-t border-surface-container">
+        <div class="w-full px-gutter max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-md">
+            <div class="flex items-center gap-space-sm text-on-surface-variant font-label-sm text-label-sm">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                <span>EDUSTREAM MOTOR AKTIVAN • 60 FPS</span>
+            </div>
+            <div class="text-center font-body-md text-body-md text-on-surface-variant">© 2025 EduArcade. Sva prava zadržana. Učenje kroz digitalnu igru.</div>
+            <div class="flex items-center gap-space-md">
+                <span class="font-label-sm text-label-sm text-arcade-cyan bg-surface-container-high px-space-sm py-space-xs rounded">v2.4-arcade</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const SUITS = [
+            { symbol: '♥', color: 'red' },
+            { symbol: '♦', color: 'red' },
+            { symbol: '♠', color: 'black' },
+            { symbol: '♣', color: 'black' }
+        ];
+        const RANKS = [
+            { name: 'A', val: 1 }, { name: '2', val: 2 }, { name: '3', val: 3 },
+            { name: '4', val: 4 }, { name: '5', val: 5 }, { name: '6', val: 6 },
+            { name: '7', val: 7 }, { name: '8', val: 8 }, { name: '9', val: 9 },
+            { name: '10', val: 10 }, { name: 'J', val: 11 }, { name: 'Q', val: 12 }, { name: 'K', val: 13 }
+        ];
+
+        let deck = [];
+        let stock = [];
+        let waste = [];
+        let foundations = { '♥': [], '♦': [], '♠': [], '♣': [] };
+        let tableau = [[], [], [], [], [], [], []];
+        let historyStack = [];
+
+        let secondsElapsed = 0;
+        let movesCount = 0;
+        let scoreCount = 0;
+        let timerInterval = null;
+        let hintedCardId = null;
+
+        // Drag & Drop State
+        let dragState = null;
+
+        function saveHistory() {
+            historyStack.push(JSON.stringify({
+                stock, waste, foundations, tableau, movesCount, scoreCount
+            }));
+            if (historyStack.length > 30) historyStack.shift();
+        }
+
+        function undoMove() {
+            if (historyStack.length === 0) return;
+            const prev = JSON.parse(historyStack.pop());
+            stock = prev.stock;
+            waste = prev.waste;
+            foundations = prev.foundations;
+            tableau = prev.tableau;
+            movesCount = prev.movesCount;
+            scoreCount = Math.max(0, prev.scoreCount - 5);
+            hintedCardId = null;
+            updateStatsUI();
+            render();
+        }
+
+        function showHint() {
+            hintedCardId = null;
+            const banner = document.getElementById('hintBannerText');
+            // 1. Check if waste top card can move to foundation or tableau
+            if (waste.length > 0) {
+                const topW = waste[waste.length - 1];
+                const fPile = foundations[topW.suit];
+                const topF = fPile.length > 0 ? fPile[fPile.length - 1] : null;
+                if ((!topF && topW.name === 'A') || (topF && topW.val === topF.val + 1)) {
+                    hintedCardId = topW.id;
+                    banner.innerText = `Savjet: Dvoklikni na ${topW.name}${topW.suit} iz otvorenog špila za prijenos u temelj!`;
+                    render();
+                    return;
+                }
+            }
+            // 2. Check tableau cards for foundation moves
+            for (let col = 0; col < 7; col++) {
+                const colCards = tableau[col];
+                if (colCards.length === 0) continue;
+                const topC = colCards[colCards.length - 1];
+                if (!topC.faceUp) continue;
+                const fPile = foundations[topC.suit];
+                const topF = fPile.length > 0 ? fPile[fPile.length - 1] : null;
+                if ((!topF && topC.name === 'A') || (topF && topC.val === topF.val + 1)) {
+                    hintedCardId = topC.id;
+                    banner.innerText = `Savjet: Dvoklikni na ${topC.name}${topC.suit} u stupcu ${col + 1} za temelj!`;
+                    render();
+                    return;
+                }
+            }
+            // 3. Check tableau to tableau moves
+            for (let col = 0; col < 7; col++) {
+                const colCards = tableau[col];
+                for (let idx = 0; idx < colCards.length; idx++) {
+                    const card = colCards[idx];
+                    if (!card.faceUp) continue;
+                    for (let destCol = 0; destCol < 7; destCol++) {
+                        if (destCol === col) continue;
+                        const destCards = tableau[destCol];
+                        const destTop = destCards.length > 0 ? destCards[destCards.length - 1] : null;
+                        if (!destTop && card.name === 'K' && idx > 0) {
+                            hintedCardId = card.id;
+                            banner.innerText = `Savjet: Premjesti Kralja (${card.name}${card.suit}) u prazan stupac ${destCol + 1}!`;
+                            render();
+                            return;
+                        } else if (destTop && destTop.faceUp && destTop.color !== card.color && destTop.val === card.val + 1) {
+                            hintedCardId = card.id;
+                            banner.innerText = `Savjet: Spoji ${card.name}${card.suit} na ${destTop.name}${destTop.suit} u stupcu ${destCol + 1}!`;
+                            render();
+                            return;
+                        }
+                    }
+                    break; // Check only top-most faceUp card of a sequence
+                }
+            }
+            banner.innerText = `Savjet: Klikni na Talon (Špil) za otvaranje nove karte!`;
+        }
+
+        function updateStatsUI() {
+            document.getElementById('moves-counter').innerText = movesCount;
+            document.getElementById('score-counter').innerText = scoreCount.toLocaleString('hr-HR');
+        }
+
+        function initDeck() {
+            deck = [];
+            let id = 0;
+            SUITS.forEach(suit => {
+                RANKS.forEach(rank => {
+                    deck.push({ id: id++, suit: suit.symbol, color: suit.color, name: rank.name, val: rank.val, faceUp: false });
+                });
+            });
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function startNewGame() {
+            initDeck();
+            stock = [];
+            waste = [];
+            foundations = { '♥': [], '♦': [], '♠': [], '♣': [] };
+            tableau = [[], [], [], [], [], [], []];
+            historyStack = [];
+            dragState = null;
+            hintedCardId = null;
+            secondsElapsed = 0;
+            movesCount = 0;
+            scoreCount = 0;
+            updateStatsUI();
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const m = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+                const s = (secondsElapsed % 60).toString().padStart(2, '0');
+                const tEl = document.getElementById('game-timer');
+                if (tEl) tEl.innerText = `${m}:${s}`;
+            }, 1000);
+
+            document.getElementById('win-modal').classList.add('hidden');
+            document.getElementById('win-modal').classList.remove('flex');
+
+            for (let col = 0; col < 7; col++) {
+                for (let row = col; row < 7; row++) {
+                    let card = deck.pop();
+                    if (row === col) card.faceUp = true;
+                    tableau[row].push(card);
+                }
+            }
+            stock = deck;
+            render();
+        }
+
+        function drawStockCard() {
+            if (dragState) return;
+            saveHistory();
+            hintedCardId = null;
+            if (stock.length === 0) {
+                stock = waste.reverse();
+                waste = [];
+                stock.forEach(c => c.faceUp = false);
+            } else {
+                let card = stock.pop();
+                card.faceUp = true;
+                waste.push(card);
+            }
+            movesCount++;
+            updateStatsUI();
+            render();
+        }
+
+        function autoMoveToFoundation(card, fromSource) {
+            let fPile = foundations[card.suit];
+            let topCard = fPile.length > 0 ? fPile[fPile.length - 1] : null;
+
+            let canMove = false;
+            if (!topCard && card.name === 'A') canMove = true;
+            else if (topCard && card.val === topCard.val + 1) canMove = true;
+
+            if (canMove) {
+                saveHistory();
+                hintedCardId = null;
+                if (fromSource.type === 'waste') {
+                    foundations[card.suit].push(waste.pop());
+                } else if (fromSource.type === 'tableau') {
+                    foundations[card.suit].push(tableau[fromSource.col].pop());
+                    let col = tableau[fromSource.col];
+                    if (col.length > 0 && !col[col.length - 1].faceUp) {
+                        col[col.length - 1].faceUp = true;
+                        scoreCount += 15;
+                    }
+                }
+                movesCount++;
+                scoreCount += 100;
+                updateStatsUI();
+                render();
+                checkWin();
+                return true;
+            }
+            return false;
+        }
+
+        function renderCardInner(card) {
+            if (!card.faceUp) {
+                return `<div class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary/40">
+                    <span class="material-symbols-outlined text-[16px]">all_inclusive</span>
+                </div>`;
+            }
+            return `
+                <div class="flex justify-between items-start leading-none text-[11px] sm:text-xs md:text-sm font-black">
+                    <span>${card.name}</span>
+                    <span>${card.suit}</span>
+                </div>
+                <div class="text-center text-lg sm:text-xl md:text-3xl my-auto select-none">${card.suit}</div>
+                <div class="flex justify-between items-end leading-none text-[11px] sm:text-xs md:text-sm font-black rotate-180">
+                    <span>${card.name}</span>
+                    <span>${card.suit}</span>
+                </div>
+            `;
+        }
+
+        function getOverlap() {
+            return window.innerWidth <= 768 ? 24 : 34;
+        }
+
+        function render() {
+            // 1. Stock
+            const stockEl = document.getElementById('stock-pile');
+            if (stock.length > 0) {
+                stockEl.innerHTML = `
+                    <div class="card card-back absolute" style="top:0; left:0;">
+                        <div class="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-[20px]">all_inclusive</span>
+                        </div>
+                        <span class="absolute bottom-1 right-1.5 text-[10px] text-arcade-cyan font-bold bg-surface-container-lowest/90 px-1.5 rounded">${stock.length}</span>
+                    </div>`;
+            } else {
+                stockEl.innerHTML = `<span class="material-symbols-outlined text-2xl text-arcade-cyan opacity-60">refresh</span>`;
+            }
+
+            // 2. Waste
+            const wasteEl = document.getElementById('waste-pile');
+            wasteEl.innerHTML = '';
+            if (waste.length > 0) {
+                const numToShow = Math.min(3, waste.length);
+                const horizontalOverlap = window.innerWidth <= 768 ? 12 : 20;
+                for (let i = numToShow; i > 0; i--) {
+                    const cardIndex = waste.length - i;
+                    const card = waste[cardIndex];
+                    const isTop = (i === 1);
+                    
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card ${card.color} ${isTop ? 'cursor-grab active:cursor-grabbing' : ''} ${card.id === hintedCardId ? 'hint-glow' : ''}`;
+                    cardEl.style.top = '0px'; 
+                    cardEl.style.left = `${(numToShow - i) * horizontalOverlap}px`;
+                    cardEl.innerHTML = renderCardInner(card);
+                    
+                    if (isTop) {
+                        attachDragEvents(cardEl, { type: 'waste', card: card });
+                        cardEl.ondblclick = () => autoMoveToFoundation(card, { type: 'waste' });
+                    }
+                    wasteEl.appendChild(cardEl);
+                }
+            }
+
+            // 3. Foundations
+            document.querySelectorAll('.foundation').forEach(slot => {
+                const suit = slot.dataset.suit;
+                const pile = foundations[suit];
+                slot.innerHTML = `
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-on-surface-variant/25 font-black select-none">
+                        <span class="text-xl sm:text-2xl">A</span>
+                        <span class="text-lg sm:text-xl">${suit}</span>
+                    </div>
+                    <span class="absolute -top-2 -right-1 z-20 text-[10px] bg-surface-container-highest px-1 rounded text-arcade-cyan font-bold">${pile.length}/13</span>
+                `;
+                if (pile.length > 0) {
+                    const topCard = pile[pile.length - 1];
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card ${topCard.color}`;
+                    cardEl.style.top = '0px'; cardEl.style.left = '0px';
+                    cardEl.innerHTML = renderCardInner(topCard);
+                    slot.appendChild(cardEl);
+                }
+            });
+
+            // 4. Tableau
+            const overlap = getOverlap();
+            const faceDownOverlap = window.innerWidth <= 768 ? 12 : 18;
+            
+            document.querySelectorAll('.tableau').forEach((slot, colIdx) => {
+                slot.innerHTML = `<div class="absolute inset-0 flex flex-col items-center justify-center text-on-surface-variant/20 font-bold text-xs select-none">K</div>`;
+                const colCards = tableau[colIdx];
+                let currentTop = 0;
+                
+                colCards.forEach((card, cardIdx) => {
+                    const cardEl = document.createElement('div');
+                    cardEl.className = `card ${card.faceUp ? card.color : 'card-back'} ${card.id === hintedCardId ? 'hint-glow' : ''}`;
+                    cardEl.style.top = `${currentTop}px`;
+                    cardEl.style.left = '0px';
+                    cardEl.innerHTML = renderCardInner(card);
+
+                    if (card.faceUp) {
+                        cardEl.classList.add('cursor-grab', 'active:cursor-grabbing');
+                        attachDragEvents(cardEl, { type: 'tableau', col: colIdx, idx: cardIdx, card });
+                        if (cardIdx === colCards.length - 1) {
+                            cardEl.ondblclick = () => autoMoveToFoundation(card, { type: 'tableau', col: colIdx });
+                        }
+                        currentTop += overlap;
+                    } else {
+                        if (cardIdx === colCards.length - 1) {
+                            cardEl.onclick = () => { card.faceUp = true; render(); };
+                        }
+                        currentTop += faceDownOverlap;
+                    }
+                    slot.appendChild(cardEl);
+                });
+            });
+        }
+
+        // DRAG AND DROP HANDLERS
+        function attachDragEvents(el, sourceInfo) {
+            el.onpointerdown = (e) => {
+                if (e.button !== 0 && e.pointerType === 'mouse') return;
+                e.preventDefault();
+                startDrag(e, sourceInfo, el);
+            };
+        }
+
+        function startDrag(e, source, originalEl) {
+            let movingCards = [];
+            if (source.type === 'waste') {
+                movingCards = [waste[waste.length - 1]];
+            } else if (source.type === 'tableau') {
+                movingCards = tableau[source.col].slice(source.idx);
+            }
+
+            const rect = originalEl.getBoundingClientRect();
+            const offsetX = e.clientX - rect.left;
+            const offsetY = e.clientY - rect.top;
+
+            const ghost = document.getElementById('drag-ghost');
+            ghost.innerHTML = '';
+            ghost.classList.remove('hidden');
+
+            const overlap = getOverlap();
+            movingCards.forEach((c, idx) => {
+                const cEl = document.createElement('div');
+                cEl.className = `card ${c.color}`;
+                cEl.style.top = `${idx * overlap}px`;
+                cEl.style.left = '0px';
+                cEl.innerHTML = renderCardInner(c);
+                ghost.appendChild(cEl);
+            });
+
+            dragState = {
+                source,
+                cards: movingCards,
+                offsetX,
+                offsetY
+            };
+
+            moveGhost(e.clientX, e.clientY);
+
+            window.onpointermove = (ev) => {
+                if (!dragState) return;
+                moveGhost(ev.clientX, ev.clientY);
+            };
+
+            window.onpointerup = (ev) => {
+                if (!dragState) return;
+                endDrag(ev);
+            };
+        }
+
+        function moveGhost(clientX, clientY) {
+            const ghost = document.getElementById('drag-ghost');
+            ghost.style.left = `${clientX - dragState.offsetX}px`;
+            ghost.style.top = `${clientY - dragState.offsetY}px`;
+        }
+
+        function endDrag(e) {
+            const ghost = document.getElementById('drag-ghost');
+            ghost.classList.add('hidden');
+            ghost.innerHTML = '';
+
+            window.onpointermove = null;
+            window.onpointerup = null;
+
+            const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+            if (dropTarget) {
+                const tableauSlot = dropTarget.closest('.tableau');
+                const foundationSlot = dropTarget.closest('.foundation');
+
+                if (tableauSlot) {
+                    const targetCol = parseInt(tableauSlot.dataset.column);
+                    tryDropOnTableau(targetCol);
+                } else if (foundationSlot && dragState.cards.length === 1) {
+                    const targetSuit = foundationSlot.dataset.suit;
+                    tryDropOnFoundation(targetSuit);
+                }
+            }
+
+            dragState = null;
+            render();
+            checkWin();
+        }
+
+        function tryDropOnTableau(targetCol) {
+            const movingLead = dragState.cards[0];
+            const col = tableau[targetCol];
+            const targetCard = col.length > 0 ? col[col.length - 1] : null;
+
+            let valid = false;
+            if (!targetCard) {
+                valid = true;
+            } else if (targetCard.faceUp && targetCard.color !== movingLead.color && targetCard.val === movingLead.val + 1) {
+                valid = true;
+            }
+
+            if (valid) {
+                saveHistory();
+                hintedCardId = null;
+                if (dragState.source.type === 'waste') {
+                    waste.pop();
+                    scoreCount += 50;
+                } else if (dragState.source.type === 'tableau') {
+                    if (dragState.source.col === targetCol) return;
+                    tableau[dragState.source.col].splice(dragState.source.idx);
+                    const sourceCol = tableau[dragState.source.col];
+                    if (sourceCol.length > 0 && !sourceCol[sourceCol.length - 1].faceUp) {
+                        sourceCol[sourceCol.length - 1].faceUp = true;
+                        scoreCount += 25;
+                    }
+                }
+                tableau[targetCol].push(...dragState.cards);
+                movesCount++;
+                updateStatsUI();
+            }
+        }
+
+        function tryDropOnFoundation(targetSuit) {
+            const card = dragState.cards[0];
+            if (card.suit !== targetSuit) return;
+
+            const fPile = foundations[targetSuit];
+            const topCard = fPile.length > 0 ? fPile[fPile.length - 1] : null;
+
+            let valid = false;
+            if (!topCard && card.name === 'A') valid = true;
+            else if (topCard && card.val === topCard.val + 1) valid = true;
+
+            if (valid) {
+                saveHistory();
+                hintedCardId = null;
+                if (dragState.source.type === 'waste') {
+                    foundations[targetSuit].push(waste.pop());
+                } else if (dragState.source.type === 'tableau') {
+                    foundations[targetSuit].push(tableau[dragState.source.col].pop());
+                    const sourceCol = tableau[dragState.source.col];
+                    if (sourceCol.length > 0 && !sourceCol[sourceCol.length - 1].faceUp) {
+                        sourceCol[sourceCol.length - 1].faceUp = true;
+                        scoreCount += 25;
+                    }
+                }
+                movesCount++;
+                scoreCount += 100;
+                updateStatsUI();
+            }
+        }
+
+        function checkWin() {
+            const totalFoundations = Object.values(foundations).reduce((acc, pile) => acc + pile.length, 0);
+            window.parent.postMessage({ type: 'update_highscore', score: scoreCount }, '*');
+            if (totalFoundations === 52) {
+                const winModal = document.getElementById('win-modal');
+                winModal.classList.remove('hidden');
+                winModal.classList.add('flex');
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'z' || e.key === 'Z') undoMove();
+            if (e.key === 'h' || e.key === 'H') showHint();
+        });
+
+        window.addEventListener('message', (e) => {
+            if (window.parent === window) {
+                if (e.data === 'go_home') { window.location.href = '../../index.html'; return; }
+                if (e.data && e.data.type === 'navigate' && e.data.to) {
+                    const target = String(e.data.to).replace(/^\//, '').trim();
+                    window.location.href = `../${target}/index.html`;
+                    return;
+                }
+            }
+        });
+
+        window.onload = () => {
+            startNewGame();
+            window.parent.postMessage('game_ready', '*');
+        };
+
+        window.onresize = () => {
+            render();
+        };
+    </script>
+</body>
+</html>

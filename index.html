@@ -1,15 +1,829 @@
-﻿<!doctype html>
-<html lang="hr" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#020617">
-    <title>EduArcade</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  </head>
-  <body class="min-h-screen selection:bg-green-500/30">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html class="dark" lang="hr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta name="theme-color" content="#020617" />
+    <link rel="manifest" href="manifest.json" />
+    <title>EduArcade — Uči kroz igru</title>
+
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-on-surface": "#283044",
+                        "surface": "#0b1326",
+                        "tertiary-fixed": "#f0dbff",
+                        "arcade-emerald": "#4ADE80",
+                        "surface-card-border": "#1E293B",
+                        "on-secondary-fixed-variant": "#004e5a",
+                        "on-secondary": "#00363e",
+                        "inverse-primary": "#006e2f",
+                        "primary-container": "#22c55e",
+                        "surface-container": "#171f33",
+                        "primary-fixed-dim": "#4ae176",
+                        "primary": "#4be277",
+                        "on-secondary-container": "#00515d",
+                        "inverse-surface": "#dae2fd",
+                        "on-background": "#dae2fd",
+                        "outline": "#869585",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#4ae176",
+                        "on-tertiary-fixed": "#2c0051",
+                        "on-tertiary-container": "#5f00a3",
+                        "arcade-amber": "#F59E0B",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#0b1326",
+                        "background": "#0b1326",
+                        "on-primary-fixed": "#002109",
+                        "on-primary-container": "#004b1e",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "on-tertiary": "#490080",
+                        "surface-container-lowest": "#060e20",
+                        "on-tertiary-fixed-variant": "#6900b3",
+                        "on-secondary-fixed": "#001f25",
+                        "on-surface": "#dae2fd",
+                        "surface-container-high": "#222a3d",
+                        "secondary-fixed": "#a2eeff",
+                        "surface-card": "#0F172A",
+                        "surface-bright": "#31394d",
+                        "primary-fixed": "#6bff8f",
+                        "on-surface-variant": "#bccbb9",
+                        "secondary": "#5de6ff",
+                        "secondary-container": "#00cbe6",
+                        "tertiary": "#deb8ff",
+                        "tertiary-fixed-dim": "#ddb7ff",
+                        "arcade-purple": "#C084FC",
+                        "on-primary": "#003915",
+                        "canvas-deep": "#020617",
+                        "surface-container-low": "#131b2e",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary-fixed-variant": "#005321",
+                        "secondary-fixed-dim": "#2fd9f4",
+                        "surface-variant": "#2d3449",
+                        "arcade-cyan": "#22D3EE",
+                        "tertiary-container": "#cb94ff",
+                        "outline-variant": "#3d4a3d"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "space-xl": "2rem",
+                        "margin": "2rem",
+                        "gutter": "1.5rem",
+                        "space-sm": "0.5rem",
+                        "space-2xl": "3rem",
+                        "space-md": "1rem",
+                        "space-lg": "1.5rem",
+                        "space-xs": "0.25rem",
+                        "gutter-mobile": "1rem",
+                        "margin-mobile": "1rem"
+                    },
+                    fontFamily: {
+                        "label-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "counter-number": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-xl": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    fontSize: {
+                        "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "600" }],
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "800" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "counter-number": ["28px", { lineHeight: "32px", fontWeight: "800" }],
+                        "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "700" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "800" }],
+                        "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "700" }],
+                        "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "600" }],
+                        "headline-xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }]
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #020617;
+            color: #dae2fd;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="bg-canvas-deep text-on-surface font-body-md text-body-md min-h-screen flex flex-col justify-between selection:bg-primary/30">
+
+    <!-- Top Fixed Header (Stitch Naslovnica Design) -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-surface/85 backdrop-blur-xl border-b border-primary/20 shadow-[0_4px_24px_rgba(34,197,94,0.08)]">
+        <div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-6">
+                <a class="flex items-center gap-3 group cursor-pointer" href="#" onclick="resetFilters(event)">
+                    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center border border-primary/30 shadow-[0_0_15px_rgba(75,226,119,0.25)] group-hover:border-primary transition-colors">
+                        <span class="material-symbols-outlined text-primary text-[22px]">sports_esports</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface group-hover:text-primary transition-colors">EduArcade</span>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Uči kroz igru</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- Telemetry Pill -->
+                <div class="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-xl bg-surface-container-low border border-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-arcade-emerald text-[18px]">play_circle</span>
+                        <div class="flex flex-col">
+                            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Igre</span>
+                            <span id="stat-played" class="font-label-md text-label-md text-arcade-emerald font-bold">4 aktivne</span>
+                        </div>
+                    </div>
+                    <div class="w-px h-6 bg-surface-container-highest"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-arcade-cyan text-[18px]">military_tech</span>
+                        <div class="flex flex-col">
+                            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Najbolji</span>
+                            <span id="stat-score" class="font-label-md text-label-md text-arcade-cyan font-bold">0</span>
+                        </div>
+                    </div>
+                    <div class="w-px h-6 bg-surface-container-highest"></div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-arcade-purple text-[18px]">bolt</span>
+                        <div class="flex flex-col">
+                            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Spremljeno</span>
+                            <span id="stat-saved" class="font-label-md text-label-md text-arcade-purple font-bold">0 igara</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile & Settings Buttons -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openProfileModal()" class="w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer" title="Postavke profila" type="button">
+                        <span class="material-symbols-outlined text-[20px]">settings</span>
+                    </button>
+                    <button onclick="openProfileModal()" class="flex items-center gap-2 pl-1.5 pr-3.5 py-1 rounded-full bg-surface-container hover:bg-surface-container-high border border-primary/30 transition-all cursor-pointer" title="Tvoj profil i napredak" type="button">
+                        <div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined text-on-primary text-[16px]">person</span>
+                        </div>
+                        <span id="header-username" class="font-label-md text-label-md font-bold text-on-surface">Gost</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Portal View -->
+    <main id="hub-main" class="w-full pt-20 bg-canvas-deep flex-1">
+        <div class="flex flex-col w-full relative overflow-hidden">
+            <!-- Dynamic Ambient Arcade Background Glows -->
+            <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-primary/10 rounded-full blur-[140px] -z-10"></div>
+            <div class="pointer-events-none absolute top-96 left-12 w-96 h-96 bg-arcade-cyan/5 rounded-full blur-[120px] -z-10"></div>
+            <div class="pointer-events-none absolute top-96 right-12 w-96 h-96 bg-arcade-purple/5 rounded-full blur-[120px] -z-10"></div>
+
+            <!-- Interactive Filter Bar Section -->
+            <section class="max-w-7xl mx-auto px-6 lg:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-4 pt-10 pb-4">
+                <!-- Category Pills -->
+                <div class="flex items-center flex-wrap gap-2.5" id="filter-container">
+                    <button class="filter-btn active inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md text-label-md font-bold transition-all bg-primary-container text-on-primary-container shadow-[0_0_20px_rgba(74,222,128,0.35)] cursor-pointer" data-filter="all" type="button">
+                        <span>Sve igre</span>
+                        <span class="px-2 py-0.5 rounded-full text-xs bg-canvas-deep/20">4</span>
+                    </button>
+                    <button class="filter-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md text-label-md font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all cursor-pointer" data-filter="arcade" type="button">
+                        <span>🎮</span>
+                        <span>Arkadne</span>
+                    </button>
+                    <button class="filter-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md text-label-md font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all cursor-pointer" data-filter="cards" type="button">
+                        <span>🃏</span>
+                        <span>Kartaške</span>
+                    </button>
+                    <button class="filter-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-label-md text-label-md font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all cursor-pointer" data-filter="edu" type="button">
+                        <span>📚</span>
+                        <span>Edukativne</span>
+                    </button>
+                </div>
+
+                <!-- Quick Search & Status Display -->
+                <div class="flex items-center gap-3 w-full md:w-auto">
+                    <div class="relative flex-1 md:w-64">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+                        <input class="w-full bg-surface-card/90 text-on-surface pl-10 pr-4 py-2 rounded-xl text-body-md placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-arcade-cyan border border-surface-card-border transition-all" id="game-search" placeholder="Pretraži igre..." type="text" />
+                    </div>
+                    <div class="hidden lg:flex items-center gap-2 text-on-surface-variant text-label-sm font-label-sm bg-surface-container-low px-3 py-2 rounded-xl border border-white/5">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+                        <span>Online</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- High-Impact Games Grid -->
+            <section class="max-w-7xl mx-auto px-6 lg:px-12 w-full py-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="games-grid">
+
+                    <!-- CARD 1: Snake Edu -->
+                    <article onclick="handleGameClick(event, 'snake')" class="game-card relative flex flex-col justify-between rounded-2xl bg-surface-card/90 backdrop-blur-xl p-6 shadow-xl border border-surface-card-border/70 hover:-translate-y-2 hover:shadow-[0_16px_36px_-10px_rgba(74,222,128,0.3)] transition-all duration-300 group cursor-pointer" data-category="arcade edu" data-game-id="snake">
+                        <div id="badge-save-snake" class="hidden absolute -top-3.5 right-6 z-10 px-3 py-1 rounded-full bg-arcade-cyan text-canvas-deep font-label-sm text-label-sm font-extrabold uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.7)] items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-canvas-deep animate-ping"></span>
+                            <span class="save-label">SPREMLJENO</span>
+                        </div>
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
+                                    <span class="text-3xl filter drop-shadow-[0_0_12px_rgba(74,222,128,0.5)]">🐍</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-label-sm font-label-sm font-bold uppercase tracking-wider bg-surface-container-low text-arcade-emerald">
+                                    Akcija &amp; Kviz
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface group-hover:text-primary transition-colors">
+                                    Snake Edu
+                                </h2>
+                                <span class="material-symbols-outlined text-outline group-hover:text-primary group-hover:translate-x-0.5 transition-all text-[20px]">arrow_forward</span>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
+                                Vježbaj matematičke operacije, povijest i geografiju uz klasičnu zmiju s modernim 360° kontrolama.
+                            </p>
+                            <div class="flex items-center flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">360° kontrole</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Kvizovi</span>
+                            </div>
+                        </div>
+                        <a href="games/snake/index.html" onclick="handleGameClick(event, 'snake')" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary-container text-on-primary-container font-label-lg text-label-lg font-bold shadow-[0_0_18px_rgba(34,197,94,0.35)] hover:shadow-[0_0_24px_rgba(34,197,94,0.6)] group-hover:bg-primary transition-all">
+                            <span class="btn-label">Pokreni</span>
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        </a>
+                    </article>
+
+                    <!-- CARD 2: Tablić -->
+                    <article onclick="handleGameClick(event, 'tablic')" class="game-card relative flex flex-col justify-between rounded-2xl bg-surface-card/90 backdrop-blur-xl p-6 shadow-xl border border-surface-card-border/70 hover:-translate-y-2 hover:shadow-[0_16px_36px_-10px_rgba(34,211,238,0.3)] transition-all duration-300 group cursor-pointer" data-category="cards edu" data-game-id="tablic">
+                        <div id="badge-save-tablic" class="hidden absolute -top-3.5 right-6 z-10 px-3 py-1 rounded-full bg-arcade-cyan text-canvas-deep font-label-sm text-label-sm font-extrabold uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.7)] items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-canvas-deep animate-ping"></span>
+                            <span class="save-label">SPREMLJENO</span>
+                        </div>
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
+                                    <span class="text-3xl filter drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]">🃏</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-label-sm font-label-sm font-bold uppercase tracking-wider bg-surface-container-low text-arcade-cyan">
+                                    Strategija &amp; Brojevi
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface group-hover:text-arcade-cyan transition-colors">
+                                    Tablić
+                                </h2>
+                                <span class="material-symbols-outlined text-outline group-hover:text-arcade-cyan group-hover:translate-x-0.5 transition-all text-[20px]">arrow_forward</span>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
+                                Klasična kartaška igra strategije i zbrajanja brojeva protiv pametnog računalnog suparnika.
+                            </p>
+                            <div class="flex items-center flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Pametni AI</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Matematika</span>
+                            </div>
+                        </div>
+                        <a href="games/tablic/index.html" onclick="handleGameClick(event, 'tablic')" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-surface-container-high text-on-surface hover:bg-secondary-container hover:text-on-secondary-container font-label-lg text-label-lg font-bold hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all">
+                            <span class="btn-label">Pokreni</span>
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        </a>
+                    </article>
+
+                    <!-- CARD 3: Pasijans -->
+                    <article onclick="handleGameClick(event, 'pasijans')" class="game-card relative flex flex-col justify-between rounded-2xl bg-surface-card/90 backdrop-blur-xl p-6 shadow-xl border border-surface-card-border/70 hover:-translate-y-2 hover:shadow-[0_16px_36px_-10px_rgba(192,132,252,0.3)] transition-all duration-300 group cursor-pointer" data-category="cards" data-game-id="pasijans">
+                        <div id="badge-save-pasijans" class="hidden absolute -top-3.5 right-6 z-10 px-3 py-1 rounded-full bg-arcade-cyan text-canvas-deep font-label-sm text-label-sm font-extrabold uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.7)] items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-canvas-deep animate-ping"></span>
+                            <span class="save-label">SPREMLJENO</span>
+                        </div>
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
+                                    <span class="text-3xl filter drop-shadow-[0_0_12px_rgba(192,132,252,0.5)]">🎴</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-label-sm font-label-sm font-bold uppercase tracking-wider bg-surface-container-low text-arcade-purple">
+                                    Logika &amp; Strpljenje
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface group-hover:text-arcade-purple transition-colors">
+                                    Pasijans
+                                </h2>
+                                <span class="material-symbols-outlined text-outline group-hover:text-arcade-purple group-hover:translate-x-0.5 transition-all text-[20px]">arrow_forward</span>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
+                                Klasična kartaška igra strpljenja i slaganja nizova od asa do kralja po znakovima.
+                            </p>
+                            <div class="flex items-center flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Klondike</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Opuštanje</span>
+                            </div>
+                        </div>
+                        <a href="games/pasijans/index.html" onclick="handleGameClick(event, 'pasijans')" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-surface-container-high text-on-surface hover:bg-tertiary-container hover:text-on-tertiary-container font-label-lg text-label-lg font-bold hover:shadow-[0_0_20px_rgba(192,132,252,0.4)] transition-all">
+                            <span class="btn-label">Pokreni</span>
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        </a>
+                    </article>
+
+                    <!-- CARD 4: Pac-Man Edu (Featured Novo!) -->
+                    <article onclick="handleGameClick(event, 'pacman')" class="game-card relative flex flex-col justify-between rounded-2xl bg-surface-card/90 backdrop-blur-xl p-6 shadow-xl border border-surface-card-border/70 hover:-translate-y-2 hover:shadow-[0_16px_36px_-10px_rgba(245,158,11,0.35)] transition-all duration-300 group cursor-pointer" data-category="arcade edu" data-game-id="pacman">
+                        <div id="badge-save-pacman" class="hidden absolute -top-3.5 right-6 z-10 px-3 py-1 rounded-full bg-arcade-cyan text-canvas-deep font-label-sm text-label-sm font-extrabold uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.7)] items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-canvas-deep animate-ping"></span>
+                            <span class="save-label">SPREMLJENO</span>
+                        </div>
+                        <div id="badge-new-pacman" class="absolute -top-3.5 right-6 z-10 px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-extrabold uppercase tracking-widest shadow-[0_0_15px_rgba(75,226,119,0.7)] flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-on-primary animate-ping"></span>
+                            <span>NOVO!</span>
+                        </div>
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-surface-container-low flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
+                                    <span class="text-3xl filter drop-shadow-[0_0_12px_rgba(245,158,11,0.6)]">🟡</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-label-sm font-label-sm font-bold uppercase tracking-wider bg-surface-container-low text-arcade-amber">
+                                    Labirint &amp; Kviz
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface group-hover:text-arcade-amber transition-colors">
+                                    Pac-Man Edu
+                                </h2>
+                                <span class="material-symbols-outlined text-outline group-hover:text-arcade-amber group-hover:translate-x-0.5 transition-all text-[20px]">arrow_forward</span>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
+                                Skupi sve točkice, bježi od duhova i spasi život točnim odgovorom kada te uhvate!
+                            </p>
+                            <div class="flex items-center flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Duhovi</span>
+                                <span class="px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">Spas kviz</span>
+                            </div>
+                        </div>
+                        <a href="games/pacman/index.html" onclick="handleGameClick(event, 'pacman')" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-surface-container-high text-on-surface hover:bg-arcade-amber hover:text-surface font-label-lg text-label-lg font-bold hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] transition-all">
+                            <span class="btn-label">Pokreni</span>
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        </a>
+                    </article>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-surface-container-lowest border-t border-surface-container py-8">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center border border-primary/20">
+                    <span class="material-symbols-outlined text-primary text-[16px]">sports_esports</span>
+                </div>
+                <span class="font-label-md text-label-md text-on-surface-variant">EduArcade Portal • Uči kroz igru</span>
+            </div>
+            <div class="flex items-center flex-wrap justify-center gap-3">
+                <span class="px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-surface-container-low text-primary border border-primary/30">v2.5.0 PROD</span>
+                <span class="px-2.5 py-1 rounded-full font-label-sm text-label-sm bg-surface-container-low text-on-surface-variant">60 FPS</span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant">© 2025 EduArcade. Sva prava pridržana.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Full-screen Game Iframe Container (enables seamless postMessage save/resume/switcher) -->
+    <div id="game-iframe-container" class="hidden fixed inset-0 z-[100] bg-canvas-deep">
+        <iframe id="game-iframe" src="" class="w-full h-full border-none" allow="fullscreen"></iframe>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="bg-surface-card border border-surface-card-border rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b border-surface-card-border bg-surface-container-low">
+                <h2 class="text-lg font-bold text-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">account_circle</span>
+                    Tvoj Profil &amp; Napredak
+                </h2>
+                <button onclick="closeProfileModal()" class="text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Nadimak igrača</label>
+                    <input id="profile-username-input" type="text" placeholder="Upiši svoj nadimak..."
+                        class="w-full bg-surface-container-low border border-surface-card-border rounded-xl px-4 py-2.5 text-on-surface focus:outline-none focus:border-primary transition-all" />
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2.5 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-arcade-amber text-[16px]">emoji_events</span>
+                        Najbolji rezultati
+                    </h3>
+                    <div id="profile-highscores-list" class="space-y-2"></div>
+                </div>
+
+                <!-- Hybrid Sync Code (Export / Import between work & home) -->
+                <div class="pt-3 border-t border-surface-card-border">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-arcade-cyan mb-1.5 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">sync_alt</span>
+                        Prijenos profila (Posao ↔ Doma)
+                    </h3>
+                    <p class="text-xs text-on-surface-variant mb-2.5">
+                        Kopiraj kod profila kako bi nastavio svoje razine i rekorde na drugom računalu ili mobitelu.
+                    </p>
+                    <div class="flex gap-2 mb-2">
+                        <button onclick="copyProfileCode()" type="button"
+                            class="flex-1 py-2 px-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-xs font-bold text-on-surface flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px] text-arcade-emerald">content_copy</span>
+                            <span id="copy-code-btn-txt">Kopiraj kod profila</span>
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <input id="import-code-input" type="text" placeholder="Zalijepi kod s drugog uređaja..."
+                            class="flex-1 bg-surface-container-low border border-surface-card-border rounded-xl px-3 py-2 text-xs text-on-surface focus:outline-none focus:border-arcade-cyan" />
+                        <button onclick="importProfileCode()" type="button"
+                            class="px-3 py-2 rounded-xl bg-arcade-cyan/20 hover:bg-arcade-cyan/30 text-arcade-cyan text-xs font-bold transition-all cursor-pointer">
+                            Učitaj
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-surface-card-border bg-surface-container-low flex justify-end gap-3">
+                <button onclick="closeProfileModal()" class="px-4 py-2 text-xs font-bold text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer">Zatvori</button>
+                <button onclick="saveProfileModal()" class="px-6 py-2 bg-primary-container text-on-primary-container font-bold text-xs rounded-xl hover:bg-primary transition-colors shadow-lg cursor-pointer">
+                    Spremi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Saved Game Modal -->
+    <div id="resume-modal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="bg-surface-card border border-surface-card-border rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 text-center">
+            <div id="resume-game-icon" class="text-4xl mb-3">🎮</div>
+            <h3 class="text-xl font-bold text-on-surface mb-2">Pronađena spremljena igra!</h3>
+            <p id="resume-game-desc" class="text-on-surface-variant text-sm mb-6">
+                Imate spremljen napredak. Želite li nastaviti?
+            </p>
+            <div class="flex flex-col gap-3">
+                <button onclick="confirmResumeGame(true)"
+                    class="w-full px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl hover:bg-primary transition-colors shadow-[0_0_18px_rgba(34,197,94,0.35)] cursor-pointer">
+                    Nastavi igru
+                </button>
+                <button onclick="confirmResumeGame(false)"
+                    class="w-full px-4 py-3 bg-surface-container-high text-on-surface font-bold rounded-xl hover:bg-surface-container-highest transition-colors border border-surface-card-border cursor-pointer">
+                    Započni novu igru
+                </button>
+                <button onclick="closeResumeModal()"
+                    class="w-full py-2 text-sm text-on-surface-variant hover:text-on-surface transition-colors mt-1 cursor-pointer">
+                    Odustani
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'eduarcade-storage';
+        const GAME_META = {
+            snake: { title: 'Snake Edu', icon: '🐍', path: 'games/snake/index.html' },
+            tablic: { title: 'Tablić', icon: '🃏', path: 'games/tablic/index.html' },
+            pasijans: { title: 'Pasijans', icon: '🎴', path: 'games/pasijans/index.html' },
+            pacman: { title: 'Pac-Man Edu', icon: '🟡', path: 'games/pacman/index.html' }
+        };
+
+        let storeState = {
+            username: '',
+            savedGames: {},
+            highScores: {}
+        };
+        let pendingGameId = null;
+        let activeGameId = null;
+        let shouldResumeActiveGame = false;
+
+        function loadStore() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    const s = parsed && parsed.state ? parsed.state : parsed;
+                    storeState.username = (s && typeof s.username === 'string') ? s.username : '';
+                    storeState.savedGames = (s && s.savedGames && typeof s.savedGames === 'object') ? s.savedGames : {};
+                    storeState.highScores = (s && s.highScores && typeof s.highScores === 'object') ? s.highScores : {};
+                }
+            } catch (e) {
+                console.warn('Greška pri čitanju lokalne pohrane:', e);
+            }
+            updateHubUI();
+        }
+
+        function saveStore() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: storeState, version: 0 }));
+            } catch (e) { }
+            updateHubUI();
+        }
+
+        function updateHubUI() {
+            const nameEl = document.getElementById('header-username');
+            if (nameEl) nameEl.textContent = storeState.username || 'Gost';
+
+            const scores = Object.values(storeState.highScores || {}).map(Number).filter(n => !isNaN(n));
+            const bestScore = scores.length > 0 ? Math.max(...scores) : 0;
+            const scoreEl = document.getElementById('stat-score');
+            if (scoreEl) scoreEl.textContent = bestScore.toLocaleString('hr-HR');
+
+            const savedCount = Object.keys(storeState.savedGames || {}).length;
+            const savedEl = document.getElementById('stat-saved');
+            if (savedEl) savedEl.textContent = `${savedCount} ${savedCount === 1 ? 'igra' : 'igara'}`;
+
+            Object.keys(GAME_META).forEach(gameId => {
+                const saved = storeState.savedGames && storeState.savedGames[gameId];
+                const saveBadge = document.getElementById(`badge-save-${gameId}`);
+                const newBadge = document.getElementById(`badge-new-${gameId}`);
+                const card = document.querySelector(`.game-card[data-game-id="${gameId}"]`);
+                const btnLabel = card ? card.querySelector('.btn-label') : null;
+
+                if (saved) {
+                    if (saveBadge) {
+                        saveBadge.classList.remove('hidden');
+                        saveBadge.classList.add('flex');
+                        const lbl = saveBadge.querySelector('.save-label');
+                        if (lbl) lbl.textContent = `LVL ${saved.level || 1} SPREMLJENO`;
+                    }
+                    if (newBadge) newBadge.classList.add('hidden');
+                    if (btnLabel) btnLabel.textContent = 'Nastavi / Pokreni';
+                } else {
+                    if (saveBadge) {
+                        saveBadge.classList.add('hidden');
+                        saveBadge.classList.remove('flex');
+                    }
+                    if (newBadge) newBadge.classList.remove('hidden');
+                    if (btnLabel) btnLabel.textContent = 'Pokreni';
+                }
+            });
+        }
+
+        function handleGameClick(e, gameId) {
+            if (e) e.preventDefault();
+            if (!GAME_META[gameId]) return;
+            const saved = storeState.savedGames && storeState.savedGames[gameId];
+            if (saved) {
+                pendingGameId = gameId;
+                const meta = GAME_META[gameId];
+                document.getElementById('resume-game-icon').textContent = meta.icon;
+                document.getElementById('resume-game-desc').innerHTML =
+                    `Imate spremljen napredak u igri <strong class="text-on-surface">${meta.title}</strong> (Razina ${saved.level || 1}, Bodovi: ${saved.score || 0}). Želite li nastaviti?`;
+                const modal = document.getElementById('resume-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                launchGame(gameId, false);
+            }
+        }
+
+        function closeResumeModal() {
+            pendingGameId = null;
+            const modal = document.getElementById('resume-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmResumeGame(resume) {
+            const gameId = pendingGameId;
+            closeResumeModal();
+            if (!gameId) return;
+            if (!resume && storeState.savedGames) {
+                delete storeState.savedGames[gameId];
+                saveStore();
+            }
+            launchGame(gameId, resume);
+        }
+
+        function launchGame(gameId, resume = false) {
+            const meta = GAME_META[gameId];
+            if (!meta) return;
+            activeGameId = gameId;
+            shouldResumeActiveGame = Boolean(resume);
+
+            const container = document.getElementById('game-iframe-container');
+            const iframe = document.getElementById('game-iframe');
+            iframe.src = meta.path + (resume ? '?resume=true' : '');
+            container.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGameIframe() {
+            const container = document.getElementById('game-iframe-container');
+            const iframe = document.getElementById('game-iframe');
+            iframe.src = 'about:blank';
+            container.classList.add('hidden');
+            document.body.style.overflow = '';
+            activeGameId = null;
+            shouldResumeActiveGame = false;
+            updateHubUI();
+        }
+
+        // Listen for messages from embedded games (Pac-Man, Snake, Tablić, Pasijans)
+        window.addEventListener('message', (e) => {
+            const iframe = document.getElementById('game-iframe');
+            if (e.data === 'go_home') {
+                closeGameIframe();
+            } else if (e.data && e.data.type === 'navigate' && e.data.to) {
+                const targetId = String(e.data.to).replace(/^\//, '').trim();
+                if (GAME_META[targetId]) {
+                    launchGame(targetId, false);
+                } else {
+                    closeGameIframe();
+                }
+            } else if (e.data === 'game_ready' && activeGameId && iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({
+                    type: 'user_info',
+                    username: storeState.username || 'Gost',
+                    highScore: (storeState.highScores && storeState.highScores[activeGameId]) || 0
+                }, '*');
+                if (shouldResumeActiveGame && storeState.savedGames && storeState.savedGames[activeGameId]) {
+                    iframe.contentWindow.postMessage({
+                        type: 'load_progress',
+                        data: storeState.savedGames[activeGameId]
+                    }, '*');
+                }
+            } else if (e.data && e.data.type === 'save_progress') {
+                const gId = e.data.gameId || activeGameId;
+                if (!gId) return;
+                if (e.data.data === null) {
+                    delete storeState.savedGames[gId];
+                } else {
+                    storeState.savedGames[gId] = e.data.data;
+                }
+                saveStore();
+            } else if (e.data && e.data.type === 'update_highscore') {
+                const gId = e.data.gameId || activeGameId;
+                const newScore = Number(e.data.score) || 0;
+                if (gId && newScore > (storeState.highScores[gId] || 0)) {
+                    storeState.highScores[gId] = newScore;
+                    saveStore();
+                }
+            }
+        });
+
+        // Profile Modal Logic
+        function openProfileModal() {
+            document.getElementById('profile-username-input').value = storeState.username || '';
+            const listEl = document.getElementById('profile-highscores-list');
+            listEl.innerHTML = '';
+            const entries = Object.entries(storeState.highScores || {});
+            if (entries.length === 0) {
+                listEl.innerHTML = '<div class="text-xs text-on-surface-variant italic bg-surface-container-low p-3 rounded-xl text-center">Još nema zabilježenih rekorda.</div>';
+            } else {
+                entries.forEach(([gId, sc]) => {
+                    const meta = GAME_META[gId] || { title: gId, icon: '🎮' };
+                    const row = document.createElement('div');
+                    row.className = 'flex justify-between items-center bg-surface-container-low px-3.5 py-2.5 rounded-xl border border-white/5';
+                    row.innerHTML = `<span class="text-xs font-bold text-on-surface">${meta.icon} ${meta.title}</span><span class="text-xs font-extrabold text-primary">${Number(sc).toLocaleString('hr-HR')}</span>`;
+                    listEl.appendChild(row);
+                });
+            }
+            const modal = document.getElementById('profile-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProfileModal() {
+            const modal = document.getElementById('profile-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveProfileModal() {
+            const val = document.getElementById('profile-username-input').value.trim();
+            storeState.username = val;
+            saveStore();
+            closeProfileModal();
+        }
+
+        function copyProfileCode() {
+            try {
+                const code = btoa(encodeURIComponent(JSON.stringify(storeState)));
+                navigator.clipboard.writeText(code);
+                const btnTxt = document.getElementById('copy-code-btn-txt');
+                btnTxt.textContent = 'Kod kopiran u međuspremnik! ✓';
+                setTimeout(() => { btnTxt.textContent = 'Kopiraj kod profila'; }, 2500);
+            } catch (e) { }
+        }
+
+        function importProfileCode() {
+            const input = document.getElementById('import-code-input');
+            const code = (input.value || '').trim();
+            if (!code) return;
+            try {
+                const decoded = JSON.parse(decodeURIComponent(atob(code)));
+                if (decoded && typeof decoded === 'object') {
+                    storeState.username = decoded.username || storeState.username;
+                    storeState.savedGames = { ...storeState.savedGames, ...(decoded.savedGames || {}) };
+                    storeState.highScores = { ...storeState.highScores, ...(decoded.highScores || {}) };
+                    saveStore();
+                    input.value = '';
+                    openProfileModal();
+                }
+            } catch (e) {
+                alert('Neispravan kod profila.');
+            }
+        }
+
+        // Filter & Search Logic
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const gameCards = document.querySelectorAll('.game-card');
+        const searchInput = document.getElementById('game-search');
+
+        function filterGames() {
+            const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+            const query = (searchInput?.value || '').toLowerCase().trim();
+
+            gameCards.forEach(card => {
+                const categories = card.dataset.category || '';
+                const title = card.querySelector('h2')?.innerText.toLowerCase() || '';
+                const desc = card.querySelector('p')?.innerText.toLowerCase() || '';
+
+                const matchesCategory = (activeFilter === 'all') || categories.includes(activeFilter);
+                const matchesQuery = !query || title.includes(query) || desc.includes(query);
+
+                if (matchesCategory && matchesQuery) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function resetFilters(e) {
+            if (e) e.preventDefault();
+            if (searchInput) searchInput.value = '';
+            const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+            if (allBtn) allBtn.click();
+        }
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-primary-container', 'text-on-primary-container', 'shadow-[0_0_20px_rgba(74,222,128,0.35)]', 'font-bold');
+                    b.classList.add('bg-surface-container-low', 'text-on-surface-variant', 'font-medium');
+                });
+                btn.classList.add('active', 'bg-primary-container', 'text-on-primary-container', 'shadow-[0_0_20px_rgba(74,222,128,0.35)]', 'font-bold');
+                btn.classList.remove('bg-surface-container-low', 'text-on-surface-variant', 'font-medium');
+                filterGames();
+            });
+        });
+
+        if (searchInput) {
+            searchInput.addEventListener('input', filterGames);
+        }
+
+        loadStore();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    reg.update();
+                }).catch(() => { });
+            });
+        }
+    </script>
+</body>
+
 </html>

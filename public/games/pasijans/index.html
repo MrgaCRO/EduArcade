@@ -963,6 +963,17 @@
             if (e.key === 'h' || e.key === 'H') showHint();
         });
 
+        window.addEventListener('message', (e) => {
+            if (window.parent === window) {
+                if (e.data === 'go_home') { window.location.href = '../../index.html'; return; }
+                if (e.data && e.data.type === 'navigate' && e.data.to) {
+                    const target = String(e.data.to).replace(/^\//, '').trim();
+                    window.location.href = `../${target}/index.html`;
+                    return;
+                }
+            }
+        });
+
         window.onload = () => {
             startNewGame();
             window.parent.postMessage('game_ready', '*');

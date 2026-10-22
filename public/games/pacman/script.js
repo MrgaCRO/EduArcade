@@ -804,6 +804,14 @@ resetGame();
 draw();
 
 window.addEventListener('message', (e) => {
+    if (window.parent === window) {
+        if (e.data === 'go_home') { window.location.href = '../../index.html'; return; }
+        if (e.data && e.data.type === 'navigate' && e.data.to) {
+            const target = String(e.data.to).replace(/^\//, '').trim();
+            window.location.href = `../${target}/index.html`;
+            return;
+        }
+    }
     if (e.data && e.data.type === 'load_progress' && e.data.data) {
         level = e.data.data.level || 1;
         score = e.data.data.score || 0;
