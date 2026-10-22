@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html class="dark" lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tablić - EduArcade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "canvas-deep": "#020617",
+          "secondary-fixed": "#a2eeff",
+          "secondary": "#5de6ff",
+          "secondary-fixed-dim": "#2fd9f4",
+          "outline-variant": "#3d4a3d",
+          "surface-card-border": "#1E293B",
+          "on-primary": "#003915",
+          "arcade-amber": "#F59E0B",
+          "outline": "#869585",
+          "on-secondary-fixed": "#001f25",
+          "primary": "#4be277",
+          "inverse-surface": "#dae2fd",
+          "surface-container-lowest": "#060e20",
+          "arcade-emerald": "#4ADE80",
+          "surface-card": "#0F172A",
+          "on-tertiary-container": "#5f00a3",
+          "tertiary-fixed": "#f0dbff",
+          "on-primary-fixed-variant": "#005321",
+          "error": "#ffb4ab",
+          "inverse-primary": "#006e2f",
+          "on-surface-variant": "#bccbb9",
+          "on-background": "#dae2fd",
+          "on-primary-container": "#004b1e",
+          "on-error": "#690005",
+          "primary-fixed-dim": "#4ae176",
+          "primary-fixed": "#6bff8f",
+          "on-primary-fixed": "#002109",
+          "primary-container": "#22c55e",
+          "surface-container": "#171f33",
+          "arcade-purple": "#C084FC",
+          "surface": "#0b1326",
+          "on-secondary": "#00363e",
+          "on-secondary-container": "#00515d",
+          "tertiary": "#deb8ff",
+          "arcade-cyan": "#22D3EE",
+          "on-surface": "#dae2fd",
+          "inverse-on-surface": "#283044",
+          "on-tertiary": "#490080",
+          "surface-bright": "#31394d",
+          "surface-dim": "#0b1326",
+          "on-tertiary-fixed": "#2c0051",
+          "surface-tint": "#4ae176",
+          "tertiary-fixed-dim": "#ddb7ff",
+          "error-container": "#93000a",
+          "tertiary-container": "#cb94ff",
+          "secondary-container": "#00cbe6",
+          "background": "#0b1326",
+          "on-tertiary-fixed-variant": "#6900b3",
+          "on-secondary-fixed-variant": "#004e5a",
+          "surface-container-high": "#222a3d",
+          "on-error-container": "#ffdad6",
+          "surface-variant": "#2d3449",
+          "surface-container-highest": "#2d3449",
+          "surface-container-low": "#131b2e"
+        },
+        borderRadius: {
+          DEFAULT: "0.25rem",
+          lg: "0.5rem",
+          xl: "0.75rem",
+          full: "9999px"
+        },
+        spacing: {
+          "space-sm": "0.5rem",
+          "space-2xl": "3rem",
+          "space-lg": "1.5rem",
+          "space-md": "1rem",
+          "gutter-mobile": "1rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "margin": "2rem",
+          "space-xs": "0.25rem"
+        },
+        fontFamily: {
+          "body-lg": ["Plus Jakarta Sans"],
+          "label-sm": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "counter-number": ["Plus Jakarta Sans"],
+          "display-lg": ["Plus Jakarta Sans"],
+          "body-md": ["Plus Jakarta Sans"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "label-lg": ["Plus Jakarta Sans"],
+          "label-md": ["Plus Jakarta Sans"],
+          "display-lg-mobile": ["Plus Jakarta Sans"],
+          "headline-xl": ["Plus Jakarta Sans"]
+        },
+        fontSize: {
+          "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+          "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "700" }],
+          "headline-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }],
+          "counter-number": ["28px", { lineHeight: "32px", fontWeight: "800" }],
+          "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "800" }],
+          "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+          "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "700" }],
+          "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "600" }],
+          "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "600" }],
+          "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "800" }],
+          "headline-xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }]
+        }
+      }
+    }
+  };
+</script>
+<style>
+  * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    overscroll-behavior: none;
+  }
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  .tabla-banner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #020617;
+    font-size: 2.2rem;
+    font-weight: 900;
+    padding: 12px 35px;
+    border-radius: 40px;
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
+    z-index: 50;
+    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .tabla-banner.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .score-breakdown {
+    width: 100%;
+    margin: 12px 0;
+    border-collapse: collapse;
+  }
+  .score-breakdown th, .score-breakdown td {
+    padding: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .score-breakdown th {
+    color: #4be277;
+    text-align: left;
+  }
+  .score-breakdown td {
+    text-align: right;
+  }
+  .log-item {
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    line-height: 1.35;
+    font-size: 12px;
+  }
+  .log-item.player { border-left: 3px solid #4ADE80; }
+  .log-item.cpu { border-left: 3px solid #22D3EE; }
+  .log-item.tabla { border-left: 3px solid #F59E0B; background: rgba(245, 158, 11, 0.15); font-weight: bold; }
+</style>
+</head>
+<body class="bg-canvas-deep font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary min-h-screen flex flex-col justify-between">
+
+<!-- Unified Top Header -->
+<header class="fixed top-0 w-full z-50 bg-surface-card/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.4)] border-b border-surface-card-border">
+  <div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md max-w-[1600px] mx-auto">
+    <div class="flex items-center gap-space-lg">
+      <button onclick="window.parent.postMessage('go_home', '*');" class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg bg-surface-container-high/80 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all cursor-pointer">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span class="font-label-md text-label-md hidden sm:inline">Povratak na EduArcade</span>
+      </button>
+      <div class="flex items-center gap-space-sm">
+        <div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.35)]">
+          <span class="material-symbols-outlined text-on-primary-container text-[22px]">sports_esports</span>
+        </div>
+        <div class="hidden md:flex flex-col">
+          <span class="font-headline-md text-headline-md text-on-surface leading-none tracking-tight">EduArcade</span>
+          <span class="font-label-sm text-label-sm text-arcade-cyan uppercase">Uči kroz igru</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="hidden xl:flex items-center gap-space-xs p-1 rounded-xl bg-surface-container-lowest/80">
+      <a onclick="window.parent.postMessage({type:'navigate', to:'/pacman'}, '*');" class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Pac-Man Edu</a>
+      <a aria-current="page" class="px-space-md py-space-xs rounded-lg transition-all bg-surface-container-high text-primary font-bold shadow-[0_0_12px_rgba(74,222,128,0.2)] cursor-pointer">Tablić</a>
+      <a onclick="window.parent.postMessage({type:'navigate', to:'/pasijans'}, '*');" class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Pasijans</a>
+      <a onclick="window.parent.postMessage({type:'navigate', to:'/snake'}, '*');" class="px-space-md py-space-xs rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">Snake Edu</a>
+    </nav>
+
+    <div class="flex items-center gap-space-sm">
+      <div class="flex items-center gap-space-xs p-1 rounded-xl bg-surface-container-low/90">
+        <button onclick="toggleAudio()" id="audioBtn" aria-label="Zvuk" title="Uključi/isključi zvuk" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-arcade-cyan hover:bg-surface-container-high transition-colors cursor-pointer" type="button">
+          <span class="material-symbols-outlined text-[19px]" id="audioIcon">volume_up</span>
+        </button>
+        <button onclick="openRulesModal()" aria-label="Pravila" title="Pravila igre" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-arcade-amber hover:bg-surface-container-high transition-colors cursor-pointer" type="button">
+          <span class="material-symbols-outlined text-[19px]">menu_book</span>
+        </button>
+        <button onclick="startNewGame()" aria-label="Nova partija" title="Nova partija" class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-arcade-emerald hover:bg-surface-container-high transition-colors cursor-pointer" type="button">
+          <span class="material-symbols-outlined text-[19px]">refresh</span>
+        </button>
+      </div>
+      <div class="h-6 w-px bg-surface-container-highest hidden sm:block"></div>
+      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ring-2 ring-primary/30" title="Profil igrača">
+        <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="w-full pt-16 bg-canvas-deep flex-1">
+  <div class="flex flex-col w-full">
+    <div class="relative w-full px-gutter py-space-md sm:py-space-lg max-w-[1520px] mx-auto">
+      <!-- Ambient Table Glow & Grid Atmosphere -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+        <div class="absolute -top-32 left-1/3 w-[680px] h-[480px] bg-arcade-emerald/10 blur-[130px] rounded-full"></div>
+        <div class="absolute top-1/2 right-10 w-[520px] h-[520px] bg-arcade-cyan/10 blur-[140px] rounded-full"></div>
+        <div class="absolute -bottom-24 left-10 w-[420px] h-[420px] bg-primary/10 blur-[120px] rounded-full"></div>
+      </div>
+
+      <!-- Main Game Arena Layout (12-Col Felt Table + Side Intel Board) -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+
+        <!-- FELT CARD TABLE (Col 1-8 / 9 on Desktop) -->
+        <section class="xl:col-span-8 2xl:col-span-9 flex flex-col gap-space-md">
+          <!-- Digital Table Surface Wrapper -->
+          <div class="relative w-full rounded-2xl bg-gradient-to-b from-[#0a1d15] via-[#091a13] to-surface-card p-space-md sm:p-space-lg shadow-[0_20px_50px_-15px_rgba(2,6,23,0.85)] overflow-hidden border border-surface-card-border">
+            <div id="tablaBanner" class="tabla-banner">TABLA! +1</div>
+
+            <!-- Subtle Felt Texture Overlay & Inner Rail Ring -->
+            <div class="absolute inset-2 sm:inset-3 rounded-xl pointer-events-none bg-gradient-to-br from-arcade-emerald/5 via-transparent to-arcade-cyan/5"></div>
+            <div class="relative z-10 mb-2 text-on-surface-variant/60 font-label-sm text-label-sm uppercase tracking-widest pointer-events-none flex items-center gap-space-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-arcade-emerald animate-ping"></span>
+              Stol za Tablić • Pametna Matematička Arena
+            </div>
+
+            <!-- 1. TOP SECTION: AI OPPONENT (Pametni Mate) -->
+            <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-space-md p-space-md rounded-xl bg-surface-container-lowest/80 backdrop-blur-md mb-space-md border border-white/5">
+              <!-- Bot Profile & Live Thought Tag -->
+              <div class="flex items-center gap-space-md w-full sm:w-auto">
+                <div class="relative">
+                  <div class="w-14 h-14 rounded-xl bg-gradient-to-tr from-surface-container-high via-surface-variant to-secondary-container/30 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.25)]">
+                    <span class="material-symbols-outlined text-arcade-cyan text-[32px]">smart_toy</span>
+                  </div>
+                  <span id="cpuTurnInd" class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-600 flex items-center justify-center">
+                    <span class="w-2 h-2 rounded-full bg-canvas-deep"></span>
+                  </span>
+                </div>
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-space-xs">
+                    <span class="font-headline-md text-headline-md text-on-surface">Pametni Mate</span>
+                    <span class="bg-surface-container-high text-arcade-cyan font-label-sm text-label-sm px-space-xs py-0.5 rounded">AI Bot</span>
+                  </div>
+                  <div class="flex items-center gap-space-sm mt-0.5">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1" id="cpuStatusText">
+                      <span class="material-symbols-outlined text-[14px] text-arcade-amber">psychology</span>
+                      Prati otvaranje karata i zbrojeve...
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bot Hand (Hidden Back Cards) & Mini Pile -->
+              <div class="flex items-center gap-space-lg w-full sm:w-auto justify-between sm:justify-end">
+                <div class="flex items-center -space-x-3 sm:-space-x-4" id="cpuHand"></div>
+
+                <!-- Bot Captured Pile Counters -->
+                <div class="flex items-center gap-space-sm pl-space-md">
+                  <div class="flex flex-col items-center px-space-sm py-1 rounded-lg bg-surface-container-high/60">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Osvojeno</span>
+                    <div class="flex items-center gap-1 text-on-surface">
+                      <span class="material-symbols-outlined text-arcade-cyan text-[16px]">style</span>
+                      <span class="font-headline-md text-headline-md font-bold text-arcade-cyan" id="cpuCapturedCount">0</span>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-center px-space-sm py-1 rounded-lg bg-surface-container-high/60">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Tabli</span>
+                    <div class="flex items-center gap-1 text-on-surface">
+                      <span class="material-symbols-outlined text-arcade-amber text-[16px]">stars</span>
+                      <span class="font-headline-md text-headline-md font-bold text-arcade-amber" id="cpuTablaCount">0</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. MIDDLE SECTION: TABLE CARDS (Open Cards on Table) -->
+            <div class="relative z-10 py-space-md sm:py-space-lg px-space-sm sm:px-space-md flex flex-col items-center rounded-xl bg-black/20 border border-dashed border-white/10 min-h-[260px]">
+              <!-- Table Status Badge & Deck Remainder Indicator -->
+              <div class="w-full flex flex-wrap items-center justify-between gap-2 mb-space-md">
+                <div class="flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md shadow-sm">
+                  <span class="w-2 h-2 rounded-full bg-arcade-emerald animate-pulse"></span>
+                  <span class="font-label-sm text-label-sm text-arcade-emerald uppercase" id="tableCountLabel">Otvorene karte na stolu</span>
+                </div>
+                <div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+                  <span class="material-symbols-outlined text-[16px]">layers</span>
+                  Preostalo u špilu: <strong class="text-on-surface ml-1 font-bold"><span id="deckCount">36</span> karata</strong>
+                </div>
+              </div>
+
+              <!-- High-Fidelity Open Cards Row -->
+              <div class="flex flex-wrap items-center justify-center gap-space-sm sm:gap-space-md w-full max-w-4xl py-space-sm min-h-[150px]" id="tableCards"></div>
+
+              <!-- SMART ADDITION CALCULATOR MODULE (Matematički Asistent) -->
+              <div class="w-full max-w-2xl mt-space-md p-space-md rounded-xl bg-surface-card/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-surface-card-border">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-space-md">
+                  <div class="flex items-center gap-space-md">
+                    <div class="w-10 h-10 rounded-lg bg-arcade-emerald/20 flex items-center justify-center shrink-0">
+                      <span class="material-symbols-outlined text-arcade-emerald text-[24px]">calculate</span>
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="font-label-sm text-label-sm uppercase tracking-wider text-arcade-emerald font-bold">Pametni kalkulator zbrajanja</span>
+                      <div class="font-body-md text-body-md text-on-surface flex items-center gap-space-xs flex-wrap" id="selectionInfoBar">
+                        <span id="selectionText">Klikni na karte sa stola i kartu iz svoje ruke za izračun kombinacije.</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg bg-arcade-emerald/15 shrink-0" id="selectionHintBadge">
+                    <span class="material-symbols-outlined text-arcade-emerald text-[20px]">auto_awesome</span>
+                    <span class="font-label-sm text-label-sm text-arcade-emerald font-bold whitespace-nowrap" id="selectionHintText">Odaberi potez</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. BOTTOM SECTION: PLAYER HAND & GAME ACTIONS -->
+            <div class="relative z-10 pt-space-md mt-space-sm flex flex-col gap-space-md bg-gradient-to-t from-surface-card/95 via-surface-card/60 to-transparent p-space-md rounded-2xl border border-white/5">
+              <!-- User Status Header -->
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-space-sm">
+                  <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">
+                    <span class="material-symbols-outlined text-[18px]">person</span>
+                  </div>
+                  <div class="flex items-center flex-wrap gap-2">
+                    <span class="font-headline-md text-headline-md text-on-surface" id="playerNameDisplay">Ti (Igrač)</span>
+                    <span id="playerTurnInd" class="font-label-sm text-label-sm text-arcade-emerald uppercase tracking-wider bg-arcade-emerald/10 px-2 py-0.5 rounded font-bold">Tvoj je potez</span>
+                  </div>
+                </div>
+
+                <!-- Captured by player tracker -->
+                <div class="flex items-center gap-space-md">
+                  <div class="text-right">
+                    <span class="font-label-sm text-label-sm text-on-surface-variant block uppercase">Tvoje osvojene karte</span>
+                    <span class="font-headline-md text-headline-md font-black text-arcade-emerald"><span id="playerCapturedCount">0</span> karata • <span id="playerTablaCount">0</span> Table</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Player Hand (Cards Face-Up) -->
+              <div class="flex flex-wrap items-center justify-center gap-space-sm sm:gap-space-md py-space-xs min-h-[160px]" id="playerHand"></div>
+
+              <!-- Action Controls Row -->
+              <div class="flex flex-wrap items-center justify-center gap-space-md pt-space-xs" id="actionBar" style="display: none;">
+                <button id="btnAutoCapture" onclick="handleAutoCapture()" class="group flex items-center gap-space-sm px-space-xl py-3.5 rounded-xl bg-arcade-emerald text-[#020617] font-headline-md text-headline-md font-extrabold shadow-[0_0_25px_rgba(74,222,128,0.45)] hover:bg-primary-fixed hover:scale-105 active:scale-95 transition-all cursor-pointer" type="button">
+                  <span class="material-symbols-outlined text-[24px]">auto_awesome</span>
+                  <span>Automatski odnesi najbolje</span>
+                </button>
+
+                <button id="btnConfirmCapture" onclick="handleConfirmCapture()" disabled class="group flex items-center gap-space-sm px-space-xl py-3.5 rounded-xl bg-primary-container text-on-primary-container font-headline-md text-headline-md font-extrabold shadow-[0_0_25px_rgba(74,222,128,0.35)] hover:bg-primary hover:scale-105 active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer" type="button">
+                  <span class="material-symbols-outlined text-[24px]">front_hand</span>
+                  <span>Uzmi odabrano</span>
+                </button>
+
+                <button id="btnDropCard" onclick="handleDropCard()" class="flex items-center gap-space-xs px-space-lg py-3.5 rounded-xl bg-surface-container-high text-on-surface hover:text-arcade-amber hover:bg-surface-container-highest transition-all font-label-lg text-label-lg cursor-pointer" type="button">
+                  <span class="material-symbols-outlined text-[20px]">layers_clear</span>
+                  <span>Baci kartu na stol</span>
+                </button>
+
+                <button id="btnCancel" onclick="cancelAllSelections()" class="flex items-center gap-space-xs px-space-md py-3.5 rounded-xl bg-surface-container-lowest/80 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all font-label-lg text-label-lg cursor-pointer" type="button">
+                  <span class="material-symbols-outlined text-[18px]">restart_alt</span>
+                  <span>Poništi odabir</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Strategy Quick Tips Bar -->
+          <div class="w-full rounded-xl bg-surface-card/60 backdrop-blur-md p-space-md flex flex-col sm:flex-row items-center justify-between gap-space-md border border-surface-card-border">
+            <div class="flex items-center gap-space-sm">
+              <span class="material-symbols-outlined text-arcade-cyan text-[20px]">lightbulb</span>
+              <span class="font-body-md text-body-md text-on-surface-variant">
+                <strong class="text-on-surface font-semibold">Savjet za Tablić:</strong> Ako pokupiš sve karte sa stola, osvajaš <span class="text-arcade-amber font-bold">Tablu (1 dodatni bod)</span>! Pazi na Dobru desetku (♦10).
+              </span>
+            </div>
+            <button onclick="openRulesModal()" class="text-arcade-cyan hover:text-secondary-fixed text-label-md font-label-md whitespace-nowrap flex items-center gap-1 cursor-pointer" type="button">
+              Pravila igre <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- RIGHT SIDEBAR: SCOREBOARD & BODOVANJE (Col 9-12 / 3-4 on Desktop) -->
+        <aside class="xl:col-span-4 2xl:col-span-3 flex flex-col gap-space-md w-full">
+          <!-- Scoreboard Hero Module -->
+          <div class="rounded-2xl bg-surface-card p-space-md sm:p-space-lg shadow-[0_15px_35px_rgba(0,0,0,0.5)] border border-surface-card-border">
+            <div class="flex items-center justify-between pb-space-sm">
+              <span class="font-label-sm text-label-sm uppercase tracking-wider text-arcade-cyan font-bold">Rezultat partije</span>
+              <span class="bg-surface-container-high text-on-surface-variant text-[11px] font-bold px-2 py-0.5 rounded">Do 101 bod</span>
+            </div>
+
+            <!-- Head to Head Big Score -->
+            <div class="mt-space-sm grid grid-cols-2 gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest">
+              <!-- Player Score -->
+              <div class="flex flex-col items-center justify-center p-space-sm rounded-lg bg-surface-container/60 shadow-inner">
+                <span class="font-label-md text-label-md text-arcade-emerald uppercase font-bold flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-arcade-emerald"></span> Ti
+                </span>
+                <span class="font-counter-number text-[40px] leading-tight font-extrabold text-on-surface mt-1" id="matchScorePlayer">0</span>
+                <span class="font-label-sm text-[10px] text-arcade-emerald">Ukupni bodovi</span>
+              </div>
+              <!-- Bot Score -->
+              <div class="flex flex-col items-center justify-center p-space-sm rounded-lg bg-surface-container/60 shadow-inner">
+                <span class="font-label-md text-label-md text-on-surface-variant uppercase font-bold flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-arcade-cyan"></span> Mate (AI)
+                </span>
+                <span class="font-counter-number text-[40px] leading-tight font-extrabold text-on-surface-variant mt-1" id="matchScoreCpu">0</span>
+                <span class="font-label-sm text-[10px] text-on-surface-variant">Ukupni bodovi</span>
+              </div>
+            </div>
+
+            <!-- Game Round & Pile Progression Meter -->
+            <div class="mt-space-md flex flex-col gap-1.5">
+              <div class="flex justify-between items-center text-label-sm font-label-sm">
+                <span class="text-on-surface-variant">Odigrano karata u dijeljenju</span>
+                <span class="text-on-surface font-bold" id="dealtProgressText">16 / 52 (31%)</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-arcade-emerald to-arcade-cyan rounded-full transition-all duration-300" id="dealtProgressBar" style="width: 31%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRENUTNO BODOVANJE (Live Match Points Tracker) -->
+          <div class="rounded-2xl bg-surface-card p-space-md sm:p-space-lg shadow-[0_15px_35px_rgba(0,0,0,0.5)] border border-surface-card-border">
+            <div class="flex items-center justify-between mb-space-sm">
+              <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-space-xs">
+                <span class="material-symbols-outlined text-arcade-amber text-[20px]">military_tech</span>
+                Bodovanje karata
+              </h3>
+              <span class="font-label-sm text-label-sm text-arcade-amber bg-arcade-amber/15 px-2 py-0.5 rounded font-bold">Vrijednosti</span>
+            </div>
+
+            <div class="flex flex-col gap-space-xs">
+              <!-- Dobra Desetka (♦10) -->
+              <div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <div class="w-8 h-8 rounded-lg bg-[#dc2626]/20 text-[#dc2626] font-black flex items-center justify-center font-headline-md text-[14px]">♦10</div>
+                  <div class="flex flex-col">
+                    <span class="font-label-lg text-label-lg text-on-surface font-bold">Dobra desetka</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">Desetka karo</span>
+                  </div>
+                </div>
+                <span class="font-headline-md text-headline-md font-extrabold text-arcade-amber">+2 boda</span>
+              </div>
+
+              <!-- Mala Dvojka (♣2) -->
+              <div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <div class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface font-black flex items-center justify-center font-headline-md text-[14px]">♣2</div>
+                  <div class="flex flex-col">
+                    <span class="font-label-lg text-label-lg text-on-surface font-bold">Mala dvojka</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">Dvojka tref</span>
+                  </div>
+                </div>
+                <span class="font-headline-md text-headline-md font-extrabold text-on-surface">+1 bod</span>
+              </div>
+
+              <!-- Asovi i Slike -->
+              <div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <div class="w-8 h-8 rounded-lg bg-arcade-cyan/20 text-arcade-cyan font-black flex items-center justify-center font-headline-md text-[12px]">A/J/Q/K</div>
+                  <div class="flex flex-col">
+                    <span class="font-label-lg text-label-lg text-on-surface font-bold">Asovi, Slike &amp; 10</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">Svaka karta nosi bod</span>
+                  </div>
+                </div>
+                <span class="font-headline-md text-headline-md font-extrabold text-arcade-cyan">+1 bod</span>
+              </div>
+
+              <!-- Više Karata Bonus (3 Boda) -->
+              <div class="p-space-sm rounded-xl bg-arcade-emerald/10 flex items-center justify-between">
+                <div class="flex items-center gap-space-sm">
+                  <div class="w-8 h-8 rounded-lg bg-arcade-emerald/20 text-arcade-emerald flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[18px]">style</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="font-label-lg text-label-lg text-arcade-emerald font-extrabold">Špula (Više karata)</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">Tko skupi više karata</span>
+                  </div>
+                </div>
+                <span class="font-headline-md text-headline-md font-extrabold text-arcade-emerald">+3 boda</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DNEVNIK POTEZA -->
+          <div class="rounded-2xl bg-surface-card p-space-md sm:p-space-lg shadow-[0_15px_35px_rgba(0,0,0,0.5)] border border-surface-card-border">
+            <div class="flex items-center justify-between mb-space-sm">
+              <h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-space-xs">
+                <span class="material-symbols-outlined text-arcade-cyan text-[20px]">history</span>
+                Dnevnik poteza
+              </h3>
+              <button onclick="startNewGame()" class="text-xs font-bold text-arcade-emerald hover:underline cursor-pointer">Nova runda</button>
+            </div>
+            <div class="max-h-40 overflow-y-auto flex flex-col gap-1.5 pr-1" id="gameLog">
+              <div class="log-item">Igra je započela! Kliknite na karte da ih označite.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="w-full bg-surface-container-lowest py-space-lg border-t border-surface-container">
+  <div class="w-full px-gutter max-w-[1520px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-md">
+    <div class="flex items-center gap-space-sm text-on-surface-variant font-label-sm text-label-sm">
+      <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+      <span>EDUSTREAM MOTOR AKTIVAN • 60 FPS</span>
+    </div>
+    <div class="text-center font-body-md text-body-md text-on-surface-variant">© 2025 EduArcade. Sva prava zadržana. Učenje kroz digitalnu igru.</div>
+    <div class="flex items-center gap-space-md">
+      <span class="font-label-sm text-label-sm text-arcade-cyan bg-surface-container-high px-space-sm py-space-xs rounded">v2.4-arcade</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="bg-surface-card border border-surface-card-border rounded-2xl p-6 max-w-md w-[92%] shadow-2xl text-center text-on-surface">
+    <h2 class="text-2xl font-extrabold text-primary mb-3" id="modalTitle">Kraj Runde!</h2>
+    <div class="mb-5 text-sm text-on-surface-variant text-left" id="modalBody"></div>
+    <button class="w-full py-3 rounded-xl bg-primary-container text-on-primary-container font-extrabold hover:bg-primary transition-all cursor-pointer" onclick="closeModal()">U redu</button>
+  </div>
+</div>
+
+<script>
+let audioEnabled = true;
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function initAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+
+function playSound(type) {
+    if (!audioEnabled) return;
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+
+    if (type === 'card') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(400, now); osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now); osc.stop(now + 0.08);
+    } else if (type === 'capture') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.08);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+    } else if (type === 'tabla') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2); osc.frequency.setValueAtTime(1046.50, now + 0.3);
+        gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now); osc.stop(now + 0.5);
+    }
+}
+
+function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    const icon = document.getElementById('audioIcon');
+    if (icon) icon.innerText = audioEnabled ? 'volume_up' : 'volume_off';
+}
+
+const SUITS = [
+    { name: 'Herc', symbol: '♥', color: 'red' },
+    { name: 'Karo', symbol: '♦', color: 'red' },
+    { name: 'Pik', symbol: '♠', color: 'black' },
+    { name: 'Tref', symbol: '♣', color: 'black' }
+];
+
+const RANKS = [
+    { rank: '2', val: 2 }, { rank: '3', val: 3 }, { rank: '4', val: 4 }, { rank: '5', val: 5 },
+    { rank: '6', val: 6 }, { rank: '7', val: 7 }, { rank: '8', val: 8 }, { rank: '9', val: 9 },
+    { rank: '10', val: 10 }, { rank: 'J', val: 12 }, { rank: 'Q', val: 13 }, { rank: 'K', val: 14 }, { rank: 'A', val: 1 }
+];
+
+function getCardPoints(card) {
+    if (card.rank === '10' && card.suit.symbol === '♦') return 2;
+    if (card.rank === '2' && card.suit.symbol === '♣') return 1;
+    if (['A', 'K', 'Q', 'J', '10'].includes(card.rank)) return 1;
+    return 0;
+}
+
+function getCardPossibleValues(card) {
+    if (card.rank === 'A') return [1, 11];
+    if (card.rank === 'J') return [12];
+    if (card.rank === 'Q') return [13];
+    if (card.rank === 'K') return [14];
+    return [card.val];
+}
+
+let deck = []; let table = []; let playerHand = []; let cpuHand = [];
+let playerCaptured = []; let cpuCaptured = []; let playerTablas = 0; let cpuTablas = 0;
+let matchScorePlayer = 0; let matchScoreCpu = 0;
+let turn = 'player'; let lastCapturer = null;
+let selectedHandCardIndex = null; let selectedTableCardIds = []; let currentValidCaptures = [];
+
+function createDeck() {
+    let newDeck = []; let id = 0;
+    for (let suit of SUITS) {
+        for (let r of RANKS) {
+            newDeck.push({ id: id++, suit: suit, rank: r.rank, val: r.val, pts: getCardPoints({ rank: r.rank, suit: suit }) });
+        }
+    }
+    for (let i = newDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
+    }
+    return newDeck;
+}
+
+function startNewGame() {
+    deck = createDeck(); table = []; playerHand = []; cpuHand = [];
+    playerCaptured = []; cpuCaptured = []; playerTablas = 0; cpuTablas = 0;
+    turn = 'player'; lastCapturer = null; selectedHandCardIndex = null; selectedTableCardIds = [];
+    for (let i = 0; i < 4; i++) table.push(deck.pop());
+    dealHands();
+    logMessage('Započela je nova runda! 4 karte postavljene na stol.');
+    updateUI();
+}
+
+function dealHands() {
+    if (deck.length === 0) return;
+    for (let i = 0; i < 6; i++) {
+        if (deck.length > 0) playerHand.push(deck.pop());
+        if (deck.length > 0) cpuHand.push(deck.pop());
+    }
+    playSound('card');
+}
+
+function canPartitionCards(cards, targetVal) {
+    if (cards.length === 0) return true;
+    let groups = findSubsetsSummingTo(cards, targetVal);
+    for (let group of groups) {
+        let remaining = cards.filter(c => !group.some(gc => gc.id === c.id));
+        if (canPartitionCards(remaining, targetVal)) return true;
+    }
+    return false;
+}
+
+function findSubsetsSummingTo(cards, targetVal) {
+    let result = []; let n = cards.length; let totalSubsets = 1 << n;
+    for (let i = 1; i < totalSubsets; i++) {
+        let sub = [];
+        for (let j = 0; j < n; j++) { if ((i >> j) & 1) sub.push(cards[j]); }
+        if (doesSubsetEqualTarget(sub, targetVal)) result.push(sub);
+    }
+    return result;
+}
+
+function doesSubsetEqualTarget(subset, targetVal) {
+    if (subset.length === 0) return false;
+    if (subset.length === 1) return getCardPossibleValues(subset[0]).includes(targetVal);
+    return checkSumRecursive(subset, 0, 0, targetVal);
+}
+
+function checkSumRecursive(subset, index, currentSum, targetVal) {
+    if (currentSum > targetVal) return false;
+    if (index === subset.length) return currentSum === targetVal;
+    let card = subset[index]; let possibleVals = getCardPossibleValues(card);
+    for (let v of possibleVals) {
+        if (checkSumRecursive(subset, index + 1, currentSum + v, targetVal)) return true;
+    }
+    return false;
+}
+
+function findAllValidCaptureSubsets(tableCards, playedCard) {
+    if (tableCards.length === 0) return [];
+    if (playedCard.rank === 'J') return [ [...tableCards] ];
+    let targetValues = getCardPossibleValues(playedCard); let validSubsets = [];
+    for (let targetVal of targetValues) {
+        let n = tableCards.length; let totalSubsets = 1 << n;
+        for (let i = 1; i < totalSubsets; i++) {
+            let sub = [];
+            for (let j = 0; j < n; j++) { if ((i >> j) & 1) sub.push(cards[j]); }
+            if (canPartitionCards(sub, targetVal)) {
+                if (!validSubsets.some(existing => isSameCardSet(existing, sub))) validSubsets.push(sub);
+            }
+        }
+    }
+    return validSubsets;
+}
+
+function isSameCardSet(setA, setB) {
+    if (setA.length !== setB.length) return false;
+    let idsA = setA.map(c => c.id).sort(); let idsB = setB.map(c => c.id).sort();
+    return idsA.every((id, idx) => id === idsB[idx]);
+}
+
+function evaluateCaptureScore(capturedCards, isTabla) {
+    let score = 0;
+    for (let c of capturedCards) score += c.pts * 10;
+    score += capturedCards.length;
+    if (isTabla) score += 50;
+    return score;
+}
+
+function selectHandCard(index) {
+    if (turn !== 'player') return;
+    selectedHandCardIndex = (selectedHandCardIndex === index) ? null : index;
+    playSound('card');
+    reevaluateSelection(); updateUI();
+}
+
+function toggleTableCardSelection(cardId) {
+    if (turn !== 'player') return;
+    const idx = selectedTableCardIds.indexOf(cardId);
+    if (idx >= 0) selectedTableCardIds.splice(idx, 1); else selectedTableCardIds.push(cardId);
+    playSound('card'); reevaluateSelection(); updateUI();
+}
+
+function cancelAllSelections() {
+    selectedHandCardIndex = null; selectedTableCardIds = []; currentValidCaptures = []; updateUI();
+}
+
+function reevaluateSelection() {
+    const selectedTableCards = table.filter(c => selectedTableCardIds.includes(c.id));
+    if (selectedHandCardIndex !== null) {
+        const playedCard = playerHand[selectedHandCardIndex];
+        currentValidCaptures = findAllValidCaptureSubsets(table, playedCard);
+        let isValid = false;
+        if (selectedTableCards.length > 0) {
+            if (playedCard.rank === 'J') isValid = (selectedTableCards.length === table.length);
+            else {
+                let possibleVals = getCardPossibleValues(playedCard);
+                isValid = possibleVals.some(targetVal => canPartitionCards(selectedTableCards, targetVal));
+            }
+        }
+        document.getElementById('btnConfirmCapture').disabled = !isValid;
+    } else {
+        currentValidCaptures = []; document.getElementById('btnConfirmCapture').disabled = true;
+    }
+}
+
+function handleAutoCapture() {
+    if (selectedHandCardIndex === null || currentValidCaptures.length === 0) return;
+    let bestSet = currentValidCaptures[0]; let bestScore = -1;
+    for (let set of currentValidCaptures) {
+        let isTabla = (set.length === table.length);
+        let score = evaluateCaptureScore(set, isTabla);
+        if (score > bestScore) { bestScore = score; bestSet = set; }
+    }
+    executePlay(selectedHandCardIndex, bestSet);
+}
+
+function handleConfirmCapture() {
+    if (selectedHandCardIndex === null) return;
+    const selectedCards = table.filter(c => selectedTableCardIds.includes(c.id));
+    executePlay(selectedHandCardIndex, selectedCards);
+}
+
+function handleDropCard() {
+    if (selectedHandCardIndex === null) return;
+    executePlay(selectedHandCardIndex, []);
+}
+
+function executePlay(handCardIndex, capturedCards) {
+    const isPlayer = (turn === 'player');
+    const hand = isPlayer ? playerHand : cpuHand;
+    const playedCard = hand.splice(handCardIndex, 1)[0];
+
+    if (capturedCards.length > 0) {
+        table = table.filter(tc => !capturedCards.some(cc => cc.id === tc.id));
+        const capturedPile = isPlayer ? playerCaptured : cpuCaptured;
+        capturedPile.push(playedCard, ...capturedCards);
+        lastCapturer = turn;
+        let isTabla = (table.length === 0);
+
+        if (isTabla && (deck.length > 0 || playerHand.length > 0 || cpuHand.length > 0)) {
+            if (isPlayer) playerTablas++; else cpuTablas++;
+            showTablaAnimation(); playSound('tabla');
+            logMessage(`${isPlayer ? '👤 Ti si ostvario' : '🤖 Mate je ostvario'} TABLU! (+1b)`, 'tabla');
+        } else {
+            playSound('capture');
+            let textCards = capturedCards.map(c => `${c.rank}${c.suit.symbol}`).join(', ');
+            logMessage(`${isPlayer ? '👤 Ti si odnio' : '🤖 Mate je odnio'}: [${textCards}] pomoću ${playedCard.rank}${playedCard.suit.symbol}`, isPlayer ? 'player' : 'cpu');
+        }
+    } else {
+        table.push(playedCard); playSound('card');
+        logMessage(`${isPlayer ? '👤 Ti si bacio' : '🤖 Mate je bacio'} ${playedCard.rank}${playedCard.suit.symbol} na stol.`, isPlayer ? 'player' : 'cpu');
+    }
+
+    selectedHandCardIndex = null; selectedTableCardIds = []; currentValidCaptures = [];
+    turn = isPlayer ? 'cpu' : 'player';
+    updateUI(); checkRoundProgress();
+}
+
+function makeCpuMove() {
+    if (turn !== 'cpu') return;
+    setTimeout(() => {
+        let bestMove = null; let highestScore = -999;
+        for (let i = 0; i < cpuHand.length; i++) {
+            let card = cpuHand[i]; let validCaptures = findAllValidCaptureSubsets(table, card);
+            if (validCaptures.length > 0) {
+                for (let set of validCaptures) {
+                    let isTabla = (set.length === table.length);
+                    let score = evaluateCaptureScore(set, isTabla);
+                    if (card.rank === 'J' && !isTabla && score < 15) score -= 5;
+                    if (score > highestScore) { highestScore = score; bestMove = { handIndex: i, capturedCards: set }; }
+                }
+            } else {
+                let dropScore = -card.pts * 20;
+                if (card.rank === 'J') dropScore -= 50;
+                if (card.rank === 'A') dropScore -= 30;
+                if (dropScore > highestScore) { highestScore = dropScore; bestMove = { handIndex: i, capturedCards: [] }; }
+            }
+        }
+        if (bestMove) executePlay(bestMove.handIndex, bestMove.capturedCards);
+    }, 850);
+}
+
+function checkRoundProgress() {
+    if (playerHand.length === 0 && cpuHand.length === 0) {
+        if (deck.length > 0) { dealHands(); logMessage('Podijeljene su nove karte!'); updateUI(); if (turn === 'cpu') makeCpuMove(); } 
+        else { endRound(); }
+    } else { if (turn === 'cpu') makeCpuMove(); }
+}
+
+function endRound() {
+    if (table.length > 0 && lastCapturer) {
+        const dest = (lastCapturer === 'player') ? playerCaptured : cpuCaptured;
+        dest.push(...table);
+        logMessage(`Zadnje karte sa stola pripale su ${lastCapturer === 'player' ? 'igraču' : 'Mati (AI)'}.`);
+        table = [];
+    }
+
+    let pPts = calculateCardsPoints(playerCaptured); let cPts = calculateCardsPoints(cpuCaptured);
+    let pSpula = 0, cSpula = 0;
+    if (playerCaptured.length > cpuCaptured.length) pSpula = 3; else if (cpuCaptured.length > playerCaptured.length) cSpula = 3;
+
+    let pTotalRound = pPts + pSpula + playerTablas; let cTotalRound = cPts + cSpula + cpuTablas;
+    matchScorePlayer += pTotalRound; matchScoreCpu += cTotalRound;
+
+    window.parent.postMessage({ type: 'update_highscore', score: matchScorePlayer }, '*');
+    window.parent.postMessage({ type: 'save_progress', data: { level: 1, score: matchScorePlayer, cpuScore: matchScoreCpu } }, '*');
+
+    showRoundResultModal(pPts, cPts, pSpula, cSpula, pTotalRound, cTotalRound);
+    updateUI();
+}
+
+function calculateCardsPoints(capturedArray) { return capturedArray.reduce((sum, card) => sum + card.pts, 0); }
+
+function updateUI() {
+    const tableCardsEl = document.getElementById('tableCards'); tableCardsEl.innerHTML = '';
+    table.forEach(card => {
+        const isSelected = selectedTableCardIds.includes(card.id);
+        const cardEl = renderCard(card, isSelected, 'table');
+        cardEl.onclick = () => toggleTableCardSelection(card.id);
+        tableCardsEl.appendChild(cardEl);
+    });
+
+    document.getElementById('tableCountLabel').innerText = `Otvorene karte na stolu (${table.length} karata)`;
+
+    const playerHandEl = document.getElementById('playerHand'); playerHandEl.innerHTML = '';
+    playerHand.forEach((card, idx) => {
+        const isSelected = (selectedHandCardIndex === idx);
+        const cardEl = renderCard(card, isSelected, 'hand');
+        cardEl.onclick = () => selectHandCard(idx);
+        playerHandEl.appendChild(cardEl);
+    });
+
+    const cpuHandEl = document.getElementById('cpuHand'); cpuHandEl.innerHTML = '';
+    cpuHand.forEach((_, idx) => {
+        const backCard = document.createElement('div');
+        const rot = (idx - (cpuHand.length - 1) / 2) * 3;
+        backCard.className = 'w-11 h-16 sm:w-14 sm:h-20 rounded-lg bg-gradient-to-br from-[#10223f] to-[#081226] shadow-md flex items-center justify-center transition-transform border border-arcade-cyan/20';
+        backCard.style.transform = `rotate(${rot}deg)`;
+        backCard.innerHTML = `<div class="w-8 h-12 sm:w-9 sm:h-14 rounded bg-surface-container-lowest/70 flex items-center justify-center"><span class="material-symbols-outlined text-arcade-cyan/50 text-[16px]">token</span></div>`;
+        cpuHandEl.appendChild(backCard);
+    });
+
+    const selectionText = document.getElementById('selectionText');
+    const selectionHintText = document.getElementById('selectionHintText');
+    const selectedTableCards = table.filter(c => selectedTableCardIds.includes(c.id));
+
+    if (selectedTableCards.length > 0 || selectedHandCardIndex !== null) {
+        let names = selectedTableCards.length > 0 ? selectedTableCards.map(c => `${c.rank}${c.suit.symbol}`).join(' + ') : 'Nijedna sa stola';
+        let sumVals = selectedTableCards.reduce((acc, c) => acc + c.val, 0);
+        let handCard = selectedHandCardIndex !== null ? playerHand[selectedHandCardIndex] : null;
+        let handTxt = handCard ? `Karta iz ruke: <strong class="text-arcade-emerald">${handCard.rank}${handCard.suit.symbol} (${handCard.val})</strong>` : 'Odaberi kartu iz ruke';
+        selectionText.innerHTML = `Stol: <span class="font-bold text-arcade-cyan bg-surface-container px-2 py-0.5 rounded">${names} ${selectedTableCards.length > 0 ? '= ' + sumVals : ''}</span> • ${handTxt}`;
+        if (handCard && currentValidCaptures.length > 0) {
+            selectionHintText.innerText = `Moguće nošenje s ${handCard.rank}${handCard.suit.symbol}!`;
+        } else if (handCard) {
+            selectionHintText.innerText = `Baci ${handCard.rank}${handCard.suit.symbol} na stol`;
+        } else {
+            selectionHintText.innerText = `Zbroj stola: ${sumVals}`;
+        }
+    } else {
+        selectionText.innerHTML = `Klikni na karte sa stola i kartu iz svoje ruke za izračun kombinacije.`;
+        selectionHintText.innerText = turn === 'player' ? 'Tvoj je potez' : 'Mate razmišlja...';
+    }
+
+    const actionBar = document.getElementById('actionBar');
+    const btnAuto = document.getElementById('btnAutoCapture');
+    const btnConfirm = document.getElementById('btnConfirmCapture');
+    const btnDrop = document.getElementById('btnDropCard');
+    const btnCancel = document.getElementById('btnCancel');
+
+    if (turn !== 'player' || (selectedHandCardIndex === null && selectedTableCardIds.length === 0)) {
+        actionBar.style.display = 'none';
+    } else {
+        actionBar.style.display = 'flex';
+        btnCancel.style.display = 'inline-flex';
+        if (selectedHandCardIndex !== null && selectedTableCardIds.length > 0) btnConfirm.style.display = 'inline-flex'; else btnConfirm.style.display = 'none';
+
+        if (selectedHandCardIndex !== null) {
+            if (currentValidCaptures.length > 0) {
+                btnAuto.style.display = 'inline-flex';
+                btnDrop.style.display = 'inline-flex';
+            } else {
+                btnAuto.style.display = 'none';
+                btnDrop.style.display = 'inline-flex';
+            }
+        } else {
+            btnAuto.style.display = 'none';
+            btnDrop.style.display = 'none';
+        }
+    }
+
+    document.getElementById('deckCount').innerText = deck.length;
+    document.getElementById('playerCapturedCount').innerText = playerCaptured.length;
+    document.getElementById('cpuCapturedCount').innerText = cpuCaptured.length;
+    document.getElementById('playerTablaCount').innerText = playerTablas;
+    document.getElementById('cpuTablaCount').innerText = cpuTablas;
+    document.getElementById('matchScorePlayer').innerText = matchScorePlayer;
+    document.getElementById('matchScoreCpu').innerText = matchScoreCpu;
+
+    const dealtCards = 52 - deck.length;
+    const pct = Math.round((dealtCards / 52) * 100);
+    document.getElementById('dealtProgressText').innerText = `${dealtCards} / 52 (${pct}%)`;
+    document.getElementById('dealtProgressBar').style.width = `${pct}%`;
+
+    const pTurnEl = document.getElementById('playerTurnInd');
+    const cTurnEl = document.getElementById('cpuTurnInd');
+    if (turn === 'player') {
+        pTurnEl.innerText = 'Aktivno biranje';
+        pTurnEl.className = 'font-label-sm text-label-sm text-arcade-emerald uppercase tracking-wider bg-arcade-emerald/15 px-2 py-0.5 rounded font-bold';
+        cTurnEl.className = 'absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-600 flex items-center justify-center';
+    } else {
+        pTurnEl.innerText = 'Pričekaj potez AI-ja';
+        pTurnEl.className = 'font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider bg-surface-container-high px-2 py-0.5 rounded font-bold';
+        cTurnEl.className = 'absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-arcade-emerald flex items-center justify-center animate-pulse';
+    }
+}
+
+function renderCard(card, isSelected = false, zone = 'table') {
+    const el = document.createElement('div');
+    const isRed = card.suit.color === 'red';
+    const textColor = isRed ? 'text-[#dc2626]' : 'text-[#0f172a]';
+    const isDobra10 = card.rank === '10' && card.suit.symbol === '♦';
+    const isMala2 = card.rank === '2' && card.suit.symbol === '♣';
+
+    const sizeClass = zone === 'hand' ? 'w-24 h-36 sm:w-28 sm:h-40' : 'w-20 h-32 sm:w-24 sm:h-36';
+    const ringClass = isSelected
+        ? 'ring-4 ring-arcade-emerald -translate-y-3 shadow-[0_0_25px_rgba(74,222,128,0.45)]'
+        : isDobra10
+        ? 'ring-2 ring-arcade-amber hover:-translate-y-2'
+        : 'hover:-translate-y-2 hover:ring-1 hover:ring-white/40';
+
+    el.className = `cursor-pointer group relative ${sizeClass} rounded-xl bg-gradient-to-b from-[#ffffff] to-[#e2e8f0] p-2.5 flex flex-col justify-between shadow-[0_10px_25px_-5px_rgba(0,0,0,0.55)] transform transition-all duration-200 ${ringClass}`;
+
+    let topBadge = `<span class="text-[10px] bg-slate-200 text-slate-700 px-1 rounded font-bold">${card.rank === 'A' ? '1/11' : card.val}</span>`;
+    if (isDobra10) {
+        topBadge = `<span class="text-[9px] bg-arcade-amber text-black px-1.5 py-0.5 rounded font-black uppercase">2 BODA</span>`;
+    } else if (isMala2) {
+        topBadge = `<span class="text-[9px] bg-arcade-amber/25 text-amber-800 px-1 py-0.5 rounded font-black uppercase">MALA 2</span>`;
+    } else if (card.pts > 0) {
+        topBadge = `<span class="text-[9px] bg-emerald-100 text-emerald-800 px-1 py-0.5 rounded font-bold">1 BOD</span>`;
+    }
+
+    let centerArt = `<span class="text-[30px] sm:text-[34px] leading-none ${textColor}">${card.suit.symbol}</span>`;
+    if (card.rank === 'K') {
+        centerArt = `<span class="material-symbols-outlined text-[32px] ${textColor}">crown</span><span class="text-[9px] uppercase font-extrabold ${textColor}">Kralj (14)</span>`;
+    } else if (card.rank === 'Q') {
+        centerArt = `<span class="material-symbols-outlined text-[32px] ${textColor}">diamond</span><span class="text-[9px] uppercase font-extrabold ${textColor}">Dama (13)</span>`;
+    } else if (card.rank === 'J') {
+        centerArt = `<span class="material-symbols-outlined text-[32px] ${textColor}">shield_person</span><span class="text-[9px] uppercase font-extrabold ${textColor}">Žandar (12)</span>`;
+    }
+
+    let selectPin = isSelected
+        ? `<div class="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-arcade-emerald text-on-primary flex items-center justify-center shadow-lg font-bold"><span class="material-symbols-outlined text-[16px]">check</span></div>`
+        : '';
+
+    el.innerHTML = `
+      ${selectPin}
+      <div class="flex justify-between items-start">
+        <div class="flex flex-col items-center leading-none ${textColor}">
+          <span class="text-base sm:text-lg font-black">${card.rank}</span>
+          <span class="text-xs sm:text-sm font-bold">${card.suit.symbol}</span>
+        </div>
+        ${topBadge}
+      </div>
+      <div class="flex flex-col items-center justify-center my-auto">
+        ${centerArt}
+      </div>
+      <div class="flex justify-between items-end rotate-180">
+        <div class="flex flex-col items-center leading-none ${textColor}">
+          <span class="text-base sm:text-lg font-black">${card.rank}</span>
+          <span class="text-xs sm:text-sm font-bold">${card.suit.symbol}</span>
+        </div>
+      </div>
+    `;
+    return el;
+}
+
+function logMessage(msg, type = '') {
+    const logEl = document.getElementById('gameLog');
+    const item = document.createElement('div');
+    item.className = `log-item ${type}`;
+    item.innerHTML = msg; logEl.prepend(item);
+}
+
+function showTablaAnimation() {
+    const banner = document.getElementById('tablaBanner');
+    banner.classList.add('show'); setTimeout(() => banner.classList.remove('show'), 1500);
+}
+
+function showRoundResultModal(pPts, cPts, pSpula, cSpula, pTotal, cTotal) {
+    document.getElementById('modalTitle').innerText = '🏆 Rezultat Runde';
+    let html = `<table class="score-breakdown">
+        <thead><tr><th>Kategorija</th><th>👤 Ti</th><th>🤖 Mate (AI)</th></tr></thead>
+        <tbody>
+            <tr><td>Bodovne karte</td><td>${pPts}</td><td>${cPts}</td></tr>
+            <tr><td>Špula (+3)</td><td>${pSpula}</td><td>${cSpula}</td></tr>
+            <tr><td>Table (+1)</td><td>${playerTablas}</td><td>${cpuTablas}</td></tr>
+            <tr style="font-weight: bold; background: rgba(255,255,255,0.03);"><td style="color: #4be277;">Ukupno runda:</td><td style="color: #22c55e;">+${pTotal}</td><td style="color: #22D3EE;">+${cTotal}</td></tr>
+        </tbody>
+    </table>
+    <div style="font-size: 1rem; margin-top: 15px; font-weight: bold; color: #dae2fd; text-align: center;">Ukupni Meč: Ti ${matchScorePlayer} - ${matchScoreCpu} Mate (AI)</div>`;
+    document.getElementById('modalBody').innerHTML = html;
+    document.getElementById('modalOverlay').classList.add('active');
+}
+
+function openRulesModal() {
+    document.getElementById('modalTitle').innerText = '📖 Pravila Igre Tablić';
+    document.getElementById('modalBody').innerHTML = `<ul class="space-y-2 list-disc pl-5 text-on-surface-variant">
+        <li><strong class="text-on-surface">Označavanje karata:</strong> Klikni na jednu ili više karata na stolu te kartu u svojoj ruci.</li>
+        <li><strong class="text-on-surface">Uzimanje karata:</strong> Gumb "Uzmi odabrano" ili "Automatski odnesi najbolje" nosi karte čiji zbroj odgovara tvojoj karti.</li>
+        <li><strong class="text-on-surface">Slike i As:</strong> Žandar (J) = 12, Dama (Q) = 13, Kralj (K) = 14. As (A) vrijedi 1 ili 11.</li>
+        <li><strong class="text-on-surface">Bodovanje:</strong> Dobra desetka (♦10) = 2 boda, Mala dvojka (♣2) = 1 bod, ostale 10, A, J, Q, K = 1 bod, Špula (više karata) = 3 boda, Tabla = 1 bod.</li>
+    </ul>`;
+    document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    if (deck.length === 0 && playerHand.length === 0 && cpuHand.length === 0) startNewGame();
+}
+
+window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'load_progress' && e.data.data) {
+        matchScorePlayer = e.data.data.score || 0;
+        matchScoreCpu = e.data.data.cpuScore || 0;
+        updateUI();
+    } else if (e.data && e.data.type === 'user_info') {
+        const nameEl = document.getElementById('playerNameDisplay');
+        if (nameEl) nameEl.innerText = `Ti (${e.data.username || 'Gost'})`;
+    }
+});
+
+window.onload = () => {
+    startNewGame();
+    window.parent.postMessage('game_ready', '*');
+};
+</script>
+</body>
+</html>

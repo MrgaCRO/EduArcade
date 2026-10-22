@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas-deep: #020617;
+  --color-surface: #0b1326;
+  --color-surface-dim: #0b1326;
+  --color-surface-bright: #31394d;
+  --color-surface-card: #0F172A;
+  --color-surface-card-border: #1E293B;
+  --color-surface-container-lowest: #060e20;
+  --color-surface-container-low: #131b2e;
+  --color-surface-container: #171f33;
+  --color-surface-container-high: #222a3d;
+  --color-surface-container-highest: #2d3449;
+  --color-surface-variant: #2d3449;
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #bccbb9;
+  --color-on-background: #dae2fd;
+  --color-background: #0b1326;
+  --color-primary: #4be277;
+  --color-primary-container: #22c55e;
+  --color-primary-fixed: #6bff8f;
+  --color-primary-fixed-dim: #4ae176;
+  --color-on-primary: #003915;
+  --color-on-primary-container: #004b1e;
+  --color-on-primary-fixed: #002109;
+  --color-on-primary-fixed-variant: #005321;
+  --color-secondary: #5de6ff;
+  --color-secondary-container: #00cbe6;
+  --color-secondary-fixed: #a2eeff;
+  --color-secondary-fixed-dim: #2fd9f4;
+  --color-on-secondary: #00363e;
+  --color-on-secondary-container: #00515d;
+  --color-tertiary: #deb8ff;
+  --color-tertiary-container: #cb94ff;
+  --color-on-tertiary: #490080;
+  --color-on-tertiary-container: #5f00a3;
+  --color-arcade-emerald: #4ADE80;
+  --color-arcade-cyan: #22D3EE;
+  --color-arcade-purple: #C084FC;
+  --color-arcade-amber: #F59E0B;
+  --color-outline: #869585;
+  --color-outline-variant: #3d4a3d;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+  --color-surface-deep: #020617;
+  --color-surface-elevated: #161A2B;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-purple: #B026FF;
+  --color-neon-lime: #39FF14;
+  --color-neon-orange: #FF5F1F;
+  --color-neon-pink: #FF007F;
+}
+
+body { 
+    background-color: #020617; 
+    color: #dae2fd; 
+    font-family: "Plus Jakarta Sans", sans-serif; 
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.glass-card { 
+    background: rgba(15, 23, 42, 0.85); 
+    backdrop-filter: blur(16px); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+}
+
+.neon-title {
+    animation: neonPulse 3s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% { text-shadow: 0 0 20px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, 0.1); }
+    50% { text-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.2); }
+}
+
+.hero-float {
+    animation: heroFloat 4s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.game-card {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cardSlideIn 0.45s ease-out forwards;
+}
+
+@keyframes cardSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.badge-new {
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+}
+
+.stat-value {
+    font-variant-numeric: tabular-nums;
+}

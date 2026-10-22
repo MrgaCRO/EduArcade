@@ -1,0 +1,51 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #020617;
+    color: #dae2fd;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow-x: hidden;
+}
+
+.glass-card {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(14px);
+}
+
+/* Canvas styling for crisp edges */
+canvas {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    max-height: 62vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Settings button active state */
+.setting-btn {
+    transition: all 0.2s ease;
+}
+
+.setting-btn.active {
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    background-color: rgba(245, 158, 11, 0.2) !important;
+    color: #F59E0B !important;
+}
+
+/* D-Pad specific styles */
+#dpad {
+    transform: scale(0.85);
+    transform-origin: bottom center;
+}
+
+@media (min-width: 768px) {
+    #dpad {
+        transform: scale(1);
+    }
+    canvas {
+        max-height: 68vh;
+    }
+}
